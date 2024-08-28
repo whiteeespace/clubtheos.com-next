@@ -1,0 +1,13 @@
+@use "utils/mixins/colors";
+
+$background-color: colors.$lighter-grey;
+$text-color: colors.$medium-grey;
+$header-background-color: colors.$white;
+$button-background-color: colors.$dark-grey;
+$button-text-color: colors.$beige;
+$header-text-color: colors.$black;
+$footer-text-color: colors.$black;
+
+$header-box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.25);
+
+$border: 2px solid colors.$black;
