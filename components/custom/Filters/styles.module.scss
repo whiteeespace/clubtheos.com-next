@@ -1,0 +1,66 @@
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-button {
+  background: white;
+  border: solid 2px black;
+  color: black;
+  padding: 2px 16px 4px;
+  min-width: 100px;
+  cursor: pointer;
+
+  &:focus {
+    outline: unset;
+  }
+
+  .count {
+    position: absolute;
+    font-size: 11px;
+    top: 2px;
+    right: 8px;
+  }
+}
+
+.menu-items {
+  position: absolute;
+  background: white;
+  border: solid 1px lightgrey;
+  z-index: 1;
+  margin-top: 8px;
+  min-width: 160px;
+  width: fit-content;
+
+  font-size: 14px;
+
+  transform-origin: top right;
+
+  .options {
+    padding: 12px 4px;
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+
+  .item {
+    display: flex;
+    white-space: nowrap;
+    padding: 8px;
+  }
+
+  .action {
+    padding: 12px;
+    border-top: 1px lightgray solid;
+
+    .action-button {
+      padding: 8px 32px;
+      white-space: nowrap;
+    }
+  }
+}

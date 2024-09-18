@@ -34,7 +34,7 @@ module.exports = {
       {
         groups: ["builtin", "external", ["internal", "unknown"]],
         pathGroups: [
-          { pattern: "@[components|utils]/**", group: "internal", position: "before" },
+          { pattern: "@[theos|components|utils]/**", group: "internal", position: "before" },
           { pattern: "~/**", group: "internal", position: "before" },
         ],
         pathGroupsExcludedImportTypes: ["react"],

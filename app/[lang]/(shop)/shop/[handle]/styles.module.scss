@@ -1,0 +1,110 @@
+@use "@utils/mixins/colors";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.shop-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin: 24px 0;
+  gap: 24px;
+  overflow-anchor: none;
+  max-width: 1400px;
+  width: 100%;
+}
+
+.products {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+}
+
+.product-count {
+  width: 100%;
+  text-align: right;
+  font-size: 13px;
+}
+
+.products-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.filters-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.pagination {
+  margin-top: 36px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    row-gap: 36px;
+    width: 100%;
+  }
+
+  .title {
+    text-transform: uppercase;
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .description {
+    font-size: 16px;
+    margin: 4px 0;
+    color: #505050;
+
+    p {
+      margin: 4px 0;
+    }
+  }
+}
+
+.filter-text {
+  color: #aaaaaa !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  margin-left: 12px !important;
+  line-height: 30px !important;
+  white-space: nowrap;
+  padding: 0 !important;
+
+  &:hover {
+    color: black;
+  }
+
+  &--selected {
+    color: #505050;
+  }
+}

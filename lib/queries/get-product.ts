@@ -1,7 +1,8 @@
 import { graphql } from "gql";
 
 export const GET_PRODUCT = graphql(`
-  query GetProduct($handle: String!) {
+  query GetProduct($handle: String!, $country: CountryCode, $language: LanguageCode)
+  @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       id
       title
@@ -9,6 +10,16 @@ export const GET_PRODUCT = graphql(`
       availableForSale
       descriptionHtml
       priceRange {
+        maxVariantPrice {
+          amount
+          currencyCode
+        }
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      compareAtPriceRange {
         maxVariantPrice {
           amount
           currencyCode
@@ -37,6 +48,10 @@ export const GET_PRODUCT = graphql(`
             }
           }
         }
+      }
+      sizeGuide: metafield(namespace: "custom", key: "size_guide_v2") {
+        type
+        value
       }
     }
   }

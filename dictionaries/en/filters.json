@@ -1,0 +1,15 @@
+{
+  "filters": {
+    "apply": "apply selection",
+    "clear": "clear filters",
+    "hide": "hide filters",
+    "hide_sold_out": "hide sold out items",
+    "show": "show filters",
+    "types": {
+      "availability": "availability",
+      "color": "color",
+      "size": "size",
+      "type": "type"
+    }
+  }
+}

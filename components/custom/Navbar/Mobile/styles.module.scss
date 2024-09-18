@@ -1,0 +1,166 @@
+@use "@utils/mixins/colors";
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.header {
+  width: 100%;
+  height: 60px;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  overscroll-behavior: none;
+  transform: translate3d(0, 0, 0);
+  transition: none !important;
+
+  .button-container {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.menu-button {
+  position: relative;
+  margin: 0;
+  padding: 15px !important;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  text-transform: uppercase;
+  align-items: center;
+  gap: 4px;
+
+  &:hover {
+    color: black;
+  }
+}
+
+.dialog-content {
+  height: 90%;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(10px);
+  height: 100dvh;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.dialog-content {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: min-content;
+  z-index: 1;
+  outline: none;
+  background-color: white;
+  color: black;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+
+  a {
+    color: colors.$black;
+  }
+
+  &[data-state="open"] {
+    animation: slide-in 200ms linear;
+  }
+
+  &[data-state="closed"] {
+    animation: slide-out 200ms linear;
+  }
+}
+
+.drawer {
+  padding: 4px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  h2 {
+    margin: 12px;
+  }
+
+  .logo {
+    width: 100px;
+    height: auto;
+  }
+
+  &--link {
+    color: black;
+    text-wrap: nowrap;
+    border-top: black solid 1px;
+
+    &--text {
+      font-weight: 400;
+      font-size: 14px;
+      text-transform: capitalize;
+    }
+  }
+
+  &--search {
+    border-top: black solid 1px;
+    padding: 16px 4px;
+  }
+}
+
+.shop-link {
+  width: 80px;
+  padding: 16px 0 8px 0;
+
+  .menu-logo {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.cart {
+  width: 24px;
+  height: auto;
+}
+
+.cart-quantity {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.menu {
+  width: 18px;
+  height: auto;
+}

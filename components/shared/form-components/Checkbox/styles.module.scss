@@ -1,0 +1,32 @@
+.label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  text-transform: capitalize;
+
+  .checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid black;
+    border-radius: 3px;
+    z-index: 1;
+
+    &:focus {
+      outline: 1px solid gray;
+    }
+
+    &:checked {
+      background: black;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}

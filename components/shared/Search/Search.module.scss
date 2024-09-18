@@ -1,0 +1,42 @@
+.search-text {
+  color: #aaaaaa;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  &:hover {
+    color: black;
+  }
+
+  &--selected {
+    color: #505050;
+  }
+}
+
+.content {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  .search-input {
+    border: 1px solid black;
+    border-radius: 0px;
+    height: 28px;
+    min-width: 200px;
+    width: 100%;
+    padding: 0 8px;
+
+    @media only screen and (max-width: 900px) {
+      height: 32px;
+    }
+
+    &:focus {
+      outline: 1px solid black;
+    }
+
+    &::placeholder {
+      font-family: "neue-haas-unica", sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "blog": {
+      "link": "link",
+      "sound": {
+        "mute": "mute",
+        "unmute": "unmute"
+      },
+      "statement": "* Club Theos Inc. does not own this image."
+    },
+    "cart": {
+      "checkout": "checkout",
+      "continue_shopping": "Continue shopping",
+      "empty": "Your cart is empty.",
+      "remove": "remove"
+    },
+    "product": {
+      "add_to_cart": "Add to cart",
+      "added_to_cart": "added to cart",
+      "product_details": "Product details",
+      "select_size": "Select a size...",
+      "size_guide": "Size guide",
+      "sold_out": "sold out"
+    },
+    "shop": {
+      "no_products": "No products yet.",
+      "product": "product",
+      "products": "products"
+    }
+  }
+}

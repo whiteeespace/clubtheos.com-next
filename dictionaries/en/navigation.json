@@ -1,0 +1,26 @@
+{
+  "language": {
+    "english": "english",
+    "french": "french",
+    "title": "language"
+  },
+  "navigation": {
+    "about_us": "about us",
+    "blog": "blog",
+    "cart": "cart",
+    "collections": "collections",
+    "menu": "menu",
+    "policies": {
+      "privacy_policy": "privacy policy",
+      "returns_and_exchanges": "returns & exchanges",
+      "shipping_policy": "shipping policy",
+      "terms_and_conditions": "terms & conditions",
+      "title": "policies"
+    },
+    "search": {
+      "button": "search",
+      "text": "Search products..."
+    },
+    "shop": "shop"
+  }
+}

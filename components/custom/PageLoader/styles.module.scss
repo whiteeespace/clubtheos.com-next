@@ -1,0 +1,12 @@
+.container {
+  position: fixed;
+  display: flex;
+  top: 0px;
+  width: 100dvw;
+  height: 100dvh;
+  justify-content: center;
+  align-items: center;
+  overscroll-behavior-y: none;
+  z-index: 4;
+  background-color: white;
+}

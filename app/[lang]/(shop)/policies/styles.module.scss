@@ -1,0 +1,14 @@
+.container {
+  max-width: 800px;
+
+  @media only screen and (min-width: 848px) {
+    padding: 32px 0;
+  }
+
+  p,
+  h1,
+  h2,
+  h3 {
+    word-break: break-word;
+  }
+}

@@ -1,0 +1,27 @@
+@use "@utils/mixins/colors";
+
+.discount-container {
+  display: flex;
+  gap: 0px 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  &.no-wrap {
+    flex-wrap: nowrap;
+  }
+
+  .discount-amount {
+    color: colors.$dark-grey;
+    text-decoration: line-through;
+  }
+
+  .amount {
+    color: colors.$red;
+  }
+}
+
+.price-container {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "neue-haas-unica", sans-serif;
+}

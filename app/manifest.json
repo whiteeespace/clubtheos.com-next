@@ -1,16 +1,16 @@
 {
-  "short_name": "Next",
-  "name": "Next Webstore",
-  "description": "Next Webstore made by whiteee space.",
+  "background_color": "#ffffff",
+  "description": "A Montreal curated vintage/streetwear store located at Plateau Mont-Royal.",
+  "display": "standalone",
   "icons": [
     {
-      "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
+      "src": "favicon.ico",
       "type": "image/x-icon"
     }
   ],
+  "name": "Club Theos Inc.",
+  "short_name": "Theos",
   "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#ffffff"
 }

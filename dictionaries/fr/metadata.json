@@ -1,0 +1,58 @@
+{
+  "blog": {
+    "link": "lien",
+    "sound": {
+      "mute": "sans son",
+      "unmute": "son"
+    },
+    "statement": "* Club Theos Inc. n'est pas propriétaire de cette image."
+  },
+  "cart": {
+    "checkout": "Continuer à payer",
+    "continue_shopping": "Continuer à magasiner",
+    "empty": "Votre panier est vide.",
+    "remove": "retirer"
+  },
+  "metadata": {
+    "blog": {
+      "link": "lien",
+      "sound": {
+        "mute": "sans son",
+        "unmute": "son"
+      },
+      "statement": "* Club Theos Inc. n'est pas propriétaire de cette image."
+    },
+    "cart": {
+      "checkout": "Continuer à payer",
+      "continue_shopping": "Continuer à magasiner",
+      "empty": "Votre panier est vide.",
+      "remove": "retirer"
+    },
+    "product": {
+      "add_to_cart": "Ajouter au panier",
+      "added_to_cart": "ajouté au panier",
+      "product_details": "Détails du produit",
+      "select_size": "Sélectionnez la taille...",
+      "size_guide": "Guide de taille",
+      "sold_out": "Épuisé"
+    },
+    "shop": {
+      "no_products": "Pas de produits encore.",
+      "product": "produit",
+      "products": "produits"
+    }
+  },
+  "product": {
+    "add_to_cart": "Ajouter au panier",
+    "added_to_cart": "ajouté au panier",
+    "product_details": "Détails du produit",
+    "select_size": "Sélectionnez la taille...",
+    "size_guide": "Guide de taille",
+    "sold_out": "Épuisé"
+  },
+  "shop": {
+    "no_products": "Pas de produits encore.",
+    "product": "produit",
+    "products": "produits"
+  }
+}

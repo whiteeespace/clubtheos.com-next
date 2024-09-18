@@ -1,18 +1,18 @@
-"use client";
-
-import { UrqlProvider, WhiteeeShopifyProvider } from "@whiteeespace/core";
-import classNames from "classnames";
+import { getLocale } from "next-intl/server";
 import { PropsWithChildren } from "react";
 
-import styles from "./styles.module.scss";
+import { LanguageCode } from "@/gql/graphql";
 
-const Layout: React.FC<PropsWithChildren> = ({ children }) => {
+import Providers from "./Providers";
+import Analytics from "../Analytics";
+
+const Layout: React.FC<PropsWithChildren> = async ({ children }) => {
+  const locale = await getLocale();
   return (
-    <UrqlProvider>
-      <WhiteeeShopifyProvider countryCode="CA" languageCode="EN">
-        <div className={classNames(styles["container"])}>{children}</div>
-      </WhiteeeShopifyProvider>
-    </UrqlProvider>
+    <Providers languageCode={locale as LanguageCode}>
+      {children}
+      <Analytics />
+    </Providers>
   );
 };
 export default Layout;

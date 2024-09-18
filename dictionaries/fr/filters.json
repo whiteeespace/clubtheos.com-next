@@ -1,0 +1,15 @@
+{
+  "filters": {
+    "apply": "appliquer sélection",
+    "clear": "recommencer",
+    "hide": "cacher triage",
+    "hide_sold_out": "masquer articles épuisés",
+    "show": "montrer triage",
+    "types": {
+      "availability": "disponibilité",
+      "color": "couleur",
+      "size": "taille",
+      "type": "type"
+    }
+  }
+}

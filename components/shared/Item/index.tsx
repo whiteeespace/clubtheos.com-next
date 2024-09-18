@@ -1,22 +1,17 @@
 "use client";
 
-import { ProductPrice } from "@whiteeespace/core";
 import classNames from "classnames";
 import { motion } from "framer-motion";
+import { PartialDeep } from "type-fest";
 
 import { Product } from "@/gql/graphql";
+import Image from "@theos/Image";
+import Price from "@theos/Price";
 
 import styles from "./styles.module.scss";
 
 interface Props {
-  product: {
-    title: Product["title"];
-    availableForSale: Product["availableForSale"];
-    featuredImage?: {
-      url: string;
-    } | null;
-    priceRange: Product["priceRange"];
-  };
+  product: PartialDeep<Product, { recurseIntoArrays: true }>;
   className?: string;
 }
 
@@ -26,21 +21,25 @@ const Item: React.FC<Props> = ({ product, className }) => {
 
   return (
     <motion.div className={classNames(styles["item-container"], className)} transition={{ duration: 0.5 }}>
-      <motion.img
-        transition={{ duration: 1 }}
+      <Image
         src={`${src}&width=10`}
-        className={classNames(styles["image"], "lazyload", "lazyloaded", {
+        className={classNames(styles["image"], {
           [styles["image--not-available"]]: !availableForSale,
         })}
-        alt="taikataikataika"
-        data-sizes="auto"
-        data-srcset={`${src}&width=300 300w,
-          ${src}&width=600 600w,
-          ${src}&width=800 800w`}
+        alt={title}
       />
       <div className={styles["info-container"]}>
         <p className={styles["title"]}>{title}</p>
-        <ProductPrice data={product} />
+        <div className={styles["price"]}>
+          {availableForSale && product.priceRange?.maxVariantPrice ? (
+            <Price
+              price={product.priceRange?.maxVariantPrice}
+              comparedAtPrice={product.compareAtPriceRange?.maxVariantPrice}
+            />
+          ) : (
+            "SOLD OUT"
+          )}
+        </div>
       </div>
     </motion.div>
   );

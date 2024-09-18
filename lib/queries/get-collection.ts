@@ -1,11 +1,16 @@
-import { GetCollectionQuery } from "@/gql/graphql";
 import { graphql } from "gql";
 
-export const getCollectionQuery = /* GraphQL */ `
-  query GetCollection($collectionHandle: String!, $after: String) {
+export const GET_COLLECTION = graphql(`
+  query GetCollection(
+    $collectionHandle: String!
+    $after: String
+    $filters: [ProductFilter!]
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
     collection(handle: $collectionHandle) {
       id
-      products(first: 250, after: $after) {
+      products(first: 32, after: $after, filters: $filters) {
         nodes {
           handle
           title
@@ -23,20 +28,22 @@ export const getCollectionQuery = /* GraphQL */ `
               currencyCode
             }
           }
-          updatedAt
+          compareAtPriceRange {
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
         }
       }
     }
   }
-`;
-
-export type ShopifyCollectionOperation = {
-  data: {
-    collection: GetCollectionQuery["collection"];
-  };
-  variables: {
-    collectionHandle: string;
-  };
-};
-
-export const GET_COLLECTION = graphql(getCollectionQuery);
+`);
