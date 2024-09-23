@@ -7,6 +7,7 @@ import { Suspense, useEffect } from "react";
 
 import { ShopVariables, useShopContext } from "@components/Layout/ShopContext";
 import { ShopProducts } from "@components/ShopProducts";
+import Loader from "@theos/Loader";
 import { getFilters } from "@utils/filters";
 import useInfiniteScroll from "@utils/hooks/use-infinite-scroll";
 import { GET_COLLECTION } from "@utils/queries/get-collection";
@@ -47,7 +48,7 @@ const ShopResults: React.FC<ShopResultsProps> = ({ variables, isLastPage }) => {
   );
 
   if (fetching || !shopResults) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return <ShopProducts products={shopResults.nodes} onLinkClick={() => setScrollPosition(window.scrollY)} />;
@@ -99,7 +100,7 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle, productCou
       )}
       <div className={styles["products"]}>
         {shopVariables.map((variables, index) => (
-          <Suspense key={index} fallback={<></>}>
+          <Suspense key={index} fallback={<Loader />}>
             <ShopResults variables={variables} isLastPage={shopVariables.length - 1 === index} />
           </Suspense>
         ))}

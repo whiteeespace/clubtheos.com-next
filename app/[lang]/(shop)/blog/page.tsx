@@ -5,6 +5,7 @@ import Head from "next/head";
 import React, { Suspense, useState } from "react";
 
 import { GET_BLOG } from "@/lib/queries/get-blog";
+import Loader from "@theos/Loader";
 import useInfiniteScroll from "@utils/hooks/use-infinite-scroll";
 
 import { BlogItem } from "./_components/BlogItem";
@@ -35,13 +36,7 @@ const BlogResults: React.FC<BlogResultsProps> = ({ onLoadMore, variables, isLast
   );
 
   return (
-    <>
-      {fetching ? (
-        <div>Loading...</div>
-      ) : (
-        blogResults?.nodes.map((node) => <BlogItem key={node.id} blog={node} />)
-      )}
-    </>
+    <>{fetching ? <Loader /> : blogResults?.nodes.map((node) => <BlogItem key={node.id} blog={node} />)}</>
   );
 };
 
@@ -56,7 +51,7 @@ const BlogPage: React.FC = () => {
       </Head>
       <section className={styles["blog-container"]}>
         {blogVariables.map((variables, index) => (
-          <Suspense key={index} fallback={<div>Loading...</div>}>
+          <Suspense key={index} fallback={<Loader />}>
             <BlogResults
               variables={variables}
               onLoadMore={(after) => setBlogVariables([...blogVariables, { after }])}
