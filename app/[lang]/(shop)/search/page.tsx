@@ -1,8 +1,7 @@
 import { flattenConnection, makeClient } from "@whiteeespace/core/utils";
 import { getLocale } from "next-intl/server";
 
-import Item from "@theos/Item";
-import { Link } from "@utils/navigation";
+import { ShopProducts } from "@components/ShopProducts";
 import { GET_SEARCH_RESULTS } from "@utils/queries/get-search-results";
 import {
   CountryCode,
@@ -37,15 +36,7 @@ const SearchPage = async ({ searchParams }) => {
       <div className={styles["header"]}>
         <h1 className={styles["title"]}>search results for &quot;{query}&quot;</h1>
       </div>
-      <div className={styles["products-container"]}>
-        <div className={styles["products"]}>
-          {products.map((product) => (
-            <Link href={`/product/${product.handle}`} key={product.handle}>
-              {product && <Item product={product} />}
-            </Link>
-          ))}
-        </div>
-      </div>
+      <ShopProducts products={products} />
     </div>
   );
 };

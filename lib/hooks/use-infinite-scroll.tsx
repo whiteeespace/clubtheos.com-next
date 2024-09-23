@@ -16,7 +16,7 @@ const useInfiniteScroll = (
 
     const handleScroll = debounce(() => {
       const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight && !isBlogLoading && hasNextPage) {
+      if (scrollTop + clientHeight >= scrollHeight - 50 && !isBlogLoading && hasNextPage) {
         fetchNextPage();
       }
     }, 200);
