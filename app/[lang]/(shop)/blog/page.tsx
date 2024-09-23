@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@whiteeespace/core";
+import Head from "next/head";
 import React, { Suspense, useState } from "react";
 
 import { GET_BLOG } from "@/lib/queries/get-blog";
@@ -49,6 +50,10 @@ const BlogPage: React.FC = () => {
 
   return (
     <div>
+      <Head>
+        <title>Club Theos · Blog</title>
+        <meta name="description" content="Club Theos Inc. Blog. A mood board." />
+      </Head>
       <section className={styles["blog-container"]}>
         {blogVariables.map((variables, index) => (
           <Suspense key={index} fallback={<div>Loading...</div>}>

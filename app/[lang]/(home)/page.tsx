@@ -16,7 +16,7 @@ import FadeContainer from "./_components/FadeContainer";
 import Logo from "./_components/Logo";
 import styles from "./styles.module.scss";
 
-export const Home = async () => {
+const HomePage = async () => {
   const language = await getLocale();
   const result = await getClient().query(GET_HOME_PAGE, { language: language.toUpperCase() as LanguageCode });
   const homeObject = result.data?.metaobject;
@@ -85,4 +85,4 @@ export async function generateMetadata({ params: { lang } }: { params: { lang: s
   };
 }
 
-export default Home;
+export default HomePage;

@@ -1,3 +1,4 @@
+import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 
 import { ShopProducts } from "@components/ShopProducts";
@@ -5,6 +6,25 @@ import Image from "@theos/Image";
 
 import styles from "./styles.module.scss";
 import { getTheosBeanieClassOf24Data } from "../action";
+
+// eslint-disable-next-line no-empty-pattern
+export async function generateMetadata({}, parent: ResolvingMetadata): Promise<Metadata> {
+  const locale = await getLocale();
+  const { productData } = await getTheosBeanieClassOf24Data(locale.toUpperCase());
+
+  const images = productData?.map((product) => product.featuredImage?.url);
+  const parentFields = await parent;
+
+  return {
+    title: "Club Theos · Theos Beanie Class of 24",
+    description: "Collection of Beanies made by Club Theos Inc.",
+    openGraph: {
+      images,
+    },
+    metadataBase: parentFields.metadataBase,
+    ...parentFields.robots,
+  };
+}
 
 const TheosBeaniePage = async () => {
   const locale = await getLocale();
