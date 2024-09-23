@@ -72,17 +72,4 @@ const HomePage = async () => {
   );
 };
 
-export async function generateMetadata({ params: { lang } }: { params: { lang: string } }) {
-  const title = lang === "fr" ? "Accueil" : "Home";
-  const description =
-    lang === "fr"
-      ? "Bienvenue sur notre application Next.js multilingue"
-      : "Welcome to our multilingual Next.js application";
-
-  return {
-    title,
-    description,
-  };
-}
-
 export default HomePage;
