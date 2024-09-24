@@ -7,14 +7,13 @@ export const GET_COLLECTION_METADATA = graphql(`
       id
       title
       descriptionHtml
-      products(first: 1) {
+      products(first: 0) {
         filters {
           id
           label
           values {
             id
             label
-            count
           }
         }
       }

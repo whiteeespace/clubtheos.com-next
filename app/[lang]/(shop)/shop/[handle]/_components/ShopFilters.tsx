@@ -22,12 +22,15 @@ export const ShopFilters: React.FC<ShopFiltersProps> = ({ filters }) => {
   const t = useTranslations("filters");
   const [isFiltersOpen] = useQueryState("filtersOpen", parseAsBoolean);
 
-  const [, setFilters] = useQueryStates({
-    productType: parseAsString,
-    size: parseAsString,
-    color: parseAsString,
-    availability: parseAsString,
-  });
+  const [, setFilters] = useQueryStates(
+    {
+      productType: parseAsString,
+      size: parseAsString,
+      color: parseAsString,
+      availability: parseAsString,
+    },
+    { history: "push" }
+  );
 
   const resetFilters = () => {
     setFilters(null);

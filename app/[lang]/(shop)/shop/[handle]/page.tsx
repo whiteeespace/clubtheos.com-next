@@ -22,7 +22,13 @@ export async function generateMetadata({ params }, parent: ResolvingMetadata): P
   };
 }
 
-const ShopPage = async ({ params }) => {
+interface Props {
+  params: {
+    handle: string;
+  };
+}
+
+const ShopPage = async ({ params }: Props) => {
   const handle = String(params.handle);
   const locale = await getLocale();
 
@@ -30,11 +36,7 @@ const ShopPage = async ({ params }) => {
     return redirect("/");
   }
 
-  const { title, description, totalProductCount, filters } = await getCollectionMetadata(
-    handle,
-    locale.toUpperCase(),
-    "CA"
-  );
+  const { title, description, filters } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
 
   return (
     <section className={styles["shop-container"]}>
@@ -53,7 +55,7 @@ const ShopPage = async ({ params }) => {
         )}
       </div>
       <ShopFilters filters={filters} />
-      <Products collectionHandle={handle} productCount={totalProductCount} />
+      <Products collectionHandle={handle} />
     </section>
   );
 };

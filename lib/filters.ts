@@ -1,4 +1,6 @@
-import { ProductFilter } from "@/gql/graphql";
+import { PartialDeep } from "type-fest";
+
+import { Filter, ProductFilter } from "@/gql/graphql";
 
 export interface AvailabilityFilterType {
   available: boolean;
@@ -23,10 +25,10 @@ export interface Filters {
 }
 
 export const getFilters = (filters?: {
-  productType: string[] | null;
-  size: string[] | null;
-  color: string[] | null;
-  availability: string[] | null;
+  productType?: string[] | null;
+  size?: string[] | null;
+  color?: string[] | null;
+  availability?: string[] | null;
 }): ProductFilter[] => {
   const filtersInput: Filters = {
     productTypeFilter: filters?.productType?.map((productType) => ({ productType })) ?? [],
@@ -42,4 +44,18 @@ export const getFilters = (filters?: {
     ...(filtersInput?.colorFilter || []),
     ...(filtersInput?.sizeFilter || []),
   ];
+};
+
+export const getSearchParamsFilters = (filters?: string | string[]) => {
+  if (!filters) return undefined;
+  return Array.isArray(filters) ? filters : [filters];
+};
+
+export const getProductCount = (filters?: PartialDeep<Filter, { recurseIntoArrays: true }>[]) => {
+  const availabilityFilter = filters?.find((filter) => filter.id === "filter.v.availability");
+  const totalProductCount = availabilityFilter?.values?.reduce(
+    (acc, filter) => acc + (filter?.count ?? 0),
+    0
+  );
+  return totalProductCount ?? 0;
 };

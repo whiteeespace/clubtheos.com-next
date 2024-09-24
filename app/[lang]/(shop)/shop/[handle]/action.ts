@@ -1,6 +1,7 @@
 "use server";
 
 import { getClient } from "@whiteeespace/core/utils";
+import { revalidatePath } from "next/cache";
 
 import {
   CountryCode,
@@ -29,21 +30,18 @@ export const getCollectionMetadata = async (handle: string, language: string, co
   );
   const colorFilter = collection?.products.filters.find((filter) => filter.id === "filter.v.option.color");
   const sizeFilter = collection?.products.filters.find((filter) => filter.id === "filter.v.option.size");
-  const availabilityFilter = collection?.products.filters.find(
-    (filter) => filter.id === "filter.v.availability"
-  );
-  const totalProductCount = availabilityFilter?.values.reduce((acc, filter) => acc + filter.count, 0);
 
-  const filters = {
+  const filtersOptions = {
     productType: productTypeFilter,
     color: colorFilter,
     size: sizeFilter,
   };
 
+  revalidatePath(`/${language}/shop/${handle}`);
+
   return {
     title: collection?.title,
     description: collection?.descriptionHtml,
-    totalProductCount,
-    filters,
+    filters: filtersOptions,
   };
 };

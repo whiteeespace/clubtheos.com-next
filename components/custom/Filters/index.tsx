@@ -110,7 +110,10 @@ interface VariantFilterProps {
 
 export const VariantFilter = forwardRef<Ref, VariantFilterProps>(({ label, options, type }, ref) => {
   const filterName = type === "size" ? "size" : "color";
-  const [variantFilter, setVariantFilter] = useQueryState(filterName, parseAsArrayOf(parseAsString));
+  const [variantFilter, setVariantFilter] = useQueryState(
+    filterName,
+    parseAsArrayOf(parseAsString).withOptions({ history: "push" })
+  );
 
   const onSubmit = useCallback(
     (formData: FormValues) => {
@@ -142,7 +145,7 @@ interface ProductTypeFilterProps {
 export const ProductTypeFilter = forwardRef<Ref, ProductTypeFilterProps>(({ label, options }, ref) => {
   const [productTypeFilter, setProductTypeFilter] = useQueryState(
     "productType",
-    parseAsArrayOf(parseAsString)
+    parseAsArrayOf(parseAsString).withOptions({ history: "push" })
   );
 
   const onSubmit = useCallback(
@@ -175,7 +178,7 @@ interface AvailabilityFilterProps {
 export const AvailabilityFilter = forwardRef<Ref, AvailabilityFilterProps>(({ label, options }, ref) => {
   const [availabilityFilter, setAvailabilityFilter] = useQueryState(
     "availability",
-    parseAsArrayOf(parseAsString)
+    parseAsArrayOf(parseAsString).withOptions({ history: "push" })
   );
 
   const onSubmit = useCallback(
