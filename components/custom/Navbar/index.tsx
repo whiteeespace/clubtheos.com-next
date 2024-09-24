@@ -85,7 +85,7 @@ const Navbar: React.FC = async () => {
       items: [
         {
           title: t("policies.shipping_policy"),
-          to: "/policies/shipping-policy",
+          to: "/policies/shipping",
         },
         {
           title: t("policies.returns_and_exchanges"),
@@ -97,7 +97,7 @@ const Navbar: React.FC = async () => {
         },
         {
           title: t("policies.privacy_policy"),
-          to: "/policies/privacy-policy",
+          to: "/policies/privacy",
         },
       ],
     },

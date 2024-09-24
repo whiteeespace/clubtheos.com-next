@@ -18,10 +18,6 @@ const Cart: React.FC<CartProps> = ({ freeShipping }) => {
   const t = useTranslations("metadata");
   const { lines, totalQuantity, checkoutUrl } = useCart();
 
-  if (!checkoutUrl) {
-    return null;
-  }
-
   if (!totalQuantity) {
     return (
       <div className={styles["empty-container"]}>
@@ -52,17 +48,19 @@ const Cart: React.FC<CartProps> = ({ freeShipping }) => {
             ))}
           </div>
         </div>
-        <div className={styles["right-container"]}>
-          <div className={styles["button-container"]}>
-            <Link href={checkoutUrl} target="_blank">
-              <Button className={styles["button"]} variant="primary">
-                {t("cart.checkout")}
-              </Button>
-            </Link>
+        {checkoutUrl && (
+          <div className={styles["right-container"]}>
+            <div className={styles["button-container"]}>
+              <Link href={checkoutUrl} target="_blank">
+                <Button className={styles["button"]} variant="primary">
+                  {t("cart.checkout")}
+                </Button>
+              </Link>
 
-            <p>{freeShipping}</p>
+              <p>{freeShipping}</p>
+            </div>
           </div>
-        </div>
+        )}
       </motion.div>
     </div>
   );
