@@ -2,7 +2,7 @@
 
 import { useQuery } from "@whiteeespace/core";
 import Head from "next/head";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 import { GET_BLOG } from "@/lib/queries/get-blog";
 import Loader from "@theos/Loader";
@@ -19,9 +19,10 @@ interface BlogResultsProps {
   variables: BlogVariables;
   onLoadMore: (after: string) => void;
   isLastPage: boolean;
+  onEndReached: () => void;
 }
 
-const BlogResults: React.FC<BlogResultsProps> = ({ onLoadMore, variables, isLastPage }) => {
+const BlogResults: React.FC<BlogResultsProps> = ({ onLoadMore, variables, isLastPage, onEndReached }) => {
   const [{ data, fetching }] = useQuery({
     query: GET_BLOG,
     variables,
@@ -35,13 +36,22 @@ const BlogResults: React.FC<BlogResultsProps> = ({ onLoadMore, variables, isLast
     isLastPage
   );
 
-  return (
-    <>{fetching ? <Loader /> : blogResults?.nodes.map((node) => <BlogItem key={node.id} blog={node} />)}</>
-  );
+  useEffect(() => {
+    if (!blogResults?.pageInfo.hasNextPage) {
+      onEndReached();
+    }
+  }, [blogResults?.pageInfo.hasNextPage, isLastPage, onEndReached]);
+
+  if (fetching) {
+    return null;
+  }
+
+  return <>{blogResults?.nodes.map((node) => <BlogItem key={node.id} blog={node} />)}</>;
 };
 
 const BlogPage: React.FC = () => {
   const [blogVariables, setBlogVariables] = useState<BlogVariables[]>([{ after: undefined }]);
+  const [showLoader, setShowLoader] = useState(true);
 
   return (
     <div>
@@ -51,14 +61,16 @@ const BlogPage: React.FC = () => {
       </Head>
       <section className={styles["blog-container"]}>
         {blogVariables.map((variables, index) => (
-          <Suspense key={index} fallback={<Loader />}>
+          <Suspense key={index} fallback={null}>
             <BlogResults
               variables={variables}
               onLoadMore={(after) => setBlogVariables([...blogVariables, { after }])}
               isLastPage={blogVariables.length - 1 === index}
+              onEndReached={() => setShowLoader(false)}
             />
           </Suspense>
         ))}
+        {showLoader && <Loader />}
       </section>
     </div>
   );

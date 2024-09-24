@@ -48,7 +48,7 @@ const ShopResults: React.FC<ShopResultsProps> = ({ variables, isLastPage }) => {
   );
 
   if (fetching || !shopResults) {
-    return <Loader />;
+    return null;
   }
 
   return <ShopProducts products={shopResults.nodes} onLinkClick={() => setScrollPosition(window.scrollY)} />;
@@ -90,20 +90,20 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle, productCou
   ]);
 
   const countText = productCount === 1 ? t("shop.product") : t("shop.products");
+  const loadedProductsCount = Math.min(shopVariables.length * 32, productCount ?? 0);
 
   return (
     <div className={styles["products-container"]}>
-      {productCount && (
-        <p className={styles["product-count"]}>
-          1-{Math.min(shopVariables.length * 32, productCount)} of {productCount} {countText}
-        </p>
-      )}
+      <p className={styles["product-count"]}>
+        1-{loadedProductsCount} of {productCount} {countText}
+      </p>
       <div className={styles["products"]}>
         {shopVariables.map((variables, index) => (
-          <Suspense key={index} fallback={<Loader />}>
+          <Suspense key={index} fallback={null}>
             <ShopResults variables={variables} isLastPage={shopVariables.length - 1 === index} />
           </Suspense>
         ))}
+        {shopVariables.length * 32 < (productCount ?? 0) && <Loader />}
       </div>
     </div>
   );
