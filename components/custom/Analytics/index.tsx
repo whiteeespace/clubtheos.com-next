@@ -8,7 +8,7 @@ const Analytics: React.FC = () => {
   const pathname = usePathname();
   return (
     <ShopifyAnalytics
-      shopId={`${process.env.REACT_APP_SHOP_ID}`}
+      shopId={`${process.env.NEXT_PUBLIC_SHOP_ID}`}
       currency={"CAD"}
       pathname={pathname}
       domain={"clubtheos.com"}
