@@ -7,7 +7,7 @@
 
   .title {
     font-family: "ropest-black";
-    font-size: 60px;
+    font-size: 88px;
   }
 
   .description {
@@ -17,22 +17,24 @@
 }
 
 .image-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   justify-content: center;
   gap: 10px;
   margin: 75px 0;
   width: 100%;
 
-  .image {
-    width: 30vw;
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-    @media only screen and (max-width: 768px) {
-      width: 100%;
-    }
+  .image {
+    width: 100%;
+    height: auto;
   }
 }
 
 .container {
   padding-bottom: 100px;
+  width: 100%;
 }

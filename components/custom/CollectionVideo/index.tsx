@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import Button from "@theos/Button";
 
-import styles from "../styles.module.scss";
+import styles from "./styles.module.scss";
 
 interface CollectionVideoProps {
   videoSourcesMobile: { url: string; mimeType: string }[];

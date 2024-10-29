@@ -128,7 +128,12 @@ export const getTheosUOneBlockData = async (language: string) => {
   const imagesData = result.data?.collection?.images
     ? parseMetafield<ParsedMetafields["list.file_reference"]>(result.data?.collection?.images)
     : undefined;
+  const videoData = result.data?.collection?.video
+    ? parseMetafield<ParsedMetafields["file_reference"]>(result.data?.collection?.video)
+    : undefined;
+
   const images = imagesData?.references && flattenConnection(imagesData?.references);
+  const video = videoData?.reference;
   const description = result.data?.collection?.description;
   const products = flattenConnection(result.data?.collection?.products);
 
@@ -136,5 +141,6 @@ export const getTheosUOneBlockData = async (language: string) => {
     images,
     description,
     products,
+    video,
   };
 };

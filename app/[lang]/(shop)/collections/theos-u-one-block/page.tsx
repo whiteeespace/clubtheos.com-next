@@ -1,26 +1,30 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 
-import { MediaImage } from "@/gql/graphql";
+import { MediaImage, Video } from "@/gql/graphql";
+import CollectionVideo from "@components/CollectionVideo";
 import { ShopProducts } from "@components/ShopProducts";
 import Image from "@theos/Image";
 
 import styles from "./styles.module.scss";
-import { getJArthurCollaborationData, getTheosUOneBlockData } from "../action";
+import { getTheosUOneBlockData } from "../action";
 
 // eslint-disable-next-line no-empty-pattern
 export async function generateMetadata({}, parent: ResolvingMetadata): Promise<Metadata> {
   const locale = await getLocale();
-  const { title, description, products } = await getJArthurCollaborationData(locale.toUpperCase());
+  const { images, description } = await getTheosUOneBlockData(locale.toUpperCase());
 
-  const images = products?.map((product) => product.featuredImage?.url);
+  const ogImages = images?.map((file: MediaImage) => ({
+    url: file?.image?.url,
+  }));
+
   const parentFields = await parent;
 
   return {
-    title: `Club Theos · ${title.value}`,
-    description: description.value,
+    title: `Club Theos · Theos U: OneBlock`,
+    description: description,
     openGraph: {
-      images,
+      images: ogImages,
     },
     metadataBase: parentFields.metadataBase,
     ...parentFields.robots,
@@ -29,14 +33,20 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
 
 const TheosUOneBlockPage = async () => {
   const locale = await getLocale();
-  const { images, description, products } = await getTheosUOneBlockData(locale.toUpperCase());
+  const { video, images, description, products } = await getTheosUOneBlockData(locale.toUpperCase());
 
   if (!products) {
     return null;
   }
 
+  const mainVideo: Video = (video as Video) ?? undefined;
+
   return (
     <div className={styles["container"]}>
+      <CollectionVideo
+        videoSourcesDesktop={mainVideo?.sources ?? []}
+        videoSourcesMobile={mainVideo?.sources ?? []}
+      />
       <div className={styles["content"]}>
         <h1 className={styles["title"]}>Theos</h1>
         <p className={styles["description"]}>{description}</p>
@@ -54,7 +64,7 @@ const TheosUOneBlockPage = async () => {
       <ShopProducts
         products={products ?? []}
         className={styles["shop-products"]}
-        isCollection={true}
+        // isCollection={true}
         centered
       />
     </div>
