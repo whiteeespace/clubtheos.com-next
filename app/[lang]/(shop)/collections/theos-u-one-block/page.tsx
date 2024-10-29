@@ -21,7 +21,7 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
   const parentFields = await parent;
 
   return {
-    title: `Club Theos · Theos U: OneBlock`,
+    title: `Club Theos · Theos U: One Block`,
     description: description,
     openGraph: {
       images: ogImages,
