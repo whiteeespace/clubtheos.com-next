@@ -1,7 +1,9 @@
 import { Metadata, ResolvingMetadata } from "next";
+import NextImage from "next/image";
 import { getLocale } from "next-intl/server";
 
 import { MediaImage, Video } from "@/gql/graphql";
+import logo from "@/public/theos_rope_.png";
 import CollectionVideo from "@components/CollectionVideo";
 import { ShopProducts } from "@components/ShopProducts";
 import Image from "@theos/Image";
@@ -48,7 +50,7 @@ const TheosUOneBlockPage = async () => {
         videoSourcesMobile={mainVideo?.sources ?? []}
       />
       <div className={styles["content"]}>
-        <h1 className={styles["title"]}>Theos</h1>
+        <NextImage src={logo} alt={"logo"} className={styles["logo"]} />
         <p className={styles["description"]}>{description}</p>
       </div>
       <div className={styles["image-container"]}>
