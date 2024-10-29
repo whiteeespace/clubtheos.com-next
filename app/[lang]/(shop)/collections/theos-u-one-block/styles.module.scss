@@ -1,0 +1,38 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  .title {
+    font-family: "ropest-black";
+    font-size: 60px;
+  }
+
+  .description {
+    max-width: 800px;
+    text-align: center;
+  }
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 75px 0;
+  width: 100%;
+
+  .image {
+    width: 30vw;
+
+    @media only screen and (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
+
+.container {
+  padding-bottom: 100px;
+}

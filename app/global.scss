@@ -1,5 +1,15 @@
 @import url("https://use.typekit.net/utz4tfk.css");
 
+@font-face {
+  font-family: "ropest";
+  src: url("/fonts/Ropest.ttf");
+}
+
+@font-face {
+  font-family: "ropest-black";
+  src: url("/fonts/RopestBlack.ttf");
+}
+
 body,
 html {
   font-family: "neue-haas-unica", sans-serif;
