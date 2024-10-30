@@ -12,6 +12,7 @@ interface ProductsProps {
   productCount?: number;
   currentPage?: number;
   isCollection?: boolean;
+  centered?: boolean;
   onLinkClick?: () => void;
   className?: string;
 }
@@ -21,6 +22,7 @@ export const ShopProducts: React.FC<ProductsProps> = ({
   productCount,
   currentPage,
   isCollection,
+  centered,
   className,
   onLinkClick,
 }) => {
@@ -46,6 +48,7 @@ export const ShopProducts: React.FC<ProductsProps> = ({
           {
             [styles["products--collection"]]: isCollection,
             [styles["products--non-collection"]]: !isCollection,
+            [styles["products--centered"]]: centered,
           },
           className
         )}

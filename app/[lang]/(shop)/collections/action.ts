@@ -4,6 +4,8 @@ import {
   flattenConnection,
   getClient,
   ImageMetaobject,
+  ParsedMetafields,
+  parseMetafield,
   parseMetaobject,
   ReferencesMetaobject,
   ValueMetaobject,
@@ -20,12 +22,15 @@ import {
   GetTheosBeanieQueryVariables,
   GetTheosBubblesQuery,
   GetTheosBubblesQueryVariables,
+  GetTheosUOneBlockCollectionQuery,
+  GetTheosUOneBlockCollectionQueryVariables,
   LanguageCode,
 } from "@/gql/graphql";
 import { GET_COLLECTIONS_DATA } from "@utils/queries/collections/get-collections-data";
 import { GET_J_ARTHUR_COLLECTION } from "@utils/queries/collections/get-j-arthur-collection";
 import { GET_THEOS_BEANIE_PAGE } from "@utils/queries/collections/get-theos-beanie-collection";
 import { GET_THEOS_BUBBLES_PAGE } from "@utils/queries/collections/get-theos-bubbles-collection";
+import { GET_THEOS_U_ONE_BLOCK_COLLECTION } from "@utils/queries/collections/get-theos-u-one-block-collection";
 
 export const getCollectionsData = async (language: string) => {
   const client = getClient();
@@ -108,5 +113,34 @@ export const getTheosBubblesData = async (language: string) => {
     photoshootData,
     title,
     productData,
+  };
+};
+
+export const getTheosUOneBlockData = async (language: string) => {
+  const client = getClient();
+  const result = await client.query<
+    GetTheosUOneBlockCollectionQuery,
+    GetTheosUOneBlockCollectionQueryVariables
+  >(GET_THEOS_U_ONE_BLOCK_COLLECTION, {
+    language: language as LanguageCode,
+  });
+
+  const imagesData = result.data?.collection?.images
+    ? parseMetafield<ParsedMetafields["list.file_reference"]>(result.data?.collection?.images)
+    : undefined;
+  const videoData = result.data?.collection?.video
+    ? parseMetafield<ParsedMetafields["file_reference"]>(result.data?.collection?.video)
+    : undefined;
+
+  const images = imagesData?.references && flattenConnection(imagesData?.references);
+  const video = videoData?.reference;
+  const description = result.data?.collection?.description;
+  const products = flattenConnection(result.data?.collection?.products);
+
+  return {
+    images,
+    description,
+    products,
+    video,
   };
 };

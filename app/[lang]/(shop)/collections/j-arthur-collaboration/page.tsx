@@ -1,9 +1,9 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 
+import CollectionVideo from "@components/CollectionVideo";
 import { ShopProducts } from "@components/ShopProducts";
 
-import CollectionVideo from "./_components/CollectionVideo";
 import styles from "./styles.module.scss";
 import { getJArthurCollaborationData } from "../action";
 

@@ -25,6 +25,10 @@
       row-gap: 24px;
     }
   }
+
+  &--centered {
+    justify-content: center;
+  }
 }
 
 .products-container {
@@ -33,4 +37,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.no-products-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }

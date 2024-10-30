@@ -1,0 +1,49 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .logo {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  .description {
+    max-width: 800px;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin: 75px 0;
+  width: 100%;
+
+  .image {
+    width: calc(25% - 5px);
+    height: auto;
+
+    @media only screen and (max-width: 768px) {
+      width: calc(50% - 5px);
+    }
+  }
+}
+
+.container {
+  padding-bottom: 60px;
+  width: 100%;
+}
+
+.shop-products {
+  padding: 0 20px;
+
+  @media only screen and (max-width: 768px) {
+    padding: 0;
+  }
+}
