@@ -7,7 +7,7 @@
   overscroll-behavior-y: none;
   object-position: 50%;
   cursor: pointer;
-  z-index: 2;
+  z-index: 3;
   img {
     object-fit: cover;
   }
@@ -20,12 +20,12 @@
   width: 200px;
   aspect-ratio: 1/1;
   cursor: pointer;
-  z-index: 3;
+  z-index: 4;
 
   img {
     object-fit: contain;
     object-position: 0 0;
-    z-index: 3;
+    z-index: 4;
   }
 
   @media only screen and (max-width: 900px) {
@@ -33,7 +33,7 @@
     max-width: 250px;
     top: 5%;
     left: 10%;
-    z-index: 3;
+    z-index: 4;
   }
 }
 
