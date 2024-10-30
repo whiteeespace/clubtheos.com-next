@@ -35,7 +35,7 @@ export const GET_THEOS_U_ONE_BLOCK_COLLECTION = graphql(`
           }
         }
       }
-      products(first: 2) {
+      products(first: 4) {
         nodes {
           handle
           title
