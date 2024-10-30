@@ -7,6 +7,9 @@ export const GET_BANNER = graphql(`
       text: field(key: "text") {
         value
       }
+      show: field(key: "show") {
+        value
+      }
     }
   }
 `);

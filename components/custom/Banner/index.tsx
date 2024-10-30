@@ -27,10 +27,15 @@ const Banner: React.FC<Props> = ({ className }) => {
     variables: { language: locale.toUpperCase() as LanguageCode },
   });
   const banner = parseMetaobject<ValueMetaobject>(result?.data?.metaobject?.text);
+  const show = parseMetaobject<ValueMetaobject>(result?.data?.metaobject?.show);
 
-  if (!banner) {
-    return <span className={styles["skeleton"]} />;
+  if (show?.value === "false" || !banner) {
+    return null;
   }
+
+  // if (!banner) {
+  //   return <span className={styles["skeleton"]} />;
+  // }
 
   return (
     <div className={classNames(styles["banner"], className)}>

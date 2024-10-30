@@ -7,6 +7,9 @@ export const GET_FREE_SHIPPING = graphql(`
       text: field(key: "text") {
         value
       }
+      show: field(key: "show") {
+        value
+      }
     }
   }
 `);

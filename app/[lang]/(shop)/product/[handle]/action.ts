@@ -37,5 +37,6 @@ export const getFreeShipping = async (language: string, country: string) => {
 
   return {
     freeShipping: result.data?.metaobject?.text?.value ?? "",
+    show: result.data?.metaobject?.show?.value === "true" ? true : false,
   };
 };

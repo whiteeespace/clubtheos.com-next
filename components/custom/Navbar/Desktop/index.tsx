@@ -8,7 +8,7 @@ import { Suspense, useCallback, useMemo } from "react";
 
 import { Link, usePathname, useRouter } from "@/lib/navigation";
 import logo from "@/public/theos-logo-black.png";
-import Banner, { BannerSkeleton } from "@components/Banner";
+import Banner from "@components/Banner";
 import Button from "@theos/Button";
 import MetaSelect from "@theos/MetaSelect";
 import Search from "@theos/Search";
@@ -135,7 +135,7 @@ export const DesktopNavBar: React.FC<Props> = ({ leftItems, rightItems }) => {
           <Search setShowInput={setIsSearchOpen} showInput={isSearchOpen} placeHolder={t("search.text")} />
         </div>
       </div>
-      <Suspense fallback={<BannerSkeleton />}>{!/\/blog|\/blogue/.test(pathname) && <Banner />}</Suspense>
+      <Suspense fallback={<></>}>{!/\/blog|\/blogue/.test(pathname) && <Banner />}</Suspense>
     </nav>
   );
 };

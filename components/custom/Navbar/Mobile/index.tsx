@@ -13,7 +13,7 @@ import logo from "@/public/theos-logo-black.png";
 import Button from "@theos/Button";
 import Search from "@theos/Search";
 import { Link, usePathname, useRouter } from "@utils/navigation";
-import Banner, { BannerSkeleton } from "components/custom/Banner";
+import Banner from "components/custom/Banner";
 
 import styles from "./styles.module.scss";
 import { MenuItem } from "..";
@@ -181,7 +181,7 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
           <Menu menuItems={[...menuItems, ...languageMenuItems]} />
         </div>
       </div>
-      <Suspense fallback={<BannerSkeleton />}>{!/\/blog|\/blogue/.test(pathname) && <Banner />}</Suspense>
+      <Suspense fallback={<></>}>{!/\/blog|\/blogue/.test(pathname) && <Banner />}</Suspense>
     </nav>
   );
 };
