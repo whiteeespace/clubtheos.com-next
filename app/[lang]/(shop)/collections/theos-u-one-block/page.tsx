@@ -66,7 +66,7 @@ const TheosUOneBlockPage = async () => {
       <ShopProducts
         products={products ?? []}
         className={styles["shop-products"]}
-        // isCollection={true}
+        isCollection={true}
         centered
       />
     </div>
