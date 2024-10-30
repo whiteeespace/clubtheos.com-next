@@ -1,16 +1,6 @@
 "use server";
 
-import {
-  flattenConnection,
-  getClient,
-  ImageMetaobject,
-  ParsedMetafields,
-  parseMetafield,
-  parseMetaobject,
-  ReferencesMetaobject,
-  ValueMetaobject,
-  VideoMetaobject,
-} from "@whiteeespace/core/utils";
+import { flattenConnection, getClient, ParsedMetafields, parseMetafield } from "@whiteeespace/core/utils";
 
 import {
   Collection,
@@ -57,15 +47,16 @@ export const getTheosBeanieClassOf24Data = async (language: string) => {
     }
   );
 
-  const photoshoot = parseMetaobject<ReferencesMetaobject<ImageMetaobject>>(
-    result.data?.metaobject?.photoshoot
-  ).references;
+  const imagesData = result.data?.collection?.images
+    ? parseMetafield<ParsedMetafields["list.file_reference"]>(result.data?.collection?.images)
+    : undefined;
 
+  const images = imagesData?.references && flattenConnection(imagesData?.references);
   const productData =
     result.data?.collection?.products && flattenConnection(result.data?.collection?.products);
 
   return {
-    photoshoot,
+    images,
     productData,
   };
 };
@@ -79,15 +70,17 @@ export const getJArthurCollaborationData = async (language: string) => {
     }
   );
 
-  const mainVideoDesktop = parseMetaobject<VideoMetaobject>(result.data?.metaobject?.mainVideoMobile);
-  const mainVideoMobile = parseMetaobject<VideoMetaobject>(result.data?.metaobject?.mainVideo);
-  const title = parseMetaobject<ValueMetaobject>(result.data?.metaobject?.title);
-  const description = parseMetaobject<ValueMetaobject>(result.data?.metaobject?.description);
+  const videoData = result.data?.collection?.video
+    ? parseMetafield<ParsedMetafields["file_reference"]>(result.data?.collection?.video)
+    : undefined;
+
+  const video = videoData?.reference;
+  const title = result.data?.collection?.title;
+  const description = result.data?.collection?.description;
   const products = result.data?.collection?.products && flattenConnection(result.data?.collection?.products);
 
   return {
-    mainVideoDesktop,
-    mainVideoMobile,
+    video,
     title,
     description,
     products,
@@ -103,14 +96,16 @@ export const getTheosBubblesData = async (language: string) => {
     }
   );
 
-  const photoshootData = parseMetaobject<ReferencesMetaobject<ImageMetaobject>>(
-    result.data?.metaobject?.photoshootImages
-  );
-  const title = parseMetaobject<ValueMetaobject>(result.data?.metaobject?.title);
+  const imagesData = result.data?.collection?.images
+    ? parseMetafield<ParsedMetafields["list.file_reference"]>(result.data?.collection?.images)
+    : undefined;
+
+  const images = imagesData?.references && flattenConnection(imagesData?.references);
+  const title = result.data?.collection?.title;
   const productData = flattenConnection(result.data?.collection?.products);
 
   return {
-    photoshootData,
+    images,
     title,
     productData,
   };

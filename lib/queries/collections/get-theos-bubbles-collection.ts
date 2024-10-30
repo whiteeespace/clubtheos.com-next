@@ -3,42 +3,23 @@ import { graphql } from "gql";
 export const GET_THEOS_BUBBLES_PAGE = graphql(`
   query GetTheosBubbles($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
-    metaobject(handle: { handle: "theos-bubbles", type: "theos_bubbles" }) {
-      title: field(key: "title") {
-        value
-      }
-      mainVideo: field(key: "main_video") {
-        reference {
-          ... on Video {
-            previewImage {
-              url
-            }
-            sources {
-              url
-              mimeType
-              width
-              height
-            }
-          }
-        }
-      }
-      story: field(key: "story") {
-        value
-      }
-      photoshootImages: field(key: "photoshoot_images") {
-        references(first: 50) {
+    collection(handle: "theos-bubbles") {
+      id
+      title
+      images: metafield(namespace: "custom", key: "images") {
+        references(first: 10) {
           nodes {
             ... on MediaImage {
               image {
                 url
+                altText
+                width
+                height
               }
             }
           }
         }
       }
-    }
-    collection(handle: "theos-bubbles") {
-      id
       products(first: 1) {
         nodes {
           handle

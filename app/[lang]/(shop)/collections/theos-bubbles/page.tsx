@@ -2,6 +2,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 import Marquee from "react-fast-marquee";
 
+import { MediaImage } from "@/gql/graphql";
 import { ShopProducts } from "@components/ShopProducts";
 import Image from "@theos/Image";
 
@@ -17,7 +18,7 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
   const parentFields = await parent;
 
   return {
-    title: `Club Theos · ${title.value}`,
+    title: `Club Theos · ${title}`,
     description: "Theos Bubbles. 2024.",
     openGraph: {
       images,
@@ -29,7 +30,7 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
 
 const TheosBubblesPage = async () => {
   const locale = await getLocale();
-  const { photoshootData, title, productData } = await getTheosBubblesData(locale.toUpperCase());
+  const { images, title, productData } = await getTheosBubblesData(locale.toUpperCase());
 
   if (!productData) {
     return null;
@@ -38,13 +39,13 @@ const TheosBubblesPage = async () => {
   return (
     <div className={styles["container"]}>
       <Marquee speed={100} className={styles["marquee"]}>
-        {photoshootData.references?.map((reference, idx) => (
+        {images?.map((file: MediaImage, idx) => (
           <div key={`image-bubbles-${idx}`} className={styles["image-container"]}>
-            <Image className={styles["image"]} src={reference.image?.url} alt="photoshoot img" />
+            <Image className={styles["image"]} src={file.image?.url} alt="photoshoot img" />
           </div>
         ))}
       </Marquee>
-      <h1 className={styles["title"]}>{title.value}</h1>
+      <h1 className={styles["title"]}>{title}</h1>
       <ShopProducts products={productData ?? []} className={styles["shop-products"]} isCollection={true} />
     </div>
   );

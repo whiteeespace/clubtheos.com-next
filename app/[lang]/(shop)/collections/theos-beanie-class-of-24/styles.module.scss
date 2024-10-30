@@ -1,9 +1,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
   margin: 24px 0 60px;
   gap: 24px;
   overflow-anchor: none;
@@ -15,9 +12,11 @@
     justify-content: center;
     gap: 10px;
     margin-top: 75px;
+    width: 100%;
 
     .image {
       width: 30%;
+      height: auto;
 
       @media only screen and (max-width: 768px) {
         width: 100%;

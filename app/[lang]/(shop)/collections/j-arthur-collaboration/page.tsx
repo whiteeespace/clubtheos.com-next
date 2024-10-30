@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 
+import { Video } from "@/gql/graphql";
 import CollectionVideo from "@components/CollectionVideo";
 import { ShopProducts } from "@components/ShopProducts";
 
@@ -16,8 +17,8 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
   const parentFields = await parent;
 
   return {
-    title: `Club Theos · ${title.value}`,
-    description: description.value,
+    title: `Club Theos · ${title}`,
+    description: description,
     openGraph: {
       images,
     },
@@ -28,22 +29,23 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
 
 const JArthurCollaborationPage = async () => {
   const locale = await getLocale();
-  const { mainVideoDesktop, mainVideoMobile, title, description, products } =
-    await getJArthurCollaborationData(locale.toUpperCase());
+  const { video, title, description, products } = await getJArthurCollaborationData(locale.toUpperCase());
 
   if (!products) {
     return null;
   }
 
+  const mainVideo: Video = (video as Video) ?? undefined;
+
   return (
     <div className={styles["container"]}>
       <CollectionVideo
-        videoSourcesDesktop={mainVideoDesktop.sources ?? []}
-        videoSourcesMobile={mainVideoMobile.sources ?? []}
+        videoSourcesDesktop={mainVideo?.sources ?? []}
+        videoSourcesMobile={mainVideo?.sources ?? []}
       />
       <div className={styles["content"]}>
-        <h1 className={styles["title"]}>{title.value}</h1>
-        <p>{description.value}</p>
+        <h1 className={styles["title"]}>{title}</h1>
+        <p>{description}</p>
       </div>
       <ShopProducts products={products ?? []} className={styles["shop-products"]} isCollection={true} />
     </div>

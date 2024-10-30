@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 
+import { MediaImage } from "@/gql/graphql";
 import { ShopProducts } from "@components/ShopProducts";
 import Image from "@theos/Image";
 
@@ -28,7 +29,7 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
 
 const TheosBeaniePage = async () => {
   const locale = await getLocale();
-  const { photoshoot, productData } = await getTheosBeanieClassOf24Data(locale.toUpperCase());
+  const { images, productData } = await getTheosBeanieClassOf24Data(locale.toUpperCase());
 
   if (!productData) {
     return null;
@@ -44,11 +45,11 @@ const TheosBeaniePage = async () => {
       <ShopProducts products={productData ?? []} className={styles["shop-products"]} isCollection={true} />
       <div>
         <div className={styles["image-container"]}>
-          {photoshoot?.map((picture) => (
+          {images?.map((file: MediaImage) => (
             <Image
-              key={picture.image?.url}
-              src={picture.image?.url}
-              alt={picture.image?.altText ?? ""}
+              key={file.image?.url}
+              src={file.image?.url ?? ""}
+              alt={file.image?.altText ?? ""}
               className={styles["image"]}
             />
           ))}
