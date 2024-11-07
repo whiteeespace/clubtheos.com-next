@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 
@@ -28,6 +29,11 @@ export default async function RootLayout({
       <NextIntlClientProvider messages={messages}>
         <body>
           <Layout>{children}</Layout>
+          <Script
+            async
+            type="text/javascript"
+            src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=RwmzgQ"
+          />
         </body>
       </NextIntlClientProvider>
     </html>
