@@ -16,6 +16,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 
+import { Condition } from "@components/Condition";
 import { Accordion, AccordionGroup } from "@theos/Accordion";
 import Select, { SelectItem } from "@theos/Select";
 
@@ -25,9 +26,10 @@ import styles from "../styles.module.scss";
 interface ProductViewProps {
   freeShipping: string;
   sizeGuide?: string;
+  condition?: string;
 }
 
-export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuide }) => {
+export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuide, condition }) => {
   const t = useTranslations("metadata");
   const pathname = usePathname();
 
@@ -128,7 +130,7 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
               ))}
           />
         </AccordionGroup>
-
+        <Condition value={condition} className={styles["condition--mobile"]} />
         <p className={classNames(styles["free-shipping--mobile"], styles["free-shipping"])}>{freeShipping}</p>
       </motion.div>
       <motion.div
@@ -148,6 +150,7 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
         className={styles["right-container"]}
       >
         <ProductInfo className={styles["product-info--mobile"]} />
+        <Condition value={condition} className={styles["condition--desktop"]} />
         <div className={styles["action-container"]}>
           <Select
             label="Size"
@@ -155,7 +158,6 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
             value={selectedVariant?.id}
             onValueChange={singleSelectSetValue}
             placeholder={t("product.select_size")}
-            defaultValue={selectedVariant?.id}
           >
             {variantsOptions?.map((variant) => (
               <SelectItem key={variant.value} value={variant.value}>

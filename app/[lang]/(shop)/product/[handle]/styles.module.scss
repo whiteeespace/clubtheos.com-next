@@ -184,3 +184,24 @@
     }
   }
 }
+
+.condition {
+  &--mobile {
+    display: none;
+  }
+
+  &--desktop {
+    display: flex;
+  }
+
+  @media only screen and (max-width: 900px) {
+    &--desktop {
+      display: none;
+    }
+
+    &--mobile {
+      display: flex;
+      margin-top: 16px;
+    }
+  }
+}

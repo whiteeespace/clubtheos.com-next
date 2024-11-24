@@ -77,12 +77,12 @@ const ProductPage = async ({ params }) => {
   };
 
   const sizeGuide = product.sizeGuide?.value;
-
+  const condition = product.condition?.value;
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ProductProvider data={product}>
-        <ProductView freeShipping={freeShipping} sizeGuide={sizeGuide} />
+        <ProductView freeShipping={freeShipping} sizeGuide={sizeGuide} condition={condition} />
       </ProductProvider>
     </>
   );

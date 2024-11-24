@@ -53,6 +53,10 @@ export const GET_PRODUCT = graphql(`
         type
         value
       }
+      condition: metafield(namespace: "custom", key: "condition") {
+        type
+        value
+      }
     }
   }
 `);
