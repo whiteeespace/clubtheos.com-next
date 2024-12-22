@@ -1,14 +1,16 @@
+import Clarity from "@microsoft/clarity";
 import { Metadata } from "next";
 import { ReactNode } from "react";
 
 import { locales } from "@/i18n";
 import { baseUrl } from "@/lib/base-url";
-
 import "./global.scss";
 
 type Props = {
   children: ReactNode;
 };
+
+Clarity.init("ph2shd5o0v");
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ lang: locale }));
