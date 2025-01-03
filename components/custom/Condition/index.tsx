@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 import styles from "./styles.module.scss";
 
-const CONDITION_OPTIONS = ["as is", "fair", "good", "very good", "excellent", "pristine"];
+const CONDITION_OPTIONS = ["fair", "good", "very good", "excellent", "new"];
 
 interface ConditionProps {
   value?: string;

@@ -129,8 +129,17 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
                 </Fragment>
               ))}
           />
+          <Accordion
+            id="condition"
+            title="Condition"
+            content={
+              <div className={styles["condition"]}>
+                <Condition value={condition} />
+                <p>Good means little wear and tears, mininal stains, and minimal fading.</p>
+              </div>
+            }
+          />
         </AccordionGroup>
-        <Condition value={condition} className={styles["condition--mobile"]} />
         <p className={classNames(styles["free-shipping--mobile"], styles["free-shipping"])}>{freeShipping}</p>
       </motion.div>
       <motion.div
@@ -150,7 +159,6 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
         className={styles["right-container"]}
       >
         <ProductInfo className={styles["product-info--mobile"]} />
-        <Condition value={condition} className={styles["condition--desktop"]} />
         <div className={styles["action-container"]}>
           <Select
             label="Size"
