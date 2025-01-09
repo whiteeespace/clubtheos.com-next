@@ -8,17 +8,23 @@ export type ProductVariantWithSizeChart = ProductVariant & {
 };
 
 export type VariantSizeChart = {
-  value: number;
-  unit: string;
   size: string;
-}[];
+  measurements: {
+    value: number;
+    unit: string;
+  }[];
+};
 
 export const getVariantsSizeChart = (variants: ProductVariantWithSizeChart[]): VariantSizeChart[] => {
-  return variants.map(
-    (variant: ProductVariantWithSizeChart) =>
-      variant?.sizeChart?.value && {
-        size: variant?.title,
-        ...JSON.parse(variant?.sizeChart?.value),
-      }
+  return variants.map((variant: ProductVariantWithSizeChart) =>
+    variant?.sizeChart?.value
+      ? {
+          size: variant?.title,
+          measurements: JSON.parse(variant?.sizeChart?.value) as VariantSizeChart["measurements"],
+        }
+      : {
+          size: variant?.title,
+          measurements: [],
+        }
   );
 };

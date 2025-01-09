@@ -15,7 +15,7 @@ const getSizeChartMeasurements = (sizeGuide: string) => {
 
 interface SizeChartProps {
   sizeGuide: string;
-  sizeChart: VariantSizeChart;
+  sizeChart: VariantSizeChart[];
 }
 
 export const SizeChart: React.FC<SizeChartProps> = ({ sizeChart, sizeGuide }) => {
@@ -38,10 +38,10 @@ export const SizeChart: React.FC<SizeChartProps> = ({ sizeChart, sizeGuide }) =>
               <td>{measurement}</td>
               {sizeChart.map((variantSizeChart) => (
                 <td key={variantSizeChart.size}>
-                  {variantSizeChart[index]?.value && (
+                  {variantSizeChart.measurements[index]?.value && (
                     <>
-                      {variantSizeChart[index].value}&quot;{" "}
-                      <span>({(variantSizeChart[index].value * 2.54).toFixed(1)}cm)</span>
+                      {variantSizeChart.measurements[index].value}&quot;{" "}
+                      <span>({(variantSizeChart.measurements[index].value * 2.54).toFixed(1)}cm)</span>
                     </>
                   )}
                 </td>
