@@ -20,7 +20,6 @@ const Select: React.FC<SelectProps> = ({
   value,
   onValueChange,
   placeholder,
-  defaultValue,
   className,
   children,
 }) => {
@@ -30,13 +29,7 @@ const Select: React.FC<SelectProps> = ({
 
   return (
     <div className={classNames(styles.selectContainer, className)}>
-      <select
-        className={styles.select}
-        disabled={disabled}
-        value={value}
-        onChange={handleChange}
-        defaultValue={defaultValue}
-      >
+      <select className={styles.select} disabled={disabled} value={value} onChange={handleChange}>
         {placeholder && (
           <option value="" disabled hidden>
             {placeholder}

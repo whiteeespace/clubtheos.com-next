@@ -46,10 +46,18 @@ export const GET_PRODUCT = graphql(`
               name
               value
             }
+            sizeChart: metafield(namespace: "custom", key: "size_chart") {
+              type
+              value
+            }
           }
         }
       }
-      sizeGuide: metafield(namespace: "custom", key: "size_guide_v2") {
+      sizeGuide: metafield(namespace: "custom", key: "size_guide_type") {
+        type
+        value
+      }
+      condition: metafield(namespace: "custom", key: "condition") {
         type
         value
       }

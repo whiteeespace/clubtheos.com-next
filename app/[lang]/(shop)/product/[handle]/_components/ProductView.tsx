@@ -14,10 +14,13 @@ import classNames from "classnames";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { Condition } from "@components/Condition";
+import { SizeGuide } from "@components/SizeGuide";
 import { Accordion, AccordionGroup } from "@theos/Accordion";
 import Select, { SelectItem } from "@theos/Select";
+import { getVariantsSizeChart, ProductVariantWithSizeChart } from "@utils/utils/get-variant-size-chart";
 
 import { ProductInfo } from "./ProductInfo";
 import styles from "../styles.module.scss";
@@ -25,9 +28,10 @@ import styles from "../styles.module.scss";
 interface ProductViewProps {
   freeShipping: string;
   sizeGuide?: string;
+  condition?: string;
 }
 
-export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuide }) => {
+export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuide, condition }) => {
   const t = useTranslations("metadata");
   const pathname = usePathname();
 
@@ -43,8 +47,9 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
     product?.availableForSale ? t("product.add_to_cart") : t("product.sold_out")
   );
 
-  const variants = flattenConnection(product?.variants);
+  const variants = flattenConnection(product?.variants).map((variant) => variant);
   const productImages = flattenConnection(product?.images);
+  const sizeChart = getVariantsSizeChart(variants as ProductVariantWithSizeChart[]);
 
   const variantsOptions = useMemo(
     () =>
@@ -114,21 +119,9 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
               />
             }
           />
-          <Accordion
-            id="size-guide"
-            title="Size guide"
-            content={sizeGuide
-              ?.trim()
-              .split("\n")
-              .map((text, id) => (
-                <Fragment key={`text-${id}`}>
-                  {text}
-                  <br />
-                </Fragment>
-              ))}
-          />
+          <Accordion id="condition" title="Condition" content={<Condition value={condition} />} />
         </AccordionGroup>
-
+        <SizeGuide sizeGuide={sizeGuide} sizeChart={sizeChart} className={styles["size-guide--mobile"]} />
         <p className={classNames(styles["free-shipping--mobile"], styles["free-shipping"])}>{freeShipping}</p>
       </motion.div>
       <motion.div
@@ -149,13 +142,13 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
       >
         <ProductInfo className={styles["product-info--mobile"]} />
         <div className={styles["action-container"]}>
+          <SizeGuide sizeGuide={sizeGuide} sizeChart={sizeChart} className={styles["size-guide--desktop"]} />
           <Select
             label="Size"
             disabled={!product.availableForSale}
             value={selectedVariant?.id}
             onValueChange={singleSelectSetValue}
             placeholder={t("product.select_size")}
-            defaultValue={selectedVariant?.id}
           >
             {variantsOptions?.map((variant) => (
               <SelectItem key={variant.value} value={variant.value}>

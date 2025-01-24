@@ -13,6 +13,7 @@
     width: 100%;
     height: fit-content;
     top: unset;
+    max-width: unset;
   }
 }
 
@@ -164,8 +165,30 @@
 }
 
 .free-shipping {
+  margin: 0;
   font-size: 12px;
 
+  &--mobile {
+    display: none;
+  }
+
+  &--desktop {
+    display: block;
+    margin-top: 12px;
+  }
+
+  @media only screen and (max-width: 900px) {
+    &--desktop {
+      display: none;
+    }
+
+    &--mobile {
+      display: block;
+    }
+  }
+}
+
+.size-guide {
   &--mobile {
     display: none;
   }

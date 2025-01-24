@@ -19,8 +19,6 @@ const Item: React.FC<Props> = ({ product, className }) => {
   const { title, featuredImage, availableForSale } = product;
   const src = featuredImage?.url;
 
-  console.log(src);
-
   return (
     <motion.div className={classNames(styles["item-container"], className)} transition={{ duration: 0.5 }}>
       <Image
