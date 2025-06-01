@@ -28,7 +28,7 @@ export default async function RootLayout({
     <html lang={params.lang}>
       <NextIntlClientProvider messages={messages}>
         <body>
-          <div className={styles.maintenance}>Under maintenance.</div>
+          <div className={styles.maintenance}>Closed.</div>
           {/* <Layout>{children}</Layout> */}
           <Script
             async
