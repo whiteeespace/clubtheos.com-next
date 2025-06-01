@@ -3,10 +3,11 @@ import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 
-import Layout from "@/components/custom/Layout";
 import { baseUrl } from "@/lib/base-url";
 
 import "../global.scss";
+
+import styles from "./styles.module.scss";
 
 export const metadata: Metadata = {
   title: "Club Theos",
@@ -15,7 +16,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  children,
   params,
 }: {
   children: React.ReactNode;
@@ -28,7 +28,8 @@ export default async function RootLayout({
     <html lang={params.lang}>
       <NextIntlClientProvider messages={messages}>
         <body>
-          <Layout>{children}</Layout>
+          <div className={styles.maintenance}>Under maintenance.</div>
+          {/* <Layout>{children}</Layout> */}
           <Script
             async
             type="text/javascript"
