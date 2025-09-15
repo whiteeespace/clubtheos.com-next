@@ -53,7 +53,7 @@ export const DesktopNavBar: React.FC<Props> = ({ rightItems }) => {
   return (
     <nav className={styles["nav"]}>
       <div className={styles["header"]}>
-        <Link className={styles["link"]} href={"/"}>
+        <Link className={styles["link"]} href={"/shop"}>
           <Image src={logo} alt={"logo"} className={styles["logo"]} />
         </Link>
         <div className={styles["right-items"]}>

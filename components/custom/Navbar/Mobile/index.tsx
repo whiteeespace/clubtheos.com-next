@@ -161,7 +161,7 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
   return (
     <nav className={styles["nav"]}>
       <div className={styles["header"]}>
-        <Link className={styles["shop-link"]} href={"/"}>
+        <Link className={styles["shop-link"]} href={"/shop"}>
           <Image src={logo} alt={"logo"} className={styles["menu-logo"]} />
         </Link>
         <div className={styles["button-container"]}>
