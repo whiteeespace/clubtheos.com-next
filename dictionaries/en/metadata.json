@@ -14,6 +14,10 @@
       "empty": "Your cart is empty.",
       "remove": "remove"
     },
+    "home": {
+      "get_early_access": "get early access",
+      "next_release": "next release"
+    },
     "product": {
       "add_to_cart": "Add to cart",
       "added_to_cart": "added to cart",

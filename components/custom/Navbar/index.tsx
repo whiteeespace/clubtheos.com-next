@@ -1,9 +1,4 @@
-import {
-  CollectionMetaobject,
-  getClient,
-  parseMetaobject,
-  ReferencesMetaobject,
-} from "@whiteeespace/core/utils";
+import { getClient } from "@whiteeespace/core/utils";
 import { getLocale, getTranslations } from "next-intl/server";
 import React from "react";
 
@@ -31,53 +26,8 @@ const Navbar: React.FC = async () => {
 
   if (!navigationSections) return <></>;
 
-  const shopSections = parseMetaobject<ReferencesMetaobject<CollectionMetaobject>>(
-    navigationSections.shop?.mainSections
-  );
-  const shopSalesSection = parseMetaobject<ReferencesMetaobject<CollectionMetaobject>>(
-    navigationSections.shop?.salesSections
-  );
-
-  const shopItems =
-    shopSections.references?.map((collection) => ({
-      title: `${collection.collection?.title}`,
-      to: `/shop/${collection.collection?.handle}`,
-    })) ?? [];
-  const shopSalesItems =
-    shopSalesSection.references?.map((collection) => ({
-      title: `${collection.collection?.title}`,
-      to: `/shop/${collection.collection?.handle}`,
-      color: "red",
-    })) ?? [];
-
-  const collectionsSections = parseMetaobject<ReferencesMetaobject<CollectionMetaobject>>(
-    navigationSections.collections?.mainSections
-  );
-
-  const collectionsItems = collectionsSections.references?.map((collection) => ({
-    title: `${collection.collection?.title}`,
-    to: `/collections/${collection.collection?.handle}`,
-  }));
-
-  const shopTab: MenuItem = {
-    title: t("shop"),
-    to: "/shop",
-    items: [...shopItems, ...shopSalesItems],
-  };
-
-  const collectionsTab: MenuItem = {
-    title: t("collections"),
-    to: "/collections",
-    items: collectionsItems,
-  };
-
-  const blogTab: MenuItem = {
-    title: t("blog"),
-    to: "/blog",
-  };
-
-  const mainSections = [shopTab, collectionsTab, blogTab];
-  const otherSections = [{ title: t("about_us"), to: "/about" }];
+  const mainSections = [];
+  const otherSections = [];
   const mobileOnlySections = [
     {
       title: t("policies.title"),
@@ -106,7 +56,7 @@ const Navbar: React.FC = async () => {
   return (
     <>
       <MobileNavBar menuItems={[...mainSections, ...otherSections, ...mobileOnlySections]} />
-      <DesktopNavBar leftItems={mainSections} rightItems={otherSections} />
+      <DesktopNavBar rightItems={otherSections} />
     </>
   );
 };

@@ -1,7 +1,51 @@
-import { redirect } from "@utils/navigation";
+import { Metadata, ResolvingMetadata } from "next";
+import { getLocale } from "next-intl/server";
 
-const ShopPage = () => {
-  redirect("/shop/new-arrivals");
+import FiltersButton from "./_components/FiltersButton";
+import { Products } from "./_components/Products";
+import { ShopFilters } from "./_components/ShopFilters";
+import { getCollectionMetadata } from "./action";
+import styles from "./styles.module.scss";
+
+export async function generateMetadata(parent: ResolvingMetadata): Promise<Metadata> {
+  const handle = "new-arrivals";
+  const locale = await getLocale();
+  const { title, description } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
+  const parentFields = await parent;
+
+  return {
+    title: `Club Theos · ${title}`,
+    description: description,
+    metadataBase: parentFields.metadataBase,
+    ...parentFields.robots,
+  };
+}
+
+const ShopPage = async () => {
+  const handle = "new-arrivals";
+  const locale = await getLocale();
+  const { title, description, filters } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
+
+  return (
+    <section className={styles["shop-container"]}>
+      <div className={styles["header"]}>
+        <div className={styles["main"]}>
+          <h1 className={styles["title"]}>{title}</h1>
+          <FiltersButton />
+        </div>
+        {description && (
+          <p
+            className={styles["description"]}
+            dangerouslySetInnerHTML={{
+              __html: description ?? "",
+            }}
+          />
+        )}
+      </div>
+      <ShopFilters filters={filters} />
+      <Products collectionHandle={handle} />
+    </section>
+  );
 };
 
 export default ShopPage;

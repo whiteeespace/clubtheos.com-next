@@ -9,9 +9,8 @@ import { Suspense, useCallback, useState } from "react";
 
 import cart from "@/public/cart.png";
 import menu from "@/public/menu.png";
-import logo from "@/public/theos-logo-black.png";
+import logo from "@/public/theos-new-logo.png";
 import Button from "@theos/Button";
-import Search from "@theos/Search";
 import { Link, usePathname, useRouter } from "@utils/navigation";
 import Banner from "components/custom/Banner";
 
@@ -120,14 +119,6 @@ const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
                   ))}
                 </>
               )}
-              <div className={styles["drawer--search"]}>
-                <Search
-                  isAlwaysOpen
-                  autoFocus={false}
-                  placeHolder="Search products..."
-                  className={styles["search-bar"]}
-                />
-              </div>
             </div>
           </Dialog.Content>
         </Dialog.Portal>
