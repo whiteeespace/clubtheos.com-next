@@ -7,7 +7,8 @@ import { ShopFilters } from "./_components/ShopFilters";
 import { getCollectionMetadataCached } from "./action";
 import styles from "./styles.module.scss";
 
-export async function generateMetadata(parent: ResolvingMetadata): Promise<Metadata> {
+// eslint-disable-next-line no-empty-pattern
+export async function generateMetadata({}, parent: ResolvingMetadata): Promise<Metadata> {
   const handle = "new-arrivals";
   const locale = await getLocale();
   const { title, description } = await getCollectionMetadataCached(handle, locale.toUpperCase(), "CA");
