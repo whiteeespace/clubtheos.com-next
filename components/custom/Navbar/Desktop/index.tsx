@@ -4,7 +4,7 @@ import { useCart } from "@whiteeespace/core";
 import classNames from "classnames";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { Suspense, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import { Link, usePathname, useRouter } from "@/lib/navigation";
 import logo from "@/public/theos-new-logo.png";
@@ -86,8 +86,7 @@ export const DesktopNavBar: React.FC<Props> = ({ rightItems }) => {
           </Button>
         </div>
       </div>
-
-      <Suspense fallback={<></>}>{!/\/blog|\/blogue/.test(pathname) && <Banner />}</Suspense>
+      <Banner />
     </nav>
   );
 };

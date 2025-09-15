@@ -15,10 +15,6 @@ interface Props {
   className?: string;
 }
 
-export const BannerSkeleton = () => {
-  return <div className={styles["skeleton"]} />;
-};
-
 const Banner: React.FC<Props> = ({ className }) => {
   const locale = useLocale();
 
@@ -32,10 +28,6 @@ const Banner: React.FC<Props> = ({ className }) => {
   if (show?.value === "false" || !banner) {
     return null;
   }
-
-  // if (!banner) {
-  //   return <span className={styles["skeleton"]} />;
-  // }
 
   return (
     <div className={classNames(styles["banner"], className)}>

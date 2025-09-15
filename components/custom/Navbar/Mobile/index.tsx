@@ -5,7 +5,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useCart } from "@whiteeespace/core";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import cart from "@/public/cart.png";
 import menu from "@/public/menu.png";
@@ -172,7 +172,7 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
           <Menu menuItems={[...menuItems, ...languageMenuItems]} />
         </div>
       </div>
-      <Suspense fallback={<></>}>{!/\/blog|\/blogue/.test(pathname) && <Banner />}</Suspense>
+      <Banner />
     </nav>
   );
 };

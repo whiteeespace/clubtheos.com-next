@@ -1,7 +1,7 @@
 "use server";
 
 import { getClient } from "@whiteeespace/core/utils";
-import { revalidatePath } from "next/cache";
+import { unstable_cache as nextCache } from "next/cache";
 
 import {
   CountryCode,
@@ -11,7 +11,7 @@ import {
 } from "@/gql/graphql";
 import { GET_COLLECTION_METADATA } from "@utils/queries/get-collection-metadata";
 
-export const getCollectionMetadata = async (handle: string, language: string, country: string) => {
+async function fetchCollectionMetadata(handle: string, language: string, country: string) {
   const client = getClient();
 
   const result = await client.query<GetCollectionMetaDataQuery, GetCollectionMetaDataQueryVariables>(
@@ -37,11 +37,14 @@ export const getCollectionMetadata = async (handle: string, language: string, co
     size: sizeFilter,
   };
 
-  revalidatePath(`/${language}/shop/${handle}`);
-
   return {
-    title: collection?.title,
-    description: collection?.descriptionHtml,
+    title: collection?.title ?? null,
+    description: collection?.descriptionHtml ?? null,
     filters: filtersOptions,
   };
-};
+}
+
+export const getCollectionMetadataCached = nextCache(fetchCollectionMetadata, ["collection-metadata"], {
+  revalidate: 60,
+  tags: ["collection-metadata"],
+});

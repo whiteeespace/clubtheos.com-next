@@ -4,13 +4,13 @@ import { getLocale } from "next-intl/server";
 import FiltersButton from "./_components/FiltersButton";
 import { Products } from "./_components/Products";
 import { ShopFilters } from "./_components/ShopFilters";
-import { getCollectionMetadata } from "./action";
+import { getCollectionMetadataCached } from "./action";
 import styles from "./styles.module.scss";
 
 export async function generateMetadata(parent: ResolvingMetadata): Promise<Metadata> {
   const handle = "new-arrivals";
   const locale = await getLocale();
-  const { title, description } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
+  const { title, description } = await getCollectionMetadataCached(handle, locale.toUpperCase(), "CA");
   const parentFields = await parent;
 
   return {
@@ -24,7 +24,11 @@ export async function generateMetadata(parent: ResolvingMetadata): Promise<Metad
 const ShopPage = async () => {
   const handle = "new-arrivals";
   const locale = await getLocale();
-  const { title, description, filters } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
+  const { title, description, filters } = await getCollectionMetadataCached(
+    handle,
+    locale.toUpperCase(),
+    "CA"
+  );
 
   return (
     <section className={styles["shop-container"]}>
