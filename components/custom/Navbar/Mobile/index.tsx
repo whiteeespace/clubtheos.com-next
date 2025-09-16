@@ -129,9 +129,10 @@ const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
 
 interface Props {
   menuItems: MenuItem[];
+  banner?: string;
 }
 
-export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
+export const MobileNavBar: React.FC<Props> = ({ menuItems, banner }) => {
   const { totalQuantity } = useCart();
   const t = useTranslations("language");
   const pathname = usePathname();
@@ -172,7 +173,7 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
           <Menu menuItems={[...menuItems, ...languageMenuItems]} />
         </div>
       </div>
-      <Banner />
+      {banner && <Banner text={banner} />}
     </nav>
   );
 };

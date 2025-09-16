@@ -16,10 +16,11 @@ import styles from "./styles.module.scss";
 import { MenuItem } from "..";
 
 interface Props {
+  banner?: string;
   rightItems: MenuItem[];
 }
 
-export const DesktopNavBar: React.FC<Props> = ({ rightItems }) => {
+export const DesktopNavBar: React.FC<Props> = ({ rightItems, banner }) => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -51,7 +52,7 @@ export const DesktopNavBar: React.FC<Props> = ({ rightItems }) => {
   );
 
   return (
-    <nav className={styles["nav"]}>
+    <nav className={classNames(styles["nav"], { [styles["nav--banner"]]: banner })}>
       <div className={styles["header"]}>
         <Link className={styles["link"]} href={"/shop"}>
           <Image src={logo} alt={"logo"} className={styles["logo"]} />
@@ -86,7 +87,7 @@ export const DesktopNavBar: React.FC<Props> = ({ rightItems }) => {
           </Button>
         </div>
       </div>
-      <Banner />
+      {banner && <Banner text={banner} />}
     </nav>
   );
 };

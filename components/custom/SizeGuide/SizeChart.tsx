@@ -9,7 +9,7 @@ const getSizeChartMeasurements = (sizeGuide: string) => {
     case "pants":
       return ["Waist (A)", "Outseam (B)", "Inseam (C)", "Thigh (D)", "Leg opening (E)"];
     default:
-      return ["Chest (A)", "Length (B)", "Sleeve length (C)", "Shoulder (D)", "Hem (E)"];
+      return ["Chest (A)", "Length (B)", "Shoulder (C)", "Sleeve length (D)", "Hem (E)"];
   }
 };
 

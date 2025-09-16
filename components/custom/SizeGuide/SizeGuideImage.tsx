@@ -31,10 +31,10 @@ export const SizeGuideImage: React.FC<SizeGuideImageProps> = ({ sizeGuide }) => 
     <Image
       src={image}
       alt={`Size guide for ${sizeGuide}`}
-      placeholder={"blur"}
+      placeholder={"empty"}
       className={styles["image"]}
-      width={1048}
-      height={1048}
+      width={600}
+      height={600}
       priority
     />
   );

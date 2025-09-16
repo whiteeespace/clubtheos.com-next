@@ -13,7 +13,8 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  margin: 24px 0;
+  margin-top: 16px;
+  margin-bottom: 24px;
   gap: 24px;
   overflow-anchor: none;
   max-width: 1400px;
@@ -77,7 +78,7 @@
   .title {
     text-transform: uppercase;
     margin: 0;
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .description {
