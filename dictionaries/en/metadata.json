@@ -14,6 +14,14 @@
       "empty": "Your cart is empty.",
       "remove": "remove"
     },
+    "home": {
+      "get_early_access": "get early access",
+      "invalid_password": "Invalid password",
+      "next_release": "next release",
+      "no_password_available": "No password available",
+      "password_placeholder": "Enter password",
+      "submit": "submit"
+    },
     "product": {
       "add_to_cart": "Add to cart",
       "added_to_cart": "added to cart",

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Image from "next/image";
 
-import logo from "@/public/theos.gif";
+import logo from "@/public/theos-o-logo.png";
 
 import styles from "./styles.module.scss";
 

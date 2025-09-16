@@ -28,6 +28,10 @@
       "empty": "Votre panier est vide.",
       "remove": "retirer"
     },
+    "home": {
+      "get_early_access": "accéder à la livraison d'avance",
+      "next_release": "prochaine livraison"
+    },
     "product": {
       "add_to_cart": "Ajouter au panier",
       "added_to_cart": "ajouté au panier",

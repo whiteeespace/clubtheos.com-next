@@ -2,7 +2,6 @@
 
 import { Check } from "@phosphor-icons/react/dist/ssr";
 import {
-  Button,
   Image,
   AddToCartButton,
   flattenConnection,
@@ -19,6 +18,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Condition } from "@components/Condition";
 import { SizeGuide } from "@components/SizeGuide";
 import { Accordion, AccordionGroup } from "@theos/Accordion";
+import Button from "@theos/Button";
 import Select, { SelectItem } from "@theos/Select";
 import { getVariantsSizeChart, ProductVariantWithSizeChart } from "@utils/utils/get-variant-size-chart";
 

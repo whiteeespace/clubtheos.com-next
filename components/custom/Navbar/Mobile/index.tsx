@@ -5,13 +5,12 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useCart } from "@whiteeespace/core";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import cart from "@/public/cart.png";
 import menu from "@/public/menu.png";
-import logo from "@/public/theos-logo-black.png";
+import logo from "@/public/theos-new-logo.png";
 import Button from "@theos/Button";
-import Search from "@theos/Search";
 import { Link, usePathname, useRouter } from "@utils/navigation";
 import Banner from "components/custom/Banner";
 
@@ -120,14 +119,6 @@ const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
                   ))}
                 </>
               )}
-              <div className={styles["drawer--search"]}>
-                <Search
-                  isAlwaysOpen
-                  autoFocus={false}
-                  placeHolder="Search products..."
-                  className={styles["search-bar"]}
-                />
-              </div>
             </div>
           </Dialog.Content>
         </Dialog.Portal>
@@ -138,9 +129,10 @@ const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
 
 interface Props {
   menuItems: MenuItem[];
+  banner?: string;
 }
 
-export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
+export const MobileNavBar: React.FC<Props> = ({ menuItems, banner }) => {
   const { totalQuantity } = useCart();
   const t = useTranslations("language");
   const pathname = usePathname();
@@ -170,7 +162,7 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
   return (
     <nav className={styles["nav"]}>
       <div className={styles["header"]}>
-        <Link className={styles["shop-link"]} href={"/"}>
+        <Link className={styles["shop-link"]} href={"/shop"}>
           <Image src={logo} alt={"logo"} className={styles["menu-logo"]} />
         </Link>
         <div className={styles["button-container"]}>
@@ -181,7 +173,7 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems }) => {
           <Menu menuItems={[...menuItems, ...languageMenuItems]} />
         </div>
       </div>
-      <Suspense fallback={<></>}>{!/\/blog|\/blogue/.test(pathname) && <Banner />}</Suspense>
+      {banner && <Banner text={banner} />}
     </nav>
   );
 };

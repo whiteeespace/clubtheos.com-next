@@ -4,10 +4,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 
 import { baseUrl } from "@/lib/base-url";
+import Layout from "@components/Layout";
 
 import "../global.scss";
-
-import styles from "./styles.module.scss";
 
 export const metadata: Metadata = {
   title: "Club Theos",
@@ -16,6 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
+  children,
   params,
 }: {
   children: React.ReactNode;
@@ -28,8 +28,7 @@ export default async function RootLayout({
     <html lang={params.lang}>
       <NextIntlClientProvider messages={messages}>
         <body>
-          <div className={styles.maintenance}>Closed.</div>
-          {/* <Layout>{children}</Layout> */}
+          <Layout>{children}</Layout>
           <Script
             async
             type="text/javascript"
