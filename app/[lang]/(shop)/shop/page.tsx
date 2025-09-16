@@ -9,7 +9,7 @@ import styles from "./styles.module.scss";
 
 // eslint-disable-next-line no-empty-pattern
 export async function generateMetadata({}, parent: ResolvingMetadata): Promise<Metadata> {
-  const handle = "new-arrivals";
+  const handle = "shop-all";
   const locale = await getLocale();
   const { title, description } = await getCollectionMetadataCached(handle, locale.toUpperCase(), "CA");
   const parentFields = await parent;
