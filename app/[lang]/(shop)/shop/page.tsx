@@ -23,7 +23,7 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
 }
 
 const ShopPage = async () => {
-  const handle = "new-arrivals";
+  const handle = "shop-all";
   const locale = await getLocale();
   const { title, description, filters } = await getCollectionMetadataCached(
     handle,

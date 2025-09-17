@@ -28,22 +28,7 @@ function getUrl(pathname: string, locale: string) {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   validateEnvironmentVariables();
 
-  const routesMap = [
-    getEntry("/"),
-    getEntry("/shop/new-arrivals"),
-    getEntry("/shop/shop-all"),
-    getEntry("/shop/tops"),
-    getEntry("/shop/bottoms"),
-    getEntry("/shop/outerwear"),
-    getEntry("/shop/accessories"),
-    getEntry("/shop/shoes"),
-    getEntry("/shop/sales"),
-    getEntry("/about"),
-    getEntry("/blog"),
-    getEntry("/collections/theos-beanie-class-of-24"),
-    getEntry("/collections/theos-bubbles"),
-    getEntry("/collections/j-arthur-collaboration"),
-  ];
+  const routesMap = [getEntry("/"), getEntry("/shop")];
 
   let hasNextPage = true;
   let after: string | undefined = undefined;
