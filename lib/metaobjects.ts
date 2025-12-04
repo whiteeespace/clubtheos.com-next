@@ -8,7 +8,6 @@ import {
 } from "@shopify/hydrogen-react/storefront-api-types";
 import { PartialDeep } from "type-fest";
 
-
 /**
  * Parses a metaobject field and returns a generic object with the correct shape
  * @param metaobjectField The metaobject field to parse

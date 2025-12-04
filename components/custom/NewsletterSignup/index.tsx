@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import TextInput from "@/components/form/TextInput";
 import Button from "@/components/shared/Button";
+import { subscribe } from "@/lib/actions/subscribe";
 
 import styles from "./styles.module.scss";
 
@@ -25,6 +26,7 @@ interface Props {
 export const NewsletterSignup: React.FC<Props> = ({ className }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -37,27 +39,22 @@ export const NewsletterSignup: React.FC<Props> = ({ className }) => {
 
   const onSubmit = async (data: NewsletterFormData) => {
     setIsLoading(true);
+    setSubmitError(null);
 
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.email }),
-      });
+    const formData = new FormData();
+    formData.append("email", data.email);
 
-      if (!res.ok) {
-        const errorData = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(errorData.error ?? "Subscription failed");
-      }
+    const result = await subscribe(formData);
 
-      setIsSubmitted(true);
-      reset();
-    } catch (err) {
-      console.error("Newsletter signup error:", err);
-      // Could add error state here if needed
-    } finally {
+    if (!result.success) {
+      setSubmitError(result.error ?? "Subscription failed");
       setIsLoading(false);
+      return;
     }
+
+    setIsSubmitted(true);
+    setIsLoading(false);
+    reset();
   };
 
   if (isSubmitted) {
@@ -105,6 +102,15 @@ export const NewsletterSignup: React.FC<Props> = ({ className }) => {
           {isLoading ? "..." : "Subscribe"}
         </Button>
       </form>
+      {submitError && (
+        <motion.p
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={styles["submit-error"]}
+        >
+          {submitError}
+        </motion.p>
+      )}
       <p className={styles.hint}>Get notified about new releases</p>
     </motion.div>
   );

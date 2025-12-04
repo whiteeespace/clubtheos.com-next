@@ -16,6 +16,7 @@
     "@microsoft/clarity": "^1.0.2",
     "@next/third-parties": "^16.0.7",
     "@phosphor-icons/react": "^2.1.10",
+    "@shopify/admin-api-client": "^1.1.1",
     "@shopify/hydrogen-react": "^2025.7.0",
     "@shopify/storefront-api-client": "^1.0.9",
     "classnames": "^2.5.1",

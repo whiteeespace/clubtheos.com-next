@@ -28,7 +28,14 @@ const HomePage = async () => {
 
   // If there's a collection attached to the release, show the custom collection page
   if (data.collection) {
-    return <ReleaseCollection collection={data.collection} />;
+    return (
+      <main>
+        <div className={styles.headerCollection}>
+          <Image src={logo} alt={"logo"} className={styles.logo} />
+        </div>
+        <ReleaseCollection collection={data.collection} />
+      </main>
+    );
   }
 
   // Default countdown page
