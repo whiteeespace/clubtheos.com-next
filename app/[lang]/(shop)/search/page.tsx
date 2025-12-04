@@ -1,31 +1,19 @@
-import { flattenConnection, makeClient } from "@whiteeespace/core/utils";
 import { getLocale } from "next-intl/server";
 
+import { getSearchResults } from "@/lib/data";
 import { ShopProducts } from "@components/ShopProducts";
-import { GET_SEARCH_RESULTS } from "@utils/queries/get-search-results";
-import {
-  CountryCode,
-  GetSearchResultsQuery,
-  GetSearchResultsQueryVariables,
-  LanguageCode,
-  Product,
-} from "gql/graphql";
 
 import styles from "./styles.module.scss";
 
-const SearchPage = async ({ searchParams }) => {
-  const query = searchParams.q;
+const SearchPage = async ({ searchParams }: { searchParams: Promise<{ q?: string }> }) => {
+  const { q: query } = await searchParams;
   const locale = await getLocale();
 
-  const client = makeClient();
-  const result = await client.query<GetSearchResultsQuery, GetSearchResultsQueryVariables>(
-    GET_SEARCH_RESULTS,
-    { query, language: locale.toUpperCase() as LanguageCode, country: "CA" as CountryCode }
-  );
+  if (!query) {
+    return <>no search query...</>;
+  }
 
-  const products = flattenConnection(result?.data?.search).filter(
-    (item) => item.__typename === "Product"
-  ) as Product[];
+  const { products } = await getSearchResults(query, locale.toUpperCase(), "CA");
 
   if (!products || !products.length) {
     return <>no results...</>;

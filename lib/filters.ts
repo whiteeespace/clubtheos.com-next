@@ -35,7 +35,7 @@ export const getFilters = (filters?: {
     sizeFilter: filters?.size?.map((size) => ({ variantOption: { name: "size", value: size } })) ?? [],
     colorFilter: filters?.color?.map((color) => ({ variantOption: { name: "color", value: color } })) ?? [],
     availabilityFilter:
-      filters?.availability?.map((availability) => ({ available: availability === "true" })) ?? [],
+      filters?.availability?.map((availability) => ({ available: availability === "available" })) ?? [],
   };
 
   return [

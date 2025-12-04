@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { ReactNode } from "react";
 
-import { locales } from "@/i18n";
+import { locales } from "@/i18n/types";
 import { baseUrl } from "@/lib/base-url";
 import "./global.scss";
 

@@ -1,4 +1,6 @@
-import { useProduct } from "@whiteeespace/core";
+"use client";
+
+import { useProduct } from "@shopify/hydrogen-react";
 import classNames from "classnames";
 import React from "react";
 

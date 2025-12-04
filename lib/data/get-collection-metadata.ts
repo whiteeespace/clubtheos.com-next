@@ -1,6 +1,3 @@
-"use server";
-
-import { getClient } from "@whiteeespace/core/utils";
 import { unstable_cache as nextCache } from "next/cache";
 
 import {
@@ -9,12 +6,11 @@ import {
   GetCollectionMetaDataQueryVariables,
   LanguageCode,
 } from "@/gql/graphql";
-import { GET_COLLECTION_METADATA } from "@utils/queries/get-collection-metadata";
+import { shopifyQuery } from "@/lib/shopify";
+import { GET_COLLECTION_METADATA } from "@/lib/queries/get-collection-metadata";
 
 async function fetchCollectionMetadata(handle: string, language: string, country: string) {
-  const client = getClient();
-
-  const result = await client.query<GetCollectionMetaDataQuery, GetCollectionMetaDataQueryVariables>(
+  const result = await shopifyQuery<GetCollectionMetaDataQuery, GetCollectionMetaDataQueryVariables>(
     GET_COLLECTION_METADATA,
     {
       collectionHandle: handle,
@@ -23,7 +19,7 @@ async function fetchCollectionMetadata(handle: string, language: string, country
     }
   );
 
-  const collection = result.data?.collection;
+  const collection = result.collection;
 
   const productTypeFilter = collection?.products.filters.find(
     (filter) => filter.id === "filter.p.product_type"
@@ -44,7 +40,8 @@ async function fetchCollectionMetadata(handle: string, language: string, country
   };
 }
 
-export const getCollectionMetadataCached = nextCache(fetchCollectionMetadata, ["collection-metadata"], {
+export const getCollectionMetadata = nextCache(fetchCollectionMetadata, ["collection-metadata"], {
   revalidate: 60,
   tags: ["collection-metadata"],
 });
+

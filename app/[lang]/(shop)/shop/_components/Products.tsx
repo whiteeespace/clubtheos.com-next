@@ -1,11 +1,17 @@
 "use client";
 
-import { useQuery } from "@whiteeespace/core";
 import { useLocale, useTranslations } from "next-intl";
 import { parseAsArrayOf, parseAsString, useQueryStates } from "nuqs";
 import { Suspense, useEffect, useMemo, useState } from "react";
 
-import { CountryCode, LanguageCode, ProductFilter } from "@/gql/graphql";
+import {
+  CountryCode,
+  GetCollectionProductCountQuery,
+  GetCollectionQuery,
+  LanguageCode,
+  ProductFilter,
+} from "@/gql/graphql";
+import { useShopifyQuery } from "@/lib/hooks/use-shopify-query";
 import { ShopVariables, useShopContext } from "@components/Layout/ShopContext";
 import { ShopProducts } from "@components/ShopProducts";
 import Loader from "@theos/Loader";
@@ -27,15 +33,12 @@ const ShopResults: React.FC<ShopResultsProps> = ({ variables, isLastPage, filter
   const locale = useLocale();
   const { currentCollection, shopVariables, setShopVariables, setScrollPosition } = useShopContext();
 
-  const [{ data, fetching }] = useQuery({
-    query: GET_COLLECTION,
-    variables: {
-      collectionHandle: currentCollection,
-      filters,
-      ...variables,
-      language: locale.toUpperCase() as LanguageCode,
-      country: "CA" as CountryCode,
-    },
+  const { data, fetching } = useShopifyQuery<GetCollectionQuery>(GET_COLLECTION, {
+    collectionHandle: currentCollection,
+    filters,
+    ...variables,
+    language: locale.toUpperCase() as LanguageCode,
+    country: "CA" as CountryCode,
   });
   const shopResults = data?.collection?.products;
 
@@ -85,14 +88,11 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle }) => {
 
   const filtersInput = useMemo(() => getFilters(filters), [filters]);
 
-  const [{ data, fetching }] = useQuery({
-    query: GET_COLLECTION_PRODUCT_COUNT,
-    variables: {
-      collectionHandle: currentCollection,
-      filters: filtersInput,
-      language: locale.toUpperCase() as LanguageCode,
-      country: "CA" as CountryCode,
-    },
+  const { data, fetching } = useShopifyQuery<GetCollectionProductCountQuery>(GET_COLLECTION_PRODUCT_COUNT, {
+    collectionHandle: currentCollection,
+    filters: filtersInput,
+    language: locale.toUpperCase() as LanguageCode,
+    country: "CA" as CountryCode,
   });
 
   const productCount = getProductCount(data?.collection?.products.filters);

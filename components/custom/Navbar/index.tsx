@@ -1,10 +1,8 @@
-import { getClient, parseMetaobject, ValueMetaobject } from "@whiteeespace/core/utils";
 import { getLocale, getTranslations } from "next-intl/server";
 import React from "react";
 
-import { GET_NAVIGATION_SECTIONS } from "@/lib/queries/navigation/get-navigation-sections";
-import { GET_BANNER } from "@utils/queries/get-banner";
-import { LanguageCode } from "gql/graphql";
+import { LanguageCode } from "@/gql/graphql";
+import { getBanner, getNavigationSections } from "@/lib/data";
 
 import { DesktopNavBar } from "./Desktop";
 import { MobileNavBar } from "./Mobile";
@@ -20,19 +18,11 @@ export interface MenuItem {
 const Navbar: React.FC = async () => {
   const language = await getLocale();
   const t = await getTranslations("navigation");
-  const client = getClient();
-  const result = await client.query(GET_NAVIGATION_SECTIONS, {
-    language: language.toUpperCase() as LanguageCode,
-  });
-  const navigationSections = result.data;
+  
+  const navigationSections = await getNavigationSections(language.toUpperCase() as LanguageCode);
   if (!navigationSections) return <></>;
 
-  const bannerResult = await client.query(GET_BANNER, {
-    language: language.toUpperCase() as LanguageCode,
-  });
-  const banner = parseMetaobject<ValueMetaobject>(bannerResult.data?.metaobject?.text);
-  const show = parseMetaobject<ValueMetaobject>(bannerResult?.data?.metaobject?.show);
-  const showBanner = show?.value === "true";
+  const banner = await getBanner(language.toUpperCase() as LanguageCode);
 
   const mainSections = [];
   const otherSections = [];
@@ -65,9 +55,12 @@ const Navbar: React.FC = async () => {
     <>
       <MobileNavBar
         menuItems={[...mainSections, ...otherSections, ...mobileOnlySections]}
-        banner={showBanner ? banner.value : undefined}
+        banner={banner.show ? banner.text ?? undefined : undefined}
       />
-      <DesktopNavBar rightItems={otherSections} banner={showBanner ? banner.value : undefined} />
+      <DesktopNavBar
+        rightItems={otherSections}
+        banner={banner.show ? banner.text ?? undefined : undefined}
+      />
     </>
   );
 };

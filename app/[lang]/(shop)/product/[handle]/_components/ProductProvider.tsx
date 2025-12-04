@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductProvider as CoreProductProvider } from "@whiteeespace/core";
+import { ProductProvider as HydrogenProductProvider } from "@shopify/hydrogen-react";
 import { ReactNode } from "react";
 import { PartialDeep } from "type-fest";
 
@@ -12,5 +12,5 @@ interface ProductProviderProps {
 }
 
 export const ProductProvider: React.FC<ProductProviderProps> = ({ data, children }) => {
-  return <CoreProductProvider data={data}>{children}</CoreProductProvider>;
+  return <HydrogenProductProvider data={data}>{children}</HydrogenProductProvider>;
 };

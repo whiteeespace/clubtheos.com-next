@@ -1,9 +1,8 @@
-"use server";
-
-import { getClient, parseMetaobject, ValueMetaobject } from "@whiteeespace/core/utils";
 import { unstable_cache as nextCache } from "next/cache";
 
-import { LanguageCode } from "@/gql/graphql";
+import { GetLatestReleaseQuery, LanguageCode } from "@/gql/graphql";
+import { shopifyQuery } from "@/lib/shopify";
+import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import { GET_RELEASE_DATA } from "@/lib/queries/get-release-data";
 
 export type ReleaseData = {
@@ -13,8 +12,8 @@ export type ReleaseData = {
 };
 
 async function fetchReleaseData(language: LanguageCode): Promise<ReleaseData | null> {
-  const result = await getClient().query(GET_RELEASE_DATA, { language });
-  const node = result.data?.metaobjects.nodes[0];
+  const result = await shopifyQuery<GetLatestReleaseQuery>(GET_RELEASE_DATA, { language });
+  const node = result.metaobjects.nodes[0];
   if (!node) return null;
 
   const releaseOn = parseMetaobject<ValueMetaobject>(node.releaseOn)?.value ?? null;
@@ -24,7 +23,8 @@ async function fetchReleaseData(language: LanguageCode): Promise<ReleaseData | n
   return { releaseOn, closeOn, password };
 }
 
-export const getReleaseDataCached = nextCache(fetchReleaseData, ["release-data"], {
+export const getReleaseData = nextCache(fetchReleaseData, ["release-data"], {
   revalidate: 60,
   tags: ["release-data"],
 });
+

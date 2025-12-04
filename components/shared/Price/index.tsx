@@ -1,8 +1,10 @@
-import { Money } from "@whiteeespace/core";
+"use client";
+
+import { Money } from "@shopify/hydrogen-react";
 import classNames from "classnames";
 import React from "react";
 
-import { MoneyV2 } from "gql/graphql";
+import { MoneyV2 } from "@/gql/graphql";
 
 import styles from "./styles.module.scss";
 

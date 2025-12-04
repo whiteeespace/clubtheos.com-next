@@ -1,14 +1,14 @@
 "use client";
 
-import { Check } from "@phosphor-icons/react/dist/ssr";
 import {
-  Image,
   AddToCartButton,
   flattenConnection,
   useProduct,
-  useShopifyAnalytics,
   useCart,
-} from "@whiteeespace/core";
+  getClientBrowserParameters,
+  sendShopifyAnalytics,
+  AnalyticsEventName,
+} from "@shopify/hydrogen-react";
 import classNames from "classnames";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -19,11 +19,13 @@ import { Condition } from "@components/Condition";
 import { SizeGuide } from "@components/SizeGuide";
 import { Accordion, AccordionGroup } from "@theos/Accordion";
 import Button from "@theos/Button";
+import Image from "@theos/Image";
 import Select, { SelectItem } from "@theos/Select";
 import { getVariantsSizeChart, ProductVariantWithSizeChart } from "@utils/utils/get-variant-size-chart";
 
 import { ProductInfo } from "./ProductInfo";
 import styles from "../styles.module.scss";
+import { CheckIcon } from "@phosphor-icons/react";
 
 interface ProductViewProps {
   freeShipping: string;
@@ -37,10 +39,6 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
 
   const { product, setSelectedVariant, selectedVariant } = useProduct();
   const { lines, id: cartId } = useCart();
-  const { sendAddToCart } = useShopifyAnalytics({
-    shopId: `${process.env.NEXT_PUBLIC_SHOP_ID}`,
-    currency: "CAD",
-  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [buttonText, setButtonText] = useState(
@@ -84,7 +82,24 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
       setButtonText("none left");
     } else {
       setButtonText("added");
-      if (cartId) sendAddToCart({ cartId });
+      const shopId = process.env.NEXT_PUBLIC_SHOP_ID;
+      if (cartId && shopId) {
+        try {
+          const browserParams = getClientBrowserParameters();
+          sendShopifyAnalytics({
+            eventName: AnalyticsEventName.ADD_TO_CART,
+            payload: {
+              ...browserParams,
+              cartId,
+              shopId: `gid://shopify/Shop/${shopId}`,
+              currency: "CAD",
+              hasUserConsent: true,
+            },
+          });
+        } catch {
+          // Analytics failure should not block UX
+        }
+      }
     }
     setIsLoading(false);
   };
@@ -131,7 +146,14 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
         transition={{ duration: 1, delay: 0.25 }}
       >
         {productImages?.map((image) => (
-          <Image key={image?.url} src={image?.url} alt={"product image"} className={styles["image"]} />
+          <Image
+            key={image?.url}
+            src={image?.url}
+            alt="product image"
+            className={styles["image"]}
+            blurSize={50}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
         ))}
       </motion.div>
       <motion.div
@@ -165,7 +187,7 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
             >
               {buttonText === "added" ? (
                 <div className={styles["added"]}>
-                  <Check size={18} /> {t("product.added_to_cart")}
+                  <CheckIcon size={18} /> {t("product.added_to_cart")}
                 </div>
               ) : (
                 buttonText

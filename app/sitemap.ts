@@ -1,9 +1,11 @@
-import { flattenConnection, serverSideFetch, validateEnvironmentVariables } from "@whiteeespace/core/utils";
+import { flattenConnection } from "@shopify/hydrogen-react";
 import { MetadataRoute } from "next";
 
-import { defaultLocale, locales } from "@/i18n";
-import { ShopifyCollectionOperation, getCollectionQuery } from "@/lib/queries/get-collection";
+import { defaultLocale, locales } from "@/i18n/types";
+import { GET_COLLECTION, ShopifyCollectionOperation, getCollectionQuery } from "@/lib/queries/get-collection";
 import { baseUrl } from "@utils/base-url";
+import { shopifyQuery } from "@utils/shopify";
+import { validateEnvironmentVariables } from "@utils/environment-variables";
 
 function getEntry(
   pathname: string,
@@ -35,24 +37,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const productRoutes: MetadataRoute.Sitemap[] = [];
 
   while (hasNextPage) {
-    const collection = await serverSideFetch<ShopifyCollectionOperation>({
-      query: getCollectionQuery,
-      variables: {
-        collectionHandle: "shop-all",
-        after,
-      },
+    const data = await shopifyQuery<
+      ShopifyCollectionOperation["data"],
+      ShopifyCollectionOperation["variables"]
+    >(GET_COLLECTION, {
+      collectionHandle: "shop-all",
+      after,
     });
 
-    const products =
-      collection.body.data.collection && flattenConnection(collection.body.data.collection.products);
+    const products = data.collection && flattenConnection(data.collection.products);
     const newProductRoutes =
       products?.map((product) =>
         getEntry(`/product/${product.handle}`, "weekly", [product.featuredImage?.url as string])
       ) ?? [];
 
     productRoutes.push(...newProductRoutes);
-    hasNextPage = collection.body.data.collection?.products?.pageInfo?.hasNextPage ?? false;
-    after = collection.body.data.collection?.products?.pageInfo?.endCursor;
+    hasNextPage = data.collection?.products?.pageInfo?.hasNextPage ?? false;
+    after = data.collection?.products?.pageInfo?.endCursor;
   }
 
   return [...routesMap, ...productRoutes] as MetadataRoute.Sitemap;

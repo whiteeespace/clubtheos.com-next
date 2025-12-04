@@ -1,6 +1,6 @@
 "use client";
 
-import { useCart } from "@whiteeespace/core";
+import { useCart } from "@shopify/hydrogen-react";
 import classNames from "classnames";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";

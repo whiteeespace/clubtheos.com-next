@@ -1,9 +1,10 @@
 import { getLocale } from "next-intl/server";
 
-import { getPrivacyPolicy } from "../action";
+import { getPrivacyPolicy } from "@/lib/data";
+
 import styles from "../styles.module.scss";
 
-export default async function ReturnsAndExchangesPage() {
+export default async function PrivacyPolicyPage() {
   const locale = await getLocale();
   const { privacyPolicy } = await getPrivacyPolicy(locale.toUpperCase());
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { useWindowView } from "@whiteeespace/core";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+import { useWindowView } from "@/lib/hooks/use-window-view";
 import Button from "@theos/Button";
 
 import styles from "./styles.module.scss";

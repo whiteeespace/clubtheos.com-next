@@ -1,11 +1,11 @@
-import { useCartLine, useCart } from "@whiteeespace/core";
+import { useCartLine, useCart } from "@shopify/hydrogen-react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import React from "react";
 
 import { MoneyV2 } from "@/gql/graphql";
 import Button from "@theos/Button";
+import Image from "@theos/Image";
 import Price from "@theos/Price";
 import { Link } from "@utils/navigation";
 
@@ -29,8 +29,7 @@ const CartItem: React.FC = () => {
             <Image
               src={item.merchandise?.image?.url}
               className={styles["image"]}
-              width={1365}
-              height={2048}
+              blurSize={30}
               alt="cart-item"
             />
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { CartLineProvider, useCart } from "@whiteeespace/core";
+import { CartLineProvider, useCart } from "@shopify/hydrogen-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 

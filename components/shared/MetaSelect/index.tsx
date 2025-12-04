@@ -1,4 +1,5 @@
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Menu, Portal } from "@ark-ui/react";
+import { Check } from "@phosphor-icons/react/dist/ssr";
 import React from "react";
 
 import styles from "./styles.module.scss";
@@ -17,29 +18,27 @@ interface Props {
 
 const MetaSelect: React.FC<Props> = ({ label, value, setValue, options }) => {
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <div role="button" aria-label={label} className={styles["trigger-button"]}>
-          {label}
-        </div>
-      </DropdownMenu.Trigger>
-
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content sideOffset={8} className={styles["content"]}>
-          <DropdownMenu.RadioGroup value={value} onValueChange={setValue}>
-            {options.map((option) => (
-              <DropdownMenu.RadioItem
-                className={styles["radio-item"]}
-                value={option.value}
-                key={option.value}
-              >
-                {option.label}
-              </DropdownMenu.RadioItem>
-            ))}
-          </DropdownMenu.RadioGroup>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+    <Menu.Root positioning={{ placement: "bottom", gutter: 8 }}>
+      <Menu.Trigger className={styles["trigger-button"]} aria-label={label}>
+        {label}
+      </Menu.Trigger>
+      <Portal>
+        <Menu.Positioner>
+          <Menu.Content className={styles["content"]}>
+            <Menu.RadioItemGroup value={value} onValueChange={(e) => setValue(e.value)}>
+              {options.map((option) => (
+                <Menu.RadioItem className={styles["radio-item"]} value={option.value} key={option.value}>
+                  <Menu.ItemIndicator>
+                    <Check size={12} weight="bold" />
+                  </Menu.ItemIndicator>
+                  <Menu.ItemText>{option.label}</Menu.ItemText>
+                </Menu.RadioItem>
+              ))}
+            </Menu.RadioItemGroup>
+          </Menu.Content>
+        </Menu.Positioner>
+      </Portal>
+    </Menu.Root>
   );
 };
 

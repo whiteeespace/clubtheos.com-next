@@ -23,11 +23,13 @@ const Item: React.FC<Props> = ({ product, className }) => {
     <motion.div className={classNames(styles["item-container"], className)} transition={{ duration: 0.5 }}>
       <Image
         key={src}
-        src={`${src}&width=10`}
+        src={src}
+        blurSize={30}
+        sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
         className={classNames(styles["image"], {
           [styles["image--not-available"]]: !availableForSale,
         })}
-        alt={title}
+        alt={title ?? "product"}
       />
       <div className={styles["info-container"]}>
         <p className={styles["title"]}>{title}</p>
