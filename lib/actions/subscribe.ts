@@ -44,7 +44,6 @@ export async function subscribe(
     const getCustomerResponse = await shopifyAdmin.request(GET_CUSTOMER, {
       variables: { query: email },
     });
-    console.log("[subscribe] GET_CUSTOMER response:", JSON.stringify(getCustomerResponse, null, 2));
 
     const customerData = (getCustomerResponse as { data: GetCustomerData | undefined }).data;
 
@@ -54,7 +53,6 @@ export async function subscribe(
       const updateResponse = await shopifyAdmin.request(UPDATE_CUSTOMER_EMAIL_SUBSCRIPTION, {
         variables: { customerId },
       });
-      console.log("[subscribe] UPDATE_CUSTOMER response:", JSON.stringify(updateResponse, null, 2));
 
       const updateCustomerData = (updateResponse as { data: UpdateCustomerEmailSubData | undefined }).data;
       const id = updateCustomerData?.customerEmailMarketingConsentUpdate?.customer?.id;
@@ -69,7 +67,6 @@ export async function subscribe(
     const createResponse = await shopifyAdmin.request(CREATE_CUSTOMER, {
       variables: { email },
     });
-    console.log("[subscribe] CREATE_CUSTOMER response:", JSON.stringify(createResponse, null, 2));
 
     const createCustomerData = (createResponse as { data: CreateCustomerData | undefined }).data;
     const id = createCustomerData?.customerCreate?.customer?.id;
