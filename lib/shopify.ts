@@ -1,6 +1,7 @@
 import { createStorefrontClient } from "@shopify/hydrogen-react";
 import type { DocumentNode } from "graphql";
 import { print } from "graphql";
+import { headers as nextHeaders } from "next/headers";
 
 import { API_VERSION } from "@utils/consts";
 
@@ -18,16 +19,43 @@ export const storefrontClient = createStorefrontClient({
 });
 
 /**
+ * Extracts the buyer's IP address from Next.js request headers.
+ * Returns undefined if not available (e.g., during static generation).
+ */
+export async function getBuyerIp(): Promise<string | undefined> {
+  try {
+    const headersList = await nextHeaders();
+    // x-forwarded-for can contain multiple IPs; first one is the client
+    const forwardedFor = headersList.get("x-forwarded-for");
+    if (forwardedFor) {
+      return forwardedFor.split(",")[0].trim();
+    }
+    // Fallback to other common headers
+    return (
+      headersList.get("x-real-ip") ??
+      headersList.get("cf-connecting-ip") ?? // Cloudflare
+      undefined
+    );
+  } catch {
+    // headers() throws during static generation - that's fine
+    return undefined;
+  }
+}
+
+/**
  * Server-side Shopify Storefront API query function.
  * Uses private token if available for better rate limits and security.
+ * Automatically extracts buyerIp from request headers for analytics.
  */
 export async function shopifyQuery<TData, TVariables = Record<string, unknown>>(
   query: DocumentNode,
   variables?: TVariables
 ): Promise<TData> {
-  // Use private token headers if available, otherwise fall back to public
+  const buyerIp = await getBuyerIp();
+
+  // Use private token headers if available (with buyerIp for analytics), otherwise fall back to public
   const headers = privateToken
-    ? storefrontClient.getPrivateTokenHeaders()
+    ? storefrontClient.getPrivateTokenHeaders({ buyerIp })
     : storefrontClient.getPublicTokenHeaders();
 
   const response = await fetch(storefrontClient.getStorefrontApiUrl(), {

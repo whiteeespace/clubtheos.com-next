@@ -9,7 +9,7 @@ import { PropsWithChildren, forwardRef, useCallback, useEffect, useState } from 
 import { useForm } from "react-hook-form";
 
 import Button from "@theos/Button";
-import Checkbox from "@theos/form-components/Checkbox";
+import Checkbox from "@/components/form/Checkbox";
 
 import styles from "./styles.module.scss";
 

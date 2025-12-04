@@ -48,10 +48,8 @@ export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword }) => {
 
   function grantEarlyAccess(password: string) {
     try {
-      // Local storage for client logic
-      localStorage.setItem("theos_early_access", password);
-      // Cookie so server can read in RSC
-      document.cookie = `theos_early_access=${password}; path=/; max-age=${7 * 24 * 60 * 60}`;
+      // Session cookie - expires when browser closes, so users re-enter on revisit
+      document.cookie = `theos_early_access=${password}; path=/`;
       router.push("/shop");
     } catch (err) {
       // ignore

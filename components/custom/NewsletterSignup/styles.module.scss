@@ -1,0 +1,110 @@
+.container {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+
+  @media only screen and (max-width: 480px) {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.input-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  // Override TextInput container gap
+  gap: 0;
+
+  // Target the inner input from TextInput component
+  :global(.input-text),
+  input {
+    height: 42px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 0 14px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: rgba(0, 0, 0, 0.6);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media only screen and (max-width: 480px) {
+      height: 44px;
+      font-size: 16px; // Prevents zoom on iOS
+    }
+  }
+
+  &--error {
+    :global(.input-text),
+    input {
+      border-color: rgb(180, 50, 50);
+
+      &:focus {
+        border-color: rgb(180, 50, 50);
+      }
+    }
+  }
+}
+
+.error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgb(180, 50, 50);
+  letter-spacing: 0.02em;
+}
+
+.submit {
+  height: 42px;
+  padding: 0 24px !important;
+
+  @media only screen and (max-width: 480px) {
+    height: 44px;
+    width: 100%;
+  }
+}
+
+.hint {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.success {
+  padding: 16px 0;
+}
+
+.success-message {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}

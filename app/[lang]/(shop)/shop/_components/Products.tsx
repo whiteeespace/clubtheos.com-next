@@ -50,10 +50,10 @@ const ShopResults: React.FC<ShopResultsProps> = ({ variables, isLastPage, filter
   );
 
   useEffect(() => {
-    if (!shopResults?.pageInfo.hasNextPage) {
+    if (shopResults && !shopResults.pageInfo.hasNextPage) {
       onEndReached();
     }
-  }, [isLastPage, onEndReached, shopResults?.pageInfo.hasNextPage]);
+  }, [isLastPage, onEndReached, shopResults]);
 
   if (fetching || !shopResults) {
     return null;

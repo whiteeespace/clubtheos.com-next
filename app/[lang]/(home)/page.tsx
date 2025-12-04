@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
@@ -10,6 +9,7 @@ import { redirect } from "@utils/navigation";
 
 import Countdown from "./_components/Countdown";
 import { EarlyAccessButton } from "./_components/EarlyAccessButton";
+import { ReleaseCollection } from "./_components/ReleaseCollection";
 import styles from "./styles.module.scss";
 
 const HomePage = async () => {
@@ -21,17 +21,17 @@ const HomePage = async () => {
   const releaseOn = parseMetaobject<ValueMetaobject>({ value: data.releaseOn ?? undefined });
   const password = parseMetaobject<ValueMetaobject>({ value: data.password ?? undefined });
 
-  const cookieStore = await cookies();
-  const cookiePassword = cookieStore.get("theos_early_access")?.value;
-  if (password?.value && cookiePassword && cookiePassword === password.value) {
-    redirect({ href: "/shop", locale: language });
-  }
-
   const releaseDate = releaseOn?.value ? new Date(releaseOn.value) : null;
   if (releaseDate && !isNaN(releaseDate.getTime()) && new Date() > releaseDate) {
     redirect({ href: "/shop", locale: language });
   }
 
+  // If there's a collection attached to the release, show the custom collection page
+  if (data.collection) {
+    return <ReleaseCollection collection={data.collection} />;
+  }
+
+  // Default countdown page
   return (
     <section className={styles["container"]}>
       <div className={styles["header"]}>
