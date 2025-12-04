@@ -95,22 +95,27 @@ export function useShopifyQuery<TData, TVariables extends Record<string, unknown
         setFetching(false);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, variablesKey, options?.pause]);
 
   useEffect(() => {
     isMountedRef.current = true;
-    fetchData();
+    void fetchData();
 
     return () => {
       isMountedRef.current = false;
     };
   }, [fetchData]);
 
+  const refetch = useCallback(() => {
+    void fetchData();
+  }, [fetchData]);
+
   return {
     data,
     fetching,
     error,
-    refetch: fetchData,
+    refetch,
   };
 }
 

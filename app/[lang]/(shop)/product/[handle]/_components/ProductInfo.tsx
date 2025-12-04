@@ -22,8 +22,8 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ className }) => {
 
   return (
     <div className={classNames(styles["product-info"], className)}>
-      <h1 className={styles["title"]}>{product.title}</h1>
-      <div className={styles["price"]}>
+      <h1 className={styles.title}>{product.title}</h1>
+      <div className={styles.price}>
         {product.priceRange?.maxVariantPrice && (
           <Price
             price={product.priceRange.maxVariantPrice as Partial<MoneyV2>}

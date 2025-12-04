@@ -7,8 +7,8 @@ import {
   LanguageCode,
   Product,
 } from "@/gql/graphql";
-import { shopifyQuery } from "@/lib/shopify";
 import { GET_SEARCH_RESULTS } from "@/lib/queries/get-search-results";
+import { shopifyQuery } from "@/lib/shopify";
 
 export async function getSearchResults(query: string, language: string, country: string) {
   const result = await shopifyQuery<GetSearchResultsQuery, GetSearchResultsQueryVariables>(

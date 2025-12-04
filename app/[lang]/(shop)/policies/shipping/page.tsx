@@ -10,7 +10,7 @@ export default async function ShippingPolicyPage() {
 
   return (
     <div
-      className={styles["container"]}
+      className={styles.container}
       dangerouslySetInnerHTML={{
         __html: shippingPolicy ?? "",
       }}

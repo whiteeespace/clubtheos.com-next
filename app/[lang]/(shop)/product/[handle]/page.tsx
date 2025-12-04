@@ -20,7 +20,7 @@ export async function generateMetadata(
     return {};
   }
 
-  const images = product.images.edges.map((image) => image.node.url);
+  const images = product.images.edges.map((image) => image.node.url as string);
   const parentFields = await parent;
 
   return {
@@ -53,7 +53,7 @@ const ProductPage = async ({ params }: { params: Promise<{ handle: string }> }) 
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.title,
-    image: product.images.edges.map((image) => image.node.url),
+    image: product.images.edges.map((image) => image.node.url as string),
     description: product.description,
     productID: product.id,
     manufacturer: "Club Theos",
@@ -64,6 +64,7 @@ const ProductPage = async ({ params }: { params: Promise<{ handle: string }> }) 
     },
     offers: {
       "@type": "Offer",
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Shopify Decimal scalar is typed as any
       price: product.priceRange.minVariantPrice.amount,
       priceCurrency: product.priceRange.minVariantPrice.currencyCode,
       availability: "https://schema.org/InStock",
@@ -72,6 +73,7 @@ const ProductPage = async ({ params }: { params: Promise<{ handle: string }> }) 
   };
 
   const sizeGuide = product.sizeGuide?.value;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const condition = product.condition?.value;
   return (
     <>

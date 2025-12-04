@@ -1,3 +1,4 @@
+import { flattenConnection } from "@shopify/hydrogen-react";
 import {
   Collection,
   Image,
@@ -7,7 +8,6 @@ import {
 } from "@shopify/hydrogen-react/storefront-api-types";
 import { PartialDeep } from "type-fest";
 
-import { flattenConnection } from "@shopify/hydrogen-react";
 
 /**
  * Parses a metaobject field and returns a generic object with the correct shape
@@ -82,26 +82,26 @@ export function parseMetaobject<ReturnGeneric>(
   } as ReturnGeneric;
 }
 
-export type ImageMetaobject = {
+export interface ImageMetaobject {
   image?: Image;
-};
+}
 
-export type VideoMetaobject = {
+export interface VideoMetaobject {
   sources?: VideoSource[];
-};
+}
 
-export type CollectionMetaobject = {
+export interface CollectionMetaobject {
   collection?: Collection;
-};
+}
 
-export type ProductMetaobject = {
+export interface ProductMetaobject {
   product?: Product;
-};
+}
 
-export type ValueMetaobject = {
+export interface ValueMetaobject {
   value?: string;
-};
+}
 
-export type ReferencesMetaobject<GenericType> = {
+export interface ReferencesMetaobject<GenericType> {
   references?: GenericType[];
-};
+}

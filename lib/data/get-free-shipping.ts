@@ -4,8 +4,8 @@ import {
   GetFreeShippingQueryVariables,
   LanguageCode,
 } from "@/gql/graphql";
-import { shopifyQuery } from "@/lib/shopify";
 import { GET_FREE_SHIPPING } from "@/lib/queries/get-free-shipping";
+import { shopifyQuery } from "@/lib/shopify";
 
 export async function getFreeShipping(language: string, country?: string) {
   const result = await shopifyQuery<GetFreeShippingQuery, GetFreeShippingQueryVariables>(

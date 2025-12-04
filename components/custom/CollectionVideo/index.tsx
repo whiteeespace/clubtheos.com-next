@@ -33,7 +33,7 @@ const CollectionVideo: React.FC<CollectionVideoProps> = ({ videoSourcesMobile, v
       >
         {playSound ? "MUTE" : "UNMUTE"}
       </Button>
-      <video id="videoplayer" muted={!playSound} autoPlay playsInline loop className={styles["video"]}>
+      <video id="videoplayer" muted={!playSound} autoPlay playsInline loop className={styles.video}>
         {mainVideoSources.map((source) => (
           <source key={source.url} src={source.url} type={source.mimeType} />
         ))}

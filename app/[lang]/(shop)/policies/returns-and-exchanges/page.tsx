@@ -10,7 +10,7 @@ export default async function ReturnsAndExchangesPage() {
 
   return (
     <div
-      className={styles["container"]}
+      className={styles.container}
       dangerouslySetInnerHTML={{
         __html: refundPolicy ?? "",
       }}

@@ -32,7 +32,7 @@ export const SizeGuideImage: React.FC<SizeGuideImageProps> = ({ sizeGuide }) => 
       src={image}
       alt={`Size guide for ${sizeGuide}`}
       placeholder={"empty"}
-      className={styles["image"]}
+      className={styles.image}
       width={600}
       height={600}
       priority

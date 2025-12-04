@@ -13,8 +13,9 @@ import Button from "@theos/Button";
 import { Link, usePathname, useRouter } from "@utils/navigation";
 import Banner from "components/custom/Banner";
 
-import styles from "./styles.module.scss";
 import { MenuItem } from "..";
+
+import styles from "./styles.module.scss";
 
 interface MenuLinkProps {
   onClick: () => void;
@@ -57,7 +58,7 @@ const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
     <Dialog.Root open={open} onOpenChange={(e) => onChange(e.open)} lazyMount unmountOnExit>
       <Dialog.Trigger asChild>
         <Button variant="secondary" className={styles["menu-button"]}>
-          <Image src={menu} alt={"menu"} className={styles["menu"]} />
+          <Image src={menu} alt={"menu"} className={styles.menu} />
         </Button>
       </Dialog.Trigger>
       <Portal>
@@ -68,7 +69,7 @@ const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
               <Dialog.Title>Menu</Dialog.Title>
               <Dialog.Description>Shop mobile menu</Dialog.Description>
             </span>
-            <div className={styles["drawer"]} id={"menu-content"}>
+            <div className={styles.drawer} id={"menu-content"}>
               <Dialog.CloseTrigger asChild>
                 <Link onClick={() => onChange()} className={styles["shop-link"]} href={"/"}>
                   <Image src={logo} alt={"logo"} className={styles["menu-logo"]} />
@@ -153,14 +154,14 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems, banner }) => {
   ];
 
   return (
-    <nav className={styles["nav"]}>
-      <div className={styles["header"]}>
+    <nav className={styles.nav}>
+      <div className={styles.header}>
         <Link className={styles["shop-link"]} href={"/shop"}>
           <Image src={logo} alt={"logo"} className={styles["menu-logo"]} />
         </Link>
         <div className={styles["button-container"]}>
           <Button variant="secondary" onClick={() => router.push("/cart")} className={styles["menu-button"]}>
-            <Image src={cart} alt={"cart"} className={styles["cart"]} />
+            <Image src={cart} alt={"cart"} className={styles.cart} />
             {!!totalQuantity && <span className={styles["cart-quantity"]}>{totalQuantity}</span>}
           </Button>
           <Menu menuItems={[...menuItems, ...languageMenuItems]} />

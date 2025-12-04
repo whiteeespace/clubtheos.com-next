@@ -15,14 +15,14 @@ const SearchPage = async ({ searchParams }: { searchParams: Promise<{ q?: string
 
   const { products } = await getSearchResults(query, locale.toUpperCase(), "CA");
 
-  if (!products || !products.length) {
+  if (!products?.length) {
     return <>no results...</>;
   }
 
   return (
-    <div className={styles["container"]}>
-      <div className={styles["header"]}>
-        <h1 className={styles["title"]}>search results for &quot;{query}&quot;</h1>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>search results for &quot;{query}&quot;</h1>
       </div>
       <ShopProducts products={products} />
     </div>

@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 
-export default async function manifest(): Promise<MetadataRoute.Manifest> {
+export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Club Theos Inc.",
     short_name: "Theos",

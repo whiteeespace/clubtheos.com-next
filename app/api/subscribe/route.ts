@@ -1,5 +1,3 @@
-import { NextResponse } from "next/server";
-import { z } from "zod";
 import {
   ApiKeySession,
   ProfilesApi,
@@ -7,6 +5,8 @@ import {
   ProfileSubscriptionBulkCreateJobEnum,
   ListEnum,
 } from "klaviyo-api";
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
 const emailSubscriptionSchema = z.object({
   email: z.email(),
@@ -80,8 +80,8 @@ export async function POST(request: Request) {
     });
 
     const status = response?.status ?? 200;
-    const data = response?.data ?? { ok: true };
-    return NextResponse.json(data, { status });
+    const responseData = (response?.data ?? { ok: true }) as Record<string, unknown>;
+    return NextResponse.json(responseData, { status });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

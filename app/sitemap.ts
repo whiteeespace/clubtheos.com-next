@@ -1,11 +1,12 @@
 import { flattenConnection } from "@shopify/hydrogen-react";
 import { MetadataRoute } from "next";
 
+import { GetCollectionQuery, GetCollectionQueryVariables } from "@/gql/graphql";
 import { defaultLocale, locales } from "@/i18n/types";
-import { GET_COLLECTION, ShopifyCollectionOperation, getCollectionQuery } from "@/lib/queries/get-collection";
+import { GET_COLLECTION } from "@/lib/queries/get-collection";
 import { baseUrl } from "@utils/base-url";
-import { shopifyQuery } from "@utils/shopify";
 import { validateEnvironmentVariables } from "@utils/environment-variables";
+import { shopifyQuery } from "@utils/shopify";
 
 function getEntry(
   pathname: string,
@@ -34,26 +35,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let hasNextPage = true;
   let after: string | undefined = undefined;
-  const productRoutes: MetadataRoute.Sitemap[] = [];
+  const productRoutes: MetadataRoute.Sitemap = [];
 
   while (hasNextPage) {
-    const data = await shopifyQuery<
-      ShopifyCollectionOperation["data"],
-      ShopifyCollectionOperation["variables"]
-    >(GET_COLLECTION, {
-      collectionHandle: "shop-all",
-      after,
-    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- shopifyQuery returns typed data but TS can't infer it through the function
+    const data: GetCollectionQuery = await shopifyQuery<GetCollectionQuery, GetCollectionQueryVariables>(
+      GET_COLLECTION,
+      {
+        collectionHandle: "shop-all",
+        after,
+      }
+    );
 
-    const products = data.collection && flattenConnection(data.collection.products);
+    const collection = data.collection;
+    const products = collection ? flattenConnection(collection.products) : null;
     const newProductRoutes =
       products?.map((product) =>
-        getEntry(`/product/${product.handle}`, "weekly", [product.featuredImage?.url as string])
+        getEntry(`/product/${product.handle}`, "weekly", [String(product.featuredImage?.url ?? "")])
       ) ?? [];
 
     productRoutes.push(...newProductRoutes);
-    hasNextPage = data.collection?.products?.pageInfo?.hasNextPage ?? false;
-    after = data.collection?.products?.pageInfo?.endCursor;
+    hasNextPage = collection?.products?.pageInfo?.hasNextPage ?? false;
+    after = collection?.products?.pageInfo?.endCursor ?? undefined;
   }
 
   return [...routesMap, ...productRoutes] as MetadataRoute.Sitemap;

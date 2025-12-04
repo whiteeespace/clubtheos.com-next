@@ -30,14 +30,14 @@ const ShopPage = async () => {
 
   return (
     <section className={styles["shop-container"]}>
-      <div className={styles["header"]}>
-        <div className={styles["main"]}>
-          <h1 className={styles["title"]}>{title}</h1>
+      <div className={styles.header}>
+        <div className={styles.main}>
+          <h1 className={styles.title}>{title}</h1>
           <FiltersButton />
         </div>
         {description && (
           <p
-            className={styles["description"]}
+            className={styles.description}
             dangerouslySetInnerHTML={{
               __html: description ?? "",
             }}

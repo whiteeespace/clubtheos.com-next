@@ -54,6 +54,7 @@ const Image: React.FC<ImageProps> = ({
     <div className={classNames(styles.wrapper, className)} style={{ aspectRatio }}>
       {/* Low quality placeholder - loads instantly */}
       {placeholderSrc && (
+        // eslint-disable-next-line @next/next/no-img-element -- Intentional: tiny blur placeholder doesn't benefit from next/image optimization
         <img
           src={placeholderSrc}
           alt=""

@@ -33,7 +33,7 @@ export const ShopFilters: React.FC<ShopFiltersProps> = ({ filters }) => {
   );
 
   const resetFilters = () => {
-    setFilters(null);
+    void setFilters(null);
   };
 
   if (!isFiltersOpen) {
@@ -42,7 +42,7 @@ export const ShopFilters: React.FC<ShopFiltersProps> = ({ filters }) => {
 
   return (
     <div className={styles["filters-container"]}>
-      <Filters className={styles["filters"]}>
+      <Filters className={styles.filters}>
         <ProductTypeFilter
           label={t("types.type")}
           options={filters.productType?.values?.map((value) => value?.label ?? "") ?? []}

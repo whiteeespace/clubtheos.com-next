@@ -12,8 +12,8 @@ const TextInput: React.ForwardRefRenderFunction<HTMLInputElement, Props> = (
   { label, className, ...props },
   ref
 ) => (
-  <div className={classNames(styles["container"], className)}>
-    {label && <label className={styles["label"]}>{label}</label>}
+  <div className={classNames(styles.container, className)}>
+    {label && <label className={styles.label}>{label}</label>}
     <input ref={ref} className={styles["input-text"]} {...props} />
   </div>
 );

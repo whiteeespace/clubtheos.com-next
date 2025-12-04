@@ -23,9 +23,9 @@ const Button = forwardRef<Ref, ButtonProps>(
     <button
       ref={ref}
       className={classNames(
-        styles["button"],
+        styles.button,
         styles[`button--${variant}`],
-        { [styles["active"]]: active },
+        { [styles.active]: active },
         className
       )}
       type={type}

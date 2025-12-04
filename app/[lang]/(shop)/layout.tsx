@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
+import { getLocale } from "next-intl/server";
 
 import { LanguageCode } from "@/gql/graphql";
 import { getReleaseData } from "@/lib/data";
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <>
       <Navbar />
-      <main className={styles["container"]}>{children}</main>
+      <main className={styles.container}>{children}</main>
       <Footer />
     </>
   );

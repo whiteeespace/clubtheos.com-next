@@ -14,16 +14,16 @@ export const Dialog: React.FC<DialogProps> = ({ children, title, description, tr
   <ArkDialog.Root lazyMount unmountOnExit>
     <ArkDialog.Trigger asChild>{trigger}</ArkDialog.Trigger>
     <Portal>
-      <ArkDialog.Backdrop className={styles["backdrop"]} />
-      <ArkDialog.Positioner className={styles["positioner"]}>
-        <ArkDialog.Content className={styles["content"]}>
-          <div className={styles["header"]}>
-            <ArkDialog.Title className={styles["title"]}>{title}</ArkDialog.Title>
-            <ArkDialog.CloseTrigger className={styles["close"]} asChild>
+      <ArkDialog.Backdrop className={styles.backdrop} />
+      <ArkDialog.Positioner className={styles.positioner}>
+        <ArkDialog.Content className={styles.content}>
+          <div className={styles.header}>
+            <ArkDialog.Title className={styles.title}>{title}</ArkDialog.Title>
+            <ArkDialog.CloseTrigger className={styles.close} asChild>
               <X size={16} />
             </ArkDialog.CloseTrigger>
           </div>
-          <ArkDialog.Description className={styles["description"]}>{description}</ArkDialog.Description>
+          <ArkDialog.Description className={styles.description}>{description}</ArkDialog.Description>
           {children}
         </ArkDialog.Content>
       </ArkDialog.Positioner>

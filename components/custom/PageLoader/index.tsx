@@ -4,8 +4,8 @@ import styles from "./styles.module.scss";
 
 const PageLoader: React.FC = () => {
   return (
-    <div className={styles["container"]}>
-      <Loader className={styles["loader"]} />
+    <div className={styles.container}>
+      <Loader className={styles.loader} />
     </div>
   );
 };

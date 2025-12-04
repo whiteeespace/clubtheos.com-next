@@ -9,11 +9,11 @@ import {
   GetTermsOfServiceQueryVariables,
   LanguageCode,
 } from "@/gql/graphql";
-import { shopifyQuery } from "@/lib/shopify";
 import { GET_PRIVACY_POLICY } from "@/lib/queries/policies/get-privacy-policy";
 import { GET_REFUND_POLICY } from "@/lib/queries/policies/get-refund-policy";
 import { GET_SHIPPING_POLICY } from "@/lib/queries/policies/get-shipping-policy";
 import { GET_TERMS_OF_SERVICE } from "@/lib/queries/policies/get-terms-of-service";
+import { shopifyQuery } from "@/lib/shopify";
 
 export async function getRefundPolicy(language: string) {
   const result = await shopifyQuery<GetRefundPolicyQuery, GetRefundPolicyQueryVariables>(

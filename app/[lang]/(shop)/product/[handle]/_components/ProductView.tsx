@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckIcon } from "@phosphor-icons/react";
 import {
   AddToCartButton,
   flattenConnection,
@@ -23,9 +24,9 @@ import Image from "@theos/Image";
 import Select, { SelectItem } from "@theos/Select";
 import { getVariantsSizeChart, ProductVariantWithSizeChart } from "@utils/utils/get-variant-size-chart";
 
-import { ProductInfo } from "./ProductInfo";
 import styles from "../styles.module.scss";
-import { CheckIcon } from "@phosphor-icons/react";
+
+import { ProductInfo } from "./ProductInfo";
 
 interface ProductViewProps {
   freeShipping: string;
@@ -45,13 +46,16 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
     product?.availableForSale ? t("product.add_to_cart") : t("product.sold_out")
   );
 
-  const variants = flattenConnection(product?.variants).map((variant) => variant);
+  const variants = useMemo(
+    () => flattenConnection(product?.variants).map((variant) => variant),
+    [product?.variants]
+  );
   const productImages = flattenConnection(product?.images);
   const sizeChart = getVariantsSizeChart(variants as ProductVariantWithSizeChart[]);
 
   const variantsOptions = useMemo(
     () =>
-      variants?.map((variant) => ({
+      variants.map((variant) => ({
         label: variant?.title ?? "",
         value: variant?.id ?? "",
         disabled: !variant?.quantityAvailable,
@@ -86,7 +90,7 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
       if (cartId && shopId) {
         try {
           const browserParams = getClientBrowserParameters();
-          sendShopifyAnalytics({
+          void sendShopifyAnalytics({
             eventName: AnalyticsEventName.ADD_TO_CART,
             payload: {
               ...browserParams,
@@ -113,7 +117,7 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
   }
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -121,13 +125,13 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
         className={styles["left-container"]}
       >
         <ProductInfo className={styles["product-info--desktop"]} />
-        <AccordionGroup className={styles["accordions"]}>
+        <AccordionGroup className={styles.accordions}>
           <Accordion
             id="description"
             title="Product details"
             content={
               <div
-                className={styles["description"]}
+                className={styles.description}
                 dangerouslySetInnerHTML={{
                   __html: product.descriptionHtml ?? "",
                 }}
@@ -150,7 +154,7 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
             key={image?.url}
             src={image?.url}
             alt="product image"
-            className={styles["image"]}
+            className={styles.image}
             blurSize={50}
             sizes="(min-width: 1024px) 50vw, 100vw"
           />
@@ -181,12 +185,12 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
           <div className={styles["button-container"]}>
             <AddToCartButton // @ts-expect-error typing issues with shopify
               as={Button}
-              className={styles["button"]}
+              className={styles.button}
               onClick={() => onAddToCart()}
               disabled={isLoading || !product.availableForSale}
             >
               {buttonText === "added" ? (
-                <div className={styles["added"]}>
+                <div className={styles.added}>
                   <CheckIcon size={18} /> {t("product.added_to_cart")}
                 </div>
               ) : (

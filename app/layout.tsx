@@ -5,11 +5,11 @@ import { locales } from "@/i18n/types";
 import { baseUrl } from "@/lib/base-url";
 import "./global.scss";
 
-type Props = {
+interface Props {
   children: ReactNode;
-};
+}
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return locales.map((locale) => ({ lang: locale }));
 }
 

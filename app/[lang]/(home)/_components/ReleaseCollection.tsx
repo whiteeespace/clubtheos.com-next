@@ -27,7 +27,7 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className={styles["title"]}
+        className={styles.title}
       >
         {collection.title}
       </motion.h1>
@@ -47,7 +47,7 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
               autoPlay
               playsInline
               loop
-              className={styles["video"]}
+              className={styles.video}
             >
               {collection.videoSources.map((source) => (
                 <source key={source.url} src={source.url} type={source.mimeType} />
@@ -70,7 +70,7 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className={styles["actions"]}
+        className={styles.actions}
       >
         <button
           type="button"
@@ -89,14 +89,14 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className={styles["details"]}
+            className={styles.details}
           >
             {collection.description && (
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
-                className={styles["description"]}
+                className={styles.description}
               >
                 {collection.description}
               </motion.p>
@@ -107,7 +107,7 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.2 }}
-                className={styles["gallery"]}
+                className={styles.gallery}
               >
                 {collection.images.map((image, index) => (
                   <motion.div

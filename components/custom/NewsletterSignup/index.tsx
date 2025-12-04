@@ -46,8 +46,8 @@ export const NewsletterSignup: React.FC<Props> = ({ className }) => {
       });
 
       if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || "Subscription failed");
+        const errorData = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(errorData.error ?? "Subscription failed");
       }
 
       setIsSubmitted(true);
@@ -65,7 +65,7 @@ export const NewsletterSignup: React.FC<Props> = ({ className }) => {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className={classNames(styles["container"], styles["success"], className)}
+        className={classNames(styles.container, styles.success, className)}
       >
         <span className={styles["success-message"]}>Thanks for subscribing</span>
       </motion.div>
@@ -77,15 +77,15 @@ export const NewsletterSignup: React.FC<Props> = ({ className }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.5 }}
-      className={classNames(styles["container"], className)}
+      className={classNames(styles.container, className)}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className={styles["form"]}>
+      <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} className={styles.form}>
         <div className={styles["input-wrapper"]}>
           <TextInput
             {...register("email")}
             type="email"
             placeholder="Enter your email"
-            className={classNames(styles["input"], {
+            className={classNames(styles.input, {
               [styles["input--error"]]: errors.email,
             })}
             disabled={isLoading}
@@ -95,17 +95,17 @@ export const NewsletterSignup: React.FC<Props> = ({ className }) => {
             <motion.span
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
-              className={styles["error"]}
+              className={styles.error}
             >
               {errors.email.message}
             </motion.span>
           )}
         </div>
-        <Button type="submit" className={styles["submit"]} disabled={isLoading}>
+        <Button type="submit" className={styles.submit} disabled={isLoading}>
           {isLoading ? "..." : "Subscribe"}
         </Button>
       </form>
-      <p className={styles["hint"]}>Get notified about new releases</p>
+      <p className={styles.hint}>Get notified about new releases</p>
     </motion.div>
   );
 };

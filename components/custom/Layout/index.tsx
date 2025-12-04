@@ -4,8 +4,9 @@ import { PropsWithChildren } from "react";
 import { LanguageCode } from "@/gql/graphql";
 import Clarity from "@components/Clarity";
 
-import Providers from "./Providers";
 import Analytics from "../Analytics";
+
+import Providers from "./Providers";
 
 const Layout: React.FC<PropsWithChildren> = async ({ children }) => {
   const locale = await getLocale();

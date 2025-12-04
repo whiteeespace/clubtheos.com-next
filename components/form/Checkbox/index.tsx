@@ -14,10 +14,10 @@ type Ref = HTMLInputElement;
 
 const Checkbox = forwardRef<Ref, Props>(({ label, className, ...props }, ref) => (
   <div className={className}>
-    <label className={styles["label"]}>
+    <label className={styles.label}>
       <span className={styles["checkbox-wrapper"]}>
-        <input ref={ref} type="checkbox" className={styles["checkbox"]} {...props} />
-        <Check className={styles["checkmark"]} size={12} weight="bold" />
+        <input ref={ref} type="checkbox" className={styles.checkbox} {...props} />
+        <Check className={styles.checkmark} size={12} weight="bold" />
       </span>
       {label}
     </label>

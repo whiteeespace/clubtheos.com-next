@@ -118,10 +118,15 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle }) => {
     scrollPosition,
   ]);
 
+  // Create a stable string key for filters to detect changes
+  const filtersKey = useMemo(() => JSON.stringify(filtersInput), [filtersInput]);
+
+  // Reset shop variables when filters change
   useEffect(() => {
     setShowLoader(true);
     setShopVariables([{ after: undefined }]);
-  }, [filtersInput, setShopVariables]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtersKey]);
 
   const countText = productCount === 1 ? t("shop.product") : t("shop.products");
   const loadedProductsCount = Math.min(shopVariables.length * 32, productCount ?? 0);
@@ -135,7 +140,7 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle }) => {
       <p className={styles["product-count"]}>
         1-{loadedProductsCount} of {productCount} {countText}
       </p>
-      <div className={styles["products"]}>
+      <div className={styles.products}>
         {shopVariables.map((variables, index) => (
           <Suspense key={index} fallback={null}>
             <ShopResults

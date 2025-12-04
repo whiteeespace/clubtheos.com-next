@@ -7,13 +7,13 @@ export type ProductVariantWithSizeChart = ProductVariant & {
   };
 };
 
-export type VariantSizeChart = {
+export interface VariantSizeChart {
   size: string;
   measurements: {
     value: number;
     unit: string;
   }[];
-};
+}
 
 export const getVariantsSizeChart = (variants: ProductVariantWithSizeChart[]): VariantSizeChart[] => {
   return variants.map((variant: ProductVariantWithSizeChart) =>

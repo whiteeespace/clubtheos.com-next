@@ -4,8 +4,8 @@ import {
   GetProductQueryVariables,
   LanguageCode,
 } from "@/gql/graphql";
-import { shopifyQuery } from "@/lib/shopify";
 import { GET_PRODUCT } from "@/lib/queries/get-product";
+import { shopifyQuery } from "@/lib/shopify";
 
 export async function getProduct(handle: string, language: string, country: string) {
   const result = await shopifyQuery<GetProductQuery, GetProductQueryVariables>(GET_PRODUCT, {

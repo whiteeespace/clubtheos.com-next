@@ -28,7 +28,7 @@ const CartItem: React.FC = () => {
           <div className={styles["image-container"]}>
             <Image
               src={item.merchandise?.image?.url}
-              className={styles["image"]}
+              className={styles.image}
               blurSize={30}
               alt="cart-item"
             />
@@ -41,7 +41,7 @@ const CartItem: React.FC = () => {
         </div>
       </Link>
 
-      <div className={styles["price"]}>
+      <div className={styles.price}>
         <div>
           {item.merchandise?.price && (
             <Price

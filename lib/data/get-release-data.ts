@@ -1,45 +1,45 @@
 import { unstable_cache as nextCache } from "next/cache";
 
 import { GetLatestReleaseQuery, LanguageCode } from "@/gql/graphql";
-import { shopifyQuery } from "@/lib/shopify";
 import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import { GET_RELEASE_DATA } from "@/lib/queries/get-release-data";
+import { shopifyQuery } from "@/lib/shopify";
 
-export type VideoSource = {
+export interface VideoSource {
   url: string;
   mimeType: string;
   width: number;
   height: number;
-};
+}
 
-export type CollectionImage = {
+export interface CollectionImage {
   url: string;
   altText: string | null;
   width: number | null;
   height: number | null;
-};
+}
 
-export type ReleaseCollection = {
+export interface ReleaseCollection {
   id: string;
   handle: string;
   title: string;
   description: string;
   videoSources: VideoSource[];
   images: CollectionImage[];
-};
+}
 
-export type ReleaseData = {
+export interface ReleaseData {
   releaseOn: string | null;
   closeOn: string | null;
   password: string | null;
   collection: ReleaseCollection | null;
-};
+}
 
 function parseCollection(
   collectionField: GetLatestReleaseQuery["metaobjects"]["nodes"][0]["collection"]
 ): ReleaseCollection | null {
   const reference = collectionField?.reference;
-  if (!reference || reference.__typename !== "Collection") return null;
+  if (reference?.__typename !== "Collection") return null;
 
   const videoRef = reference.video?.reference;
   const imagesRef = reference.images?.references?.nodes;

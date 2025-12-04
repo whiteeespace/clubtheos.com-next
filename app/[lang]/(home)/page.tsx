@@ -33,13 +33,13 @@ const HomePage = async () => {
 
   // Default countdown page
   return (
-    <section className={styles["container"]}>
-      <div className={styles["header"]}>
-        <Image src={logo} alt={"logo"} className={styles["logo"]} />
+    <section className={styles.container}>
+      <div className={styles.header}>
+        <Image src={logo} alt={"logo"} className={styles.logo} />
       </div>
-      <div className={styles["content"]}>
+      <div className={styles.content}>
         <div className={styles["title-container"]}>
-          <p className={styles["title"]}>{t("next_release")}</p>
+          <p className={styles.title}>{t("next_release")}</p>
         </div>
         <div className={styles["release-on"]}>
           <Countdown targetDateString={releaseOn?.value} />

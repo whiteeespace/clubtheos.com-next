@@ -1,7 +1,7 @@
 import { GetBannerQuery, LanguageCode } from "@/gql/graphql";
-import { shopifyQuery } from "@/lib/shopify";
 import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import { GET_BANNER } from "@/lib/queries/get-banner";
+import { shopifyQuery } from "@/lib/shopify";
 
 export async function getBanner(language: LanguageCode) {
   const result = await shopifyQuery<GetBannerQuery>(GET_BANNER, { language });

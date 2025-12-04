@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Loader: React.FC<Props> = ({ className }) => {
-  return <Image src={logo} alt={"theos-logo"} className={classNames(styles["logo"], className)} />;
+  return <Image src={logo} alt={"theos-logo"} className={classNames(styles.logo, className)} />;
 };
 
 export default Loader;

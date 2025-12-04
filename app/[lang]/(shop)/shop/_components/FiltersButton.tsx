@@ -19,7 +19,7 @@ const FiltersButton: React.FC = () => {
       className={classNames(styles["filter-text"], {
         [styles["filter-text--selected"]]: isFiltersOpen,
       })}
-      onClick={() => setIsFiltersOpen(isFiltersOpen ? null : true)}
+      onClick={() => void setIsFiltersOpen(isFiltersOpen ? null : true)}
     >
       {isFiltersOpen ? t("hide") : t("show")}
     </Button>

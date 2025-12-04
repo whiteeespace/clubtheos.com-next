@@ -11,7 +11,7 @@ interface Props {
 }
 
 const Banner: React.FC<Props> = ({ text, className }) => (
-  <div className={classNames(styles["banner"], className)}>
+  <div className={classNames(styles.banner, className)}>
     <Marquee speed={10}>
       <div className={styles["banner-marquee"]}>
         {Array(12)

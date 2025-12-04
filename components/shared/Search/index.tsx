@@ -7,12 +7,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import { usePathname, useRouter } from "@utils/navigation";
 
-import styles from "./Search.module.scss";
 import Button from "../Button";
 
-type FormValues = {
+import styles from "./Search.module.scss";
+
+interface SearchFormValues {
   search: string;
-};
+}
 
 interface Props {
   isAlwaysOpen?: boolean;
@@ -34,10 +35,10 @@ const Search: React.FC<Props> = ({
   const t = useTranslations("navigation");
   const router = useRouter();
   const pathname = usePathname();
-  const { register, handleSubmit, reset } = useForm<FormValues>({
+  const { register, handleSubmit, reset } = useForm<SearchFormValues>({
     defaultValues: { search: "" },
   });
-  const onSubmit: SubmitHandler<FormValues> = (data) => onSearch(data.search);
+  const onSubmit: SubmitHandler<SearchFormValues> = (data) => onSearch(data.search);
   const openSearch = useCallback(() => {
     reset();
     setShowInput?.(true);
@@ -67,8 +68,8 @@ const Search: React.FC<Props> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-      <div className={classNames(styles["content"], className)}>
+    <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} autoComplete="off">
+      <div className={classNames(styles.content, className)}>
         <input
           className={styles["search-input"]}
           {...register("search")}

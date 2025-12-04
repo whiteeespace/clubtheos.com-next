@@ -24,7 +24,7 @@ const MetaSelect: React.FC<Props> = ({ label, value, setValue, options }) => {
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content className={styles["content"]}>
+          <Menu.Content className={styles.content}>
             <Menu.RadioItemGroup value={value} onValueChange={(e) => setValue(e.value)}>
               {options.map((option) => (
                 <Menu.RadioItem className={styles["radio-item"]} value={option.value} key={option.value}>

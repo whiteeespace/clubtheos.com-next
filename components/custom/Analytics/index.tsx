@@ -27,7 +27,7 @@ const AnalyticsComponent: React.FC = () => {
     const sendPageView = () => {
       try {
         const browserParams = getClientBrowserParameters();
-        sendShopifyAnalytics({
+        void sendShopifyAnalytics({
           eventName: AnalyticsEventName.PAGE_VIEW,
           payload: {
             ...browserParams,

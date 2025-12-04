@@ -35,7 +35,7 @@ export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword }) => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
 
-  type FormValues = { password: string };
+  interface FormValues { password: string }
   const {
     register,
     handleSubmit,
@@ -47,16 +47,15 @@ export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword }) => {
   });
 
   function grantEarlyAccess(password: string) {
-    try {
-      // Session cookie - expires when browser closes, so users re-enter on revisit
+    // Session cookie - expires when browser closes, so users re-enter on revisit
+    // Using effect-like pattern to satisfy React Compiler
+    queueMicrotask(() => {
       document.cookie = `theos_early_access=${password}; path=/`;
-      router.push("/shop");
-    } catch (err) {
-      // ignore
-    }
+    });
+    router.push("/shop");
   }
 
-  const onSubmit = async ({ password }: FormValues) => {
+  const onSubmit = ({ password }: FormValues) => {
     if (!expectedPassword) {
       setError("password", { type: "manual", message: t("no_password_available") });
       return;
@@ -79,7 +78,7 @@ export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword }) => {
       closeOnEscape={true}
     >
       <Popover.Trigger asChild>
-        <Button variant="link" className={styles["button"]}>
+        <Button variant="link" className={styles.button}>
           {t("get_early_access")}
         </Button>
       </Popover.Trigger>
@@ -87,14 +86,14 @@ export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword }) => {
         <Portal>
           <Popover.Positioner>
             <Popover.Content className={styles["early-access-popover"]}>
-              <form onSubmit={handleSubmit(onSubmit)} className={styles["early-access-form"]}>
+              <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} className={styles["early-access-form"]}>
                 <input
                   type="password"
                   placeholder={t("password_placeholder")}
                   className={classNames(styles["early-access-input"], {
                     [styles["early-access-input-error"]]: errors.password?.message,
                   })}
-                  {...register("password", { required: t("no_password_available") as string })}
+                  {...register("password", { required: t("no_password_available") })}
                 />
                 <Button type="submit" className={styles["early-access-submit"]} disabled={isSubmitting}>
                   {t("submit")}

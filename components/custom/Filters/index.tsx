@@ -8,8 +8,8 @@ import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { PropsWithChildren, forwardRef, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import Button from "@theos/Button";
 import Checkbox from "@/components/form/Checkbox";
+import Button from "@theos/Button";
 
 import styles from "./styles.module.scss";
 
@@ -25,7 +25,7 @@ interface FiltersProps {
 type Ref = HTMLFormElement;
 
 export const Filters: React.FC<PropsWithChildren<FiltersProps>> = ({ children, className }) => (
-  <motion.div className={classNames(styles["filters"], className)}>{children}</motion.div>
+  <motion.div className={classNames(styles.filters, className)}>{children}</motion.div>
 );
 
 interface FormValues {
@@ -53,7 +53,7 @@ const Filter = forwardRef<Ref, FilterProps>(({ label, options, defaultValues, co
 
   const handleApply = useCallback(() => {
     setOpen(false);
-    handleSubmit(onSubmit)();
+    void handleSubmit(onSubmit)();
   }, [handleSubmit, onSubmit]);
 
   return (
@@ -62,11 +62,11 @@ const Filter = forwardRef<Ref, FilterProps>(({ label, options, defaultValues, co
       onOpenChange={(e) => setOpen(e.open)}
       positioning={{ placement: "bottom-start", gutter: 8 }}
     >
-      <div className={styles["menu"]}>
+      <div className={styles.menu}>
         <form ref={ref}>
           <Popover.Trigger className={styles["menu-button"]}>
             {label}
-            {!!count && <span className={styles["count"]}>{count}</span>}
+            {!!count && <span className={styles.count}>{count}</span>}
           </Popover.Trigger>
           {open && (
             <Portal>
@@ -79,18 +79,18 @@ const Filter = forwardRef<Ref, FilterProps>(({ label, options, defaultValues, co
                     transition={{ duration: 0.1, ease: "easeInOut" }}
                     className={classNames(styles["menu-items"])}
                   >
-                    <div className={styles["options"]}>
+                    <div className={styles.options}>
                       {options.map((option) => (
                         <Checkbox
                           key={option.name}
                           {...register("filterValues")}
                           label={option.name}
                           value={option.value}
-                          className={styles["item"]}
+                          className={styles.item}
                         />
                       ))}
                     </div>
-                    <div className={styles["action"]}>
+                    <div className={styles.action}>
                       <Button type={"button"} className={styles["action-button"]} onClick={handleApply}>
                         {t("apply")}
                       </Button>
@@ -124,7 +124,7 @@ export const VariantFilter = forwardRef<Ref, VariantFilterProps>(({ label, optio
   const onSubmit = useCallback(
     (formData: FormValues) => {
       const { filterValues } = formData;
-      setVariantFilter(filterValues);
+      void setVariantFilter(filterValues);
     },
     [setVariantFilter]
   );
@@ -157,7 +157,7 @@ export const ProductTypeFilter = forwardRef<Ref, ProductTypeFilterProps>(({ labe
   const onSubmit = useCallback(
     (formData: FormValues) => {
       const { filterValues } = formData;
-      setProductTypeFilter(filterValues);
+      void setProductTypeFilter(filterValues);
     },
     [setProductTypeFilter]
   );
@@ -190,7 +190,7 @@ export const AvailabilityFilter = forwardRef<Ref, AvailabilityFilterProps>(({ la
   const onSubmit = useCallback(
     (formData: FormValues) => {
       const { filterValues } = formData;
-      setAvailabilityFilter(filterValues.length > 0 ? filterValues : null);
+      void setAvailabilityFilter(filterValues.length > 0 ? filterValues : null);
     },
     [setAvailabilityFilter]
   );
