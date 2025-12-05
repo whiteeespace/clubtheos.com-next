@@ -24,7 +24,7 @@ export const GET_RELEASE_DATA = graphql(`
               id
               handle
               title
-              description
+              descriptionHtml
               video: metafield(namespace: "custom", key: "video") {
                 reference {
                   __typename

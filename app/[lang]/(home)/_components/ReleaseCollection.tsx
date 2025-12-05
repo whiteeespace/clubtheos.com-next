@@ -67,15 +67,15 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
       </div>
 
       {/* Description */}
-      {collection.description && (
-        <motion.p
+      {collection.descriptionHtml && (
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className={styles.description}
-        >
-          {collection.description}
-        </motion.p>
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          dangerouslySetInnerHTML={{ __html: collection.descriptionHtml }}
+        />
       )}
 
       {/* Gallery */}

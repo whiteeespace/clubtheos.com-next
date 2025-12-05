@@ -23,7 +23,7 @@ export interface ReleaseCollection {
   id: string;
   handle: string;
   title: string;
-  description: string;
+  descriptionHtml: string;
   videoSources: VideoSource[];
   images: CollectionImage[];
 }
@@ -66,7 +66,7 @@ function parseCollection(
     id: reference.id,
     handle: reference.handle,
     title: reference.title,
-    description: reference.description,
+    descriptionHtml: reference.descriptionHtml,
     videoSources,
     images,
   };

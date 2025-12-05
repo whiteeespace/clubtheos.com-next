@@ -19,6 +19,8 @@ const AnalyticsComponent: React.FC = () => {
   useShopifyCookies({ domain: "clubtheos.com" });
 
   useEffect(() => {
+    if (process.env.NODE_ENV !== "production") return;
+
     if (!SHOP_GID) {
       console.warn("[Analytics] NEXT_PUBLIC_SHOP_ID is not set, skipping analytics");
       return;
