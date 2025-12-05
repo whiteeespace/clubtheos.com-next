@@ -1,6 +1,7 @@
 import { getLocale } from "next-intl/server";
 
-import { getRefundPolicy } from "../action";
+import { getRefundPolicy } from "@/lib/data";
+
 import styles from "../styles.module.scss";
 
 export default async function ReturnsAndExchangesPage() {
@@ -9,7 +10,7 @@ export default async function ReturnsAndExchangesPage() {
 
   return (
     <div
-      className={styles["container"]}
+      className={styles.container}
       dangerouslySetInnerHTML={{
         __html: refundPolicy ?? "",
       }}

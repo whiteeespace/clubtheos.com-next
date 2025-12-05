@@ -2,7 +2,7 @@
 
 import createMiddleware from "next-intl/middleware";
 
-import { defaultLocale, locales } from "./i18n";
+import { defaultLocale, locales } from "@/i18n/types";
 
 const middleware = createMiddleware({
   // A list of all locales that are supported

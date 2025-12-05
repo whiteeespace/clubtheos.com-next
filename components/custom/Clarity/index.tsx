@@ -5,7 +5,9 @@ import React, { useEffect } from "react";
 
 const Clarity: React.FC = () => {
   useEffect(() => {
-    MicrosoftClarity.init("ph2shd5o0v");
+    if (process.env.NODE_ENV === "production") {
+      MicrosoftClarity.init("ph2shd5o0v");
+    }
   }, []);
 
   return null;

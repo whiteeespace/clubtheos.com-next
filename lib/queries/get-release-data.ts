@@ -17,6 +17,48 @@ export const GET_RELEASE_DATA = graphql(`
         password: field(key: "early_access_password") {
           value
         }
+        collection: field(key: "collection") {
+          reference {
+            __typename
+            ... on Collection {
+              id
+              handle
+              title
+              descriptionHtml
+              video: metafield(namespace: "custom", key: "video") {
+                reference {
+                  __typename
+                  ... on Video {
+                    previewImage {
+                      url
+                    }
+                    sources {
+                      url
+                      mimeType
+                      width
+                      height
+                    }
+                  }
+                }
+              }
+              images: metafield(namespace: "custom", key: "images") {
+                references(first: 20) {
+                  nodes {
+                    __typename
+                    ... on MediaImage {
+                      image {
+                        url
+                        altText
+                        width
+                        height
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

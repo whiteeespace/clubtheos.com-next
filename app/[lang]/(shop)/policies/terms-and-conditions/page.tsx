@@ -1,15 +1,16 @@
 import { getLocale } from "next-intl/server";
 
-import { getTermsAndConditionsPolicy } from "../action";
+import { getTermsAndConditionsPolicy } from "@/lib/data";
+
 import styles from "../styles.module.scss";
 
-export default async function ReturnsAndExchangesPage() {
+export default async function TermsAndConditionsPage() {
   const locale = await getLocale();
   const { termsOfService } = await getTermsAndConditionsPolicy(locale.toUpperCase());
 
   return (
     <div
-      className={styles["container"]}
+      className={styles.container}
       dangerouslySetInnerHTML={{
         __html: termsOfService ?? "",
       }}

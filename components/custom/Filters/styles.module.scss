@@ -31,17 +31,15 @@
 }
 
 .menu-items {
-  position: absolute;
   background: white;
   border: solid 1px lightgrey;
-  z-index: 1;
-  margin-top: 8px;
   min-width: 160px;
   width: fit-content;
+  border-radius: 8px;
 
   font-size: 14px;
 
-  transform-origin: top right;
+  transform-origin: top left;
 
   .options {
     padding: 12px 4px;

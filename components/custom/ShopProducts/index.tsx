@@ -44,7 +44,7 @@ export const ShopProducts: React.FC<ProductsProps> = ({
       )}
       <div
         className={classNames(
-          styles["products"],
+          styles.products,
           {
             [styles["products--collection"]]: isCollection,
             [styles["products--non-collection"]]: !isCollection,

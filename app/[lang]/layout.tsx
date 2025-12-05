@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, unstable_setRequestLocale } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 
 import { baseUrl } from "@/lib/base-url";
 import Layout from "@components/Layout";
@@ -19,13 +19,14 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 }) {
-  unstable_setRequestLocale(params.lang);
+  const { lang } = await params;
+  setRequestLocale(lang);
   const messages = await getMessages();
 
   return (
-    <html lang={params.lang}>
+    <html lang={lang}>
       <NextIntlClientProvider messages={messages}>
         <body>
           <Layout>{children}</Layout>

@@ -1,31 +1,26 @@
-import { getClient } from "@whiteeespace/core/utils";
 import { Metadata, ResolvingMetadata } from "next";
+import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 import { Product, WithContext } from "schema-dts";
 
-import { GetProductQuery, GetProductQueryVariables } from "@/gql/graphql";
-import { redirect } from "@utils/navigation";
-import { GET_PRODUCT } from "@utils/queries/get-product";
+import { getProduct, getFreeShipping } from "@/lib/data";
 
 import { ProductProvider } from "./_components/ProductProvider";
 import { ProductView } from "./_components/ProductView";
-import { getFreeShipping, getProduct } from "./action";
 
-export async function generateMetadata({ params }, parent: ResolvingMetadata): Promise<Metadata> {
-  const handle = String(params.handle);
-  const client = getClient();
-  const result = await client.query<GetProductQuery, GetProductQueryVariables>(GET_PRODUCT, {
-    handle: handle,
-  });
-
-  const product = result.data?.product;
+export async function generateMetadata(
+  { params }: { params: Promise<{ handle: string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { handle } = await params;
+  const locale = await getLocale();
+  const { product } = await getProduct(handle, locale.toUpperCase(), "CA");
 
   if (!product) {
     return {};
   }
 
-  // optionally access and extend (rather than replace) parent metadata
-  const images = product.images.edges.map((image) => image.node.url);
+  const images = product.images.edges.map((image) => image.node.url as string);
   const parentFields = await parent;
 
   return {
@@ -39,12 +34,12 @@ export async function generateMetadata({ params }, parent: ResolvingMetadata): P
   };
 }
 
-const ProductPage = async ({ params }) => {
-  const handle = String(params.handle);
+const ProductPage = async ({ params }: { params: Promise<{ handle: string }> }) => {
+  const { handle } = await params;
   const locale = await getLocale();
 
   if (!handle) {
-    return redirect("/");
+    redirect(`/${locale}`);
   }
 
   const { product } = await getProduct(handle, locale.toUpperCase(), "CA");
@@ -58,7 +53,7 @@ const ProductPage = async ({ params }) => {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.title,
-    image: product.images.edges.map((image) => image.node.url),
+    image: product.images.edges.map((image) => image.node.url as string),
     description: product.description,
     productID: product.id,
     manufacturer: "Club Theos",
@@ -69,6 +64,7 @@ const ProductPage = async ({ params }) => {
     },
     offers: {
       "@type": "Offer",
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Shopify Decimal scalar is typed as any
       price: product.priceRange.minVariantPrice.amount,
       priceCurrency: product.priceRange.minVariantPrice.currencyCode,
       availability: "https://schema.org/InStock",
@@ -77,6 +73,7 @@ const ProductPage = async ({ params }) => {
   };
 
   const sizeGuide = product.sizeGuide?.value;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const condition = product.condition?.value;
   return (
     <>

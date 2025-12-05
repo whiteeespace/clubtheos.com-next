@@ -1,15 +1,15 @@
 "use client";
 
-import { Popover } from "@headlessui/react";
+import { Popover, Portal } from "@ark-ui/react";
 import classNames from "classnames";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
-import { PropsWithChildren, forwardRef, useCallback, useEffect } from "react";
+import { PropsWithChildren, forwardRef, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import Checkbox from "@/components/form/Checkbox";
 import Button from "@theos/Button";
-import Checkbox from "@theos/form-components/Checkbox";
 
 import styles from "./styles.module.scss";
 
@@ -25,7 +25,7 @@ interface FiltersProps {
 type Ref = HTMLFormElement;
 
 export const Filters: React.FC<PropsWithChildren<FiltersProps>> = ({ children, className }) => (
-  <motion.div className={classNames(styles["filters"], className)}>{children}</motion.div>
+  <motion.div className={classNames(styles.filters, className)}>{children}</motion.div>
 );
 
 interface FormValues {
@@ -42,6 +42,7 @@ interface FilterProps {
 
 const Filter = forwardRef<Ref, FilterProps>(({ label, options, defaultValues, count, onSubmit }, ref) => {
   const t = useTranslations("filters");
+  const [open, setOpen] = useState(false);
   const { register, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: { filterValues: defaultValues ?? [] },
   });
@@ -50,53 +51,58 @@ const Filter = forwardRef<Ref, FilterProps>(({ label, options, defaultValues, co
     reset({ filterValues: defaultValues ?? [] });
   }, [defaultValues, reset]);
 
+  const handleApply = useCallback(() => {
+    setOpen(false);
+    void handleSubmit(onSubmit)();
+  }, [handleSubmit, onSubmit]);
+
   return (
-    <Popover as="div" className={styles["menu"]}>
-      <form ref={ref}>
-        <Popover.Button className={styles["menu-button"]}>
-          {label}
-          {!!count && <span className={styles["count"]}>{count}</span>}
-        </Popover.Button>
-        <AnimatePresence>
-          <Popover.Panel>
-            {({ close }) => (
-              <motion.div
-                key={"menu-items"}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.1, ease: "easeInOut" }}
-                className={classNames(styles["menu-items"])}
-              >
-                <div className={styles["options"]}>
-                  {options.map((option) => (
-                    <Checkbox
-                      key={option.name}
-                      {...register("filterValues")}
-                      label={option.name}
-                      value={option.value}
-                      className={styles["item"]}
-                    />
-                  ))}
-                </div>
-                <div className={styles["action"]}>
-                  <Button
-                    type={"button"}
-                    className={styles["action-button"]}
-                    onClick={() => {
-                      handleSubmit(onSubmit)();
-                      close();
-                    }}
+    <Popover.Root
+      open={open}
+      onOpenChange={(e) => setOpen(e.open)}
+      positioning={{ placement: "bottom-start", gutter: 8 }}
+    >
+      <div className={styles.menu}>
+        <form ref={ref}>
+          <Popover.Trigger className={styles["menu-button"]}>
+            {label}
+            {!!count && <span className={styles.count}>{count}</span>}
+          </Popover.Trigger>
+          {open && (
+            <Portal>
+              <Popover.Positioner>
+                <Popover.Content asChild>
+                  <motion.div
+                    key={"menu-items"}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.1, ease: "easeInOut" }}
+                    className={classNames(styles["menu-items"])}
                   >
-                    {t("apply")}
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-          </Popover.Panel>
-        </AnimatePresence>
-      </form>
-    </Popover>
+                    <div className={styles.options}>
+                      {options.map((option) => (
+                        <Checkbox
+                          key={option.name}
+                          {...register("filterValues")}
+                          label={option.name}
+                          value={option.value}
+                          className={styles.item}
+                        />
+                      ))}
+                    </div>
+                    <div className={styles.action}>
+                      <Button type={"button"} className={styles["action-button"]} onClick={handleApply}>
+                        {t("apply")}
+                      </Button>
+                    </div>
+                  </motion.div>
+                </Popover.Content>
+              </Popover.Positioner>
+            </Portal>
+          )}
+        </form>
+      </div>
+    </Popover.Root>
   );
 });
 
@@ -118,7 +124,7 @@ export const VariantFilter = forwardRef<Ref, VariantFilterProps>(({ label, optio
   const onSubmit = useCallback(
     (formData: FormValues) => {
       const { filterValues } = formData;
-      setVariantFilter(filterValues);
+      void setVariantFilter(filterValues);
     },
     [setVariantFilter]
   );
@@ -151,7 +157,7 @@ export const ProductTypeFilter = forwardRef<Ref, ProductTypeFilterProps>(({ labe
   const onSubmit = useCallback(
     (formData: FormValues) => {
       const { filterValues } = formData;
-      setProductTypeFilter(filterValues);
+      void setProductTypeFilter(filterValues);
     },
     [setProductTypeFilter]
   );
@@ -184,8 +190,7 @@ export const AvailabilityFilter = forwardRef<Ref, AvailabilityFilterProps>(({ la
   const onSubmit = useCallback(
     (formData: FormValues) => {
       const { filterValues } = formData;
-      const availabilityFilterValue = filterValues.map(() => "available");
-      setAvailabilityFilter(availabilityFilterValue);
+      void setAvailabilityFilter(filterValues.length > 0 ? filterValues : null);
     },
     [setAvailabilityFilter]
   );

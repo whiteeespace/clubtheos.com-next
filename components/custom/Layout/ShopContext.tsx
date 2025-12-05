@@ -17,15 +17,20 @@ interface ShopContextProps {
   setScrollPosition: React.Dispatch<React.SetStateAction<number>>;
 }
 
+// Default context values - these are placeholders that get replaced by provider values
+const noop = () => {
+  /* placeholder */
+};
+
 export const ShopContext = createContext<ShopContextProps>({
   isSearchOpen: false,
-  setIsSearchOpen: () => {},
+  setIsSearchOpen: noop,
   currentCollection: "",
-  setCurrentCollection: () => {},
+  setCurrentCollection: noop,
   shopVariables: [],
-  setShopVariables: () => {},
+  setShopVariables: noop,
   scrollPosition: 0,
-  setScrollPosition: () => {},
+  setScrollPosition: noop,
 });
 
 export const ShopProvider: React.FC<PropsWithChildren> = ({ children }) => {

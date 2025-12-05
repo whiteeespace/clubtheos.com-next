@@ -1,8 +1,10 @@
-import { Money } from "@whiteeespace/core";
+"use client";
+
+import { Money } from "@shopify/hydrogen-react";
 import classNames from "classnames";
 import React from "react";
 
-import { MoneyV2 } from "gql/graphql";
+import { MoneyV2 } from "@/gql/graphql";
 
 import styles from "./styles.module.scss";
 
@@ -17,7 +19,7 @@ const Price: React.FC<PriceProps> = ({ price, comparedAtPrice, noWrap }) => {
     <div className={styles["price-container"]}>
       {comparedAtPrice && comparedAtPrice.amount !== "0.0" ? (
         <div className={classNames(styles["discount-container"], { [styles["no-wrap"]]: noWrap })}>
-          <Money data={price} className={styles["amount"]} />
+          <Money data={price} className={styles.amount} />
           <Money data={comparedAtPrice} className={styles["discount-amount"]} />
         </div>
       ) : (

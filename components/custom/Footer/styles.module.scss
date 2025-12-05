@@ -54,6 +54,20 @@
   }
 }
 
-.blob {
-  margin-bottom: 18px;
+.dot-logo {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+  font-size: 14px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  overflow: hidden;
+  margin: auto 0;
+
+  justify-content: center;
+  align-items: center;
 }

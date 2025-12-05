@@ -50,7 +50,7 @@ export const getCollectionQuery = /* GraphQL */ `
   }
 `;
 
-export type ShopifyCollectionOperation = {
+export interface ShopifyCollectionOperation {
   data: {
     collection: GetCollectionQuery["collection"];
   };
@@ -58,6 +58,6 @@ export type ShopifyCollectionOperation = {
     collectionHandle: string;
     after?: string;
   };
-};
+}
 
 export const GET_COLLECTION = graphql(getCollectionQuery);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCart } from "@whiteeespace/core";
+import { useCart } from "@shopify/hydrogen-react";
 import classNames from "classnames";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -12,8 +12,9 @@ import Banner from "@components/Banner";
 import Button from "@theos/Button";
 import MetaSelect from "@theos/MetaSelect";
 
-import styles from "./styles.module.scss";
 import { MenuItem } from "..";
+
+import styles from "./styles.module.scss";
 
 interface Props {
   banner?: string;
@@ -52,10 +53,10 @@ export const DesktopNavBar: React.FC<Props> = ({ rightItems, banner }) => {
   );
 
   return (
-    <nav className={classNames(styles["nav"], { [styles["nav--banner"]]: banner })}>
-      <div className={styles["header"]}>
-        <Link className={styles["link"]} href={"/shop"}>
-          <Image src={logo} alt={"logo"} className={styles["logo"]} />
+    <nav className={classNames(styles.nav, { [styles["nav--banner"]]: banner })}>
+      <div className={styles.header}>
+        <Link className={styles.link} href={"/shop"}>
+          <Image src={logo} alt={"logo"} className={styles.logo} />
         </Link>
         <div className={styles["right-items"]}>
           {rightItems.map((menuItem) => (

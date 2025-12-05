@@ -23,7 +23,7 @@ export const SizeGuide: React.FC<SizeGuideProps> = ({ sizeGuide, sizeChart, clas
       title="Size Chart"
       description="Size Chart"
       trigger={
-        <Button variant="link" className={classNames(styles["trigger"], className)}>
+        <Button variant="link" className={classNames(styles.trigger, className)}>
           Size guide
         </Button>
       }

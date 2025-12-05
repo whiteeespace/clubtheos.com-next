@@ -1,14 +1,15 @@
 "use client";
 
-import { CartLineProvider, useCart } from "@whiteeespace/core";
+import { CartLineProvider, useCart } from "@shopify/hydrogen-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import Button from "@theos/Button";
 import { Link } from "@utils/navigation";
 
-import CartItem from "./CartItem";
 import styles from "../styles.module.scss";
+
+import CartItem from "./CartItem";
 
 interface CartProps {
   freeShipping: string;
@@ -23,7 +24,7 @@ const Cart: React.FC<CartProps> = ({ freeShipping }) => {
       <div className={styles["empty-container"]}>
         <p>{t("cart.empty")}</p>
         <Link href="/shop">
-          <Button className={styles["button"]} variant="primary">
+          <Button className={styles.button} variant="primary">
             {t("cart.continue_shopping")}
           </Button>
         </Link>
@@ -32,7 +33,7 @@ const Cart: React.FC<CartProps> = ({ freeShipping }) => {
   }
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -40,7 +41,7 @@ const Cart: React.FC<CartProps> = ({ freeShipping }) => {
         className={styles["content-container"]}
       >
         <div className={styles["left-container"]}>
-          <div className={styles["cart"]}>
+          <div className={styles.cart}>
             {lines?.map((line) => (
               <CartLineProvider key={line?.id} line={line!}>
                 <CartItem />
@@ -52,7 +53,7 @@ const Cart: React.FC<CartProps> = ({ freeShipping }) => {
           <div className={styles["right-container"]}>
             <div className={styles["button-container"]}>
               <Link href={checkoutUrl} target="_blank">
-                <Button className={styles["button"]} variant="primary">
+                <Button className={styles.button} variant="primary">
                   {t("cart.checkout")}
                 </Button>
               </Link>

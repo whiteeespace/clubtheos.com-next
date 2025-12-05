@@ -1,9 +1,9 @@
 "use client";
 
-import { useWindowView } from "@whiteeespace/core";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+import { useWindowView } from "@/lib/hooks/use-window-view";
 import Button from "@theos/Button";
 
 import styles from "./styles.module.scss";
@@ -31,9 +31,9 @@ const CollectionVideo: React.FC<CollectionVideoProps> = ({ videoSourcesMobile, v
         onClick={() => setPlaySound((curr) => !curr)}
         className={styles["sound-button"]}
       >
-        {playSound ? "MUTE" : "UNMUTE"}
+        {playSound ? "Mute" : "Unmute"}
       </Button>
-      <video id="videoplayer" muted={!playSound} autoPlay playsInline loop className={styles["video"]}>
+      <video id="videoplayer" muted={!playSound} autoPlay playsInline loop className={styles.video}>
         {mainVideoSources.map((source) => (
           <source key={source.url} src={source.url} type={source.mimeType} />
         ))}

@@ -32,7 +32,7 @@ export const Condition: React.FC<ConditionProps> = ({ value, className }) => {
   const description = getConditionDescription(value);
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <div className={classNames(styles["condition-container"], className)}>
         <ul className={styles.conditions}>
           {CONDITION_OPTIONS.map((option) => (

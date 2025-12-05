@@ -1,7 +1,7 @@
+import { Accordion as ArkAccordion } from "@ark-ui/react";
 import { CaretDown } from "@phosphor-icons/react/dist/ssr";
-import * as RadixAccordion from "@radix-ui/react-accordion";
 import classNames from "classnames";
-import { PropsWithChildren, forwardRef } from "react";
+import { PropsWithChildren } from "react";
 
 import styles from "./styles.module.scss";
 
@@ -15,39 +15,24 @@ interface AccordioGroupProps {
   className?: string;
 }
 
-const AccordionTrigger = forwardRef<HTMLButtonElement, PropsWithChildren>(
-  ({ children, ...props }, forwardedRef) => (
-    <RadixAccordion.Header className={styles["header"]}>
-      <RadixAccordion.Trigger className={styles["trigger"]} {...props} ref={forwardedRef}>
-        {children}
-        <CaretDown className={styles["caret"]} aria-hidden />
-      </RadixAccordion.Trigger>
-    </RadixAccordion.Header>
-  )
-);
-
-const AccordionContent = forwardRef<HTMLDivElement, PropsWithChildren>(
-  ({ children, ...props }, forwardedRef) => (
-    <RadixAccordion.Content className={styles["content"]} {...props} ref={forwardedRef}>
-      <div className={styles["content-text"]}>{children}</div>
-    </RadixAccordion.Content>
-  )
-);
-
-AccordionTrigger.displayName = "AccordionTrigger";
-AccordionContent.displayName = "AccordionContent";
-
 export const AccordionGroup: React.FC<PropsWithChildren<AccordioGroupProps>> = ({ children, className }) => (
-  <RadixAccordion.Root className={classNames(styles["root"], className)} type="single" collapsible>
+  <ArkAccordion.Root className={classNames(styles.root, className)} collapsible>
     {children}
-  </RadixAccordion.Root>
+  </ArkAccordion.Root>
 );
 
 export const Accordion: React.FC<PropsWithChildren<AccordionProps>> = ({ id, title, content }) => {
   return (
-    <RadixAccordion.Item className={styles["item"]} value={id}>
-      <AccordionTrigger>{title}</AccordionTrigger>
-      <AccordionContent>{content}</AccordionContent>
-    </RadixAccordion.Item>
+    <ArkAccordion.Item className={styles.item} value={id}>
+      <ArkAccordion.ItemTrigger className={styles.trigger}>
+        {title}
+        <ArkAccordion.ItemIndicator>
+          <CaretDown className={styles.caret} aria-hidden />
+        </ArkAccordion.ItemIndicator>
+      </ArkAccordion.ItemTrigger>
+      <ArkAccordion.ItemContent className={styles.content}>
+        <div className={styles["content-text"]}>{content}</div>
+      </ArkAccordion.ItemContent>
+    </ArkAccordion.Item>
   );
 };

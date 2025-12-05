@@ -1,11 +1,17 @@
 "use client";
 
-import { useQuery } from "@whiteeespace/core";
 import { useLocale, useTranslations } from "next-intl";
 import { parseAsArrayOf, parseAsString, useQueryStates } from "nuqs";
 import { Suspense, useEffect, useMemo, useState } from "react";
 
-import { CountryCode, LanguageCode, ProductFilter } from "@/gql/graphql";
+import {
+  CountryCode,
+  GetCollectionProductCountQuery,
+  GetCollectionQuery,
+  LanguageCode,
+  ProductFilter,
+} from "@/gql/graphql";
+import { useShopifyQuery } from "@/lib/hooks/use-shopify-query";
 import { ShopVariables, useShopContext } from "@components/Layout/ShopContext";
 import { ShopProducts } from "@components/ShopProducts";
 import Loader from "@theos/Loader";
@@ -27,15 +33,12 @@ const ShopResults: React.FC<ShopResultsProps> = ({ variables, isLastPage, filter
   const locale = useLocale();
   const { currentCollection, shopVariables, setShopVariables, setScrollPosition } = useShopContext();
 
-  const [{ data, fetching }] = useQuery({
-    query: GET_COLLECTION,
-    variables: {
-      collectionHandle: currentCollection,
-      filters,
-      ...variables,
-      language: locale.toUpperCase() as LanguageCode,
-      country: "CA" as CountryCode,
-    },
+  const { data, fetching } = useShopifyQuery<GetCollectionQuery>(GET_COLLECTION, {
+    collectionHandle: currentCollection,
+    filters,
+    ...variables,
+    language: locale.toUpperCase() as LanguageCode,
+    country: "CA" as CountryCode,
   });
   const shopResults = data?.collection?.products;
 
@@ -47,10 +50,10 @@ const ShopResults: React.FC<ShopResultsProps> = ({ variables, isLastPage, filter
   );
 
   useEffect(() => {
-    if (!shopResults?.pageInfo.hasNextPage) {
+    if (shopResults && !shopResults.pageInfo.hasNextPage) {
       onEndReached();
     }
-  }, [isLastPage, onEndReached, shopResults?.pageInfo.hasNextPage]);
+  }, [isLastPage, onEndReached, shopResults]);
 
   if (fetching || !shopResults) {
     return null;
@@ -85,14 +88,11 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle }) => {
 
   const filtersInput = useMemo(() => getFilters(filters), [filters]);
 
-  const [{ data, fetching }] = useQuery({
-    query: GET_COLLECTION_PRODUCT_COUNT,
-    variables: {
-      collectionHandle: currentCollection,
-      filters: filtersInput,
-      language: locale.toUpperCase() as LanguageCode,
-      country: "CA" as CountryCode,
-    },
+  const { data, fetching } = useShopifyQuery<GetCollectionProductCountQuery>(GET_COLLECTION_PRODUCT_COUNT, {
+    collectionHandle: currentCollection,
+    filters: filtersInput,
+    language: locale.toUpperCase() as LanguageCode,
+    country: "CA" as CountryCode,
   });
 
   const productCount = getProductCount(data?.collection?.products.filters);
@@ -118,10 +118,15 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle }) => {
     scrollPosition,
   ]);
 
+  // Create a stable string key for filters to detect changes
+  const filtersKey = useMemo(() => JSON.stringify(filtersInput), [filtersInput]);
+
+  // Reset shop variables when filters change
   useEffect(() => {
     setShowLoader(true);
     setShopVariables([{ after: undefined }]);
-  }, [filtersInput, setShopVariables]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtersKey]);
 
   const countText = productCount === 1 ? t("shop.product") : t("shop.products");
   const loadedProductsCount = Math.min(shopVariables.length * 32, productCount ?? 0);
@@ -135,7 +140,7 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle }) => {
       <p className={styles["product-count"]}>
         1-{loadedProductsCount} of {productCount} {countText}
       </p>
-      <div className={styles["products"]}>
+      <div className={styles.products}>
         {shopVariables.map((variables, index) => (
           <Suspense key={index} fallback={null}>
             <ShopResults

@@ -1,14 +1,15 @@
 "use client";
 
-import { Check } from "@phosphor-icons/react/dist/ssr";
+import { CheckIcon } from "@phosphor-icons/react";
 import {
-  Image,
   AddToCartButton,
   flattenConnection,
   useProduct,
-  useShopifyAnalytics,
   useCart,
-} from "@whiteeespace/core";
+  getClientBrowserParameters,
+  sendShopifyAnalytics,
+  AnalyticsEventName,
+} from "@shopify/hydrogen-react";
 import classNames from "classnames";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -19,11 +20,13 @@ import { Condition } from "@components/Condition";
 import { SizeGuide } from "@components/SizeGuide";
 import { Accordion, AccordionGroup } from "@theos/Accordion";
 import Button from "@theos/Button";
+import Image from "@theos/Image";
 import Select, { SelectItem } from "@theos/Select";
 import { getVariantsSizeChart, ProductVariantWithSizeChart } from "@utils/utils/get-variant-size-chart";
 
-import { ProductInfo } from "./ProductInfo";
 import styles from "../styles.module.scss";
+
+import { ProductInfo } from "./ProductInfo";
 
 interface ProductViewProps {
   freeShipping: string;
@@ -37,23 +40,22 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
 
   const { product, setSelectedVariant, selectedVariant } = useProduct();
   const { lines, id: cartId } = useCart();
-  const { sendAddToCart } = useShopifyAnalytics({
-    shopId: `${process.env.NEXT_PUBLIC_SHOP_ID}`,
-    currency: "CAD",
-  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [buttonText, setButtonText] = useState(
     product?.availableForSale ? t("product.add_to_cart") : t("product.sold_out")
   );
 
-  const variants = flattenConnection(product?.variants).map((variant) => variant);
+  const variants = useMemo(
+    () => flattenConnection(product?.variants).map((variant) => variant),
+    [product?.variants]
+  );
   const productImages = flattenConnection(product?.images);
   const sizeChart = getVariantsSizeChart(variants as ProductVariantWithSizeChart[]);
 
   const variantsOptions = useMemo(
     () =>
-      variants?.map((variant) => ({
+      variants.map((variant) => ({
         label: variant?.title ?? "",
         value: variant?.id ?? "",
         disabled: !variant?.quantityAvailable,
@@ -84,7 +86,24 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
       setButtonText("none left");
     } else {
       setButtonText("added");
-      if (cartId) sendAddToCart({ cartId });
+      const shopId = process.env.NEXT_PUBLIC_SHOP_ID;
+      if (cartId && shopId) {
+        try {
+          const browserParams = getClientBrowserParameters();
+          void sendShopifyAnalytics({
+            eventName: AnalyticsEventName.ADD_TO_CART,
+            payload: {
+              ...browserParams,
+              cartId,
+              shopId: `gid://shopify/Shop/${shopId}`,
+              currency: "CAD",
+              hasUserConsent: true,
+            },
+          });
+        } catch {
+          // Analytics failure should not block UX
+        }
+      }
     }
     setIsLoading(false);
   };
@@ -98,7 +117,7 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
   }
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -106,13 +125,13 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
         className={styles["left-container"]}
       >
         <ProductInfo className={styles["product-info--desktop"]} />
-        <AccordionGroup className={styles["accordions"]}>
+        <AccordionGroup className={styles.accordions}>
           <Accordion
             id="description"
             title="Product details"
             content={
               <div
-                className={styles["description"]}
+                className={styles.description}
                 dangerouslySetInnerHTML={{
                   __html: product.descriptionHtml ?? "",
                 }}
@@ -131,7 +150,14 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
         transition={{ duration: 1, delay: 0.25 }}
       >
         {productImages?.map((image) => (
-          <Image key={image?.url} src={image?.url} alt={"product image"} className={styles["image"]} />
+          <Image
+            key={image?.url}
+            src={image?.url}
+            alt="product image"
+            className={styles.image}
+            blurSize={50}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
         ))}
       </motion.div>
       <motion.div
@@ -159,13 +185,13 @@ export const ProductView: React.FC<ProductViewProps> = ({ freeShipping, sizeGuid
           <div className={styles["button-container"]}>
             <AddToCartButton // @ts-expect-error typing issues with shopify
               as={Button}
-              className={styles["button"]}
+              className={styles.button}
               onClick={() => onAddToCart()}
               disabled={isLoading || !product.availableForSale}
             >
               {buttonText === "added" ? (
-                <div className={styles["added"]}>
-                  <Check size={18} /> {t("product.added_to_cart")}
+                <div className={styles.added}>
+                  <CheckIcon size={18} /> {t("product.added_to_cart")}
                 </div>
               ) : (
                 buttonText
