@@ -12,16 +12,18 @@
 
   &--primary {
     border: 1px solid black;
-    border-radius: 6px;
+    border-radius: 8px;
     background: black;
     color: white;
     transition: 0.5s;
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 300;
+
     letter-spacing: 0.7px;
     padding: 10px 60px;
     text-wrap: nowrap;
+    height: 40px;
 
     &:enabled:active {
       transform: scale(0.9);
@@ -48,7 +50,7 @@
 
   &--tertiary {
     border: solid 1px black;
-    border-radius: 6px;
+    border-radius: 8px;
     background: transparent;
     font-size: 14px;
     color: black;
