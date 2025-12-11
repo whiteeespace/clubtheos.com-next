@@ -28,9 +28,11 @@ const MetaSelect: React.FC<Props> = ({ label, value, setValue, options }) => {
             <Menu.RadioItemGroup value={value} onValueChange={(e) => setValue(e.value)}>
               {options.map((option) => (
                 <Menu.RadioItem className={styles["radio-item"]} value={option.value} key={option.value}>
-                  <Menu.ItemIndicator>
-                    <Check size={12} weight="bold" />
-                  </Menu.ItemIndicator>
+                  <span className={styles.indicator}>
+                    <Menu.ItemIndicator>
+                      <Check size={12} weight="bold" />
+                    </Menu.ItemIndicator>
+                  </span>
                   <Menu.ItemText>{option.label}</Menu.ItemText>
                 </Menu.RadioItem>
               ))}

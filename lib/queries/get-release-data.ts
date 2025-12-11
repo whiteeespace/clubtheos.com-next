@@ -56,6 +56,9 @@ export const GET_RELEASE_DATA = graphql(`
                   }
                 }
               }
+              releaseMessage: metafield(namespace: "custom", key: "release_message") {
+                value
+              }
             }
           }
         }

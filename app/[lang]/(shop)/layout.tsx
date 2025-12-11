@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
 import { LanguageCode } from "@/gql/graphql";
+import { ShopProvider } from "@/lib/context/shop-context";
 import { getReleaseData } from "@/lib/data";
 import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import Footer from "@components/Footer";
@@ -24,8 +25,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   if (!data) return <></>;
 
   const releaseOn = parseMetaobject<ValueMetaobject>({ value: data.releaseOn ?? undefined });
+  const closeOn = parseMetaobject<ValueMetaobject>({ value: data.closeOn ?? undefined });
 
   const releaseDate = releaseOn?.value ? new Date(releaseOn.value) : null;
+  const closeDate = closeOn?.value ? new Date(closeOn.value) : null;
+  const now = new Date();
+
+  const isReleaseActive =
+    data.collection &&
+    releaseDate &&
+    !isNaN(releaseDate.getTime()) &&
+    now >= releaseDate &&
+    (!closeDate || isNaN(closeDate.getTime()) || now <= closeDate);
+
+  const releaseCollectionHandle = isReleaseActive ? data.collection!.handle : null;
+
   const cookieStore = await cookies();
   const cookiePassword = cookieStore.get("theos_early_access")?.value;
   const hasEarlyAccess = cookiePassword && data.password && cookiePassword === data.password;
@@ -34,10 +48,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <>
+    <ShopProvider releaseCollectionHandle={releaseCollectionHandle}>
       <Navbar />
       <main className={styles.container}>{children}</main>
       <Footer />
-    </>
+    </ShopProvider>
   );
 }

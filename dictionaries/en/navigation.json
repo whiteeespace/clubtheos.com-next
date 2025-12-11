@@ -21,6 +21,7 @@
       "button": "search",
       "text": "Search products..."
     },
-    "shop": "shop"
+    "shop": "shop",
+    "shop_now": "Shop now"
   }
 }

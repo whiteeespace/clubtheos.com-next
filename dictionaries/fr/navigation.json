@@ -21,6 +21,7 @@
       "button": "chercher",
       "text": "Chercher des produits..."
     },
-    "shop": "magasiner"
+    "shop": "magasiner",
+    "shop_now": "Magasiner maintenant"
   }
 }

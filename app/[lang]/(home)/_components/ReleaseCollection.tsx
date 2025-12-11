@@ -11,7 +11,14 @@ import styles from "../styles.module.scss";
 
 interface Props {
   collection: ReleaseCollectionType;
+  expectedPassword?: string | null;
 }
+
+const fadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 0.5 },
+};
 
 export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
   const [playSound, setPlaySound] = useState(false);
@@ -20,26 +27,14 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
   const hasImages = collection.images.length > 0;
 
   return (
-    <div className={styles["release-collection-container"]}>
+    <motion.div className={styles["release-collection-container"]} {...fadeIn}>
       {/* Title */}
       <div className={styles.topSection}>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className={styles.title}
-        >
-          {collection.title}
-        </motion.h1>
+        <h1 className={styles.title}>{collection.title}</h1>
 
         {/* Video (Square Format) */}
         {hasVideo && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className={styles["video-wrapper"]}
-          >
+          <div className={styles["video-wrapper"]}>
             <div className={styles["video-container"]}>
               <video
                 id="collection-video"
@@ -62,38 +57,29 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
                 {playSound ? "Mute" : "Unmute"}
               </button>
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
 
       {/* Description */}
-      {collection.descriptionHtml && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className={styles.description}
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          dangerouslySetInnerHTML={{ __html: collection.descriptionHtml }}
-        />
-      )}
+      <div className={styles.descriptionContainer}>
+        {collection.descriptionHtml && (
+          <div
+            className={styles.description}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            dangerouslySetInnerHTML={{ __html: collection.descriptionHtml }}
+          />
+        )}
+
+        {/* Release Message */}
+        {collection.releaseMessage && <p className={styles.releaseMessage}>{collection.releaseMessage}</p>}
+      </div>
 
       {/* Gallery */}
       {hasImages && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.5 }}
-          className={styles.gallery}
-        >
+        <div className={styles.gallery}>
           {collection.images.map((image, index) => (
-            <motion.div
-              key={image.url}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.55 + index * 0.08 }}
-              className={styles["gallery-item"]}
-            >
+            <div key={image.url} className={styles["gallery-item"]}>
               <Image
                 src={image.url}
                 alt={image.altText ?? `${collection.title} image ${index + 1}`}
@@ -101,13 +87,13 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
                 height={image.height ?? 600}
                 className={styles["gallery-image"]}
               />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       )}
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
-    </div>
+    </motion.div>
   );
 };

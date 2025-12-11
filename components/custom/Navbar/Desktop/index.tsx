@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useMemo } from "react";
 
+import { useShopContext } from "@/lib/context/shop-context";
 import { Link, usePathname, useRouter } from "@/lib/navigation";
 import logo from "@/public/theos-new-logo.png";
 import Banner from "@components/Banner";
@@ -27,6 +28,7 @@ export const DesktopNavBar: React.FC<Props> = ({ rightItems, banner }) => {
   const pathname = usePathname();
   const t = useTranslations("navigation");
   const { totalQuantity } = useCart();
+  const { releaseCollectionHandle } = useShopContext();
 
   const onChange = (value: string) => {
     router.replace(pathname, { locale: value });
@@ -55,7 +57,10 @@ export const DesktopNavBar: React.FC<Props> = ({ rightItems, banner }) => {
   return (
     <nav className={classNames(styles.nav, { [styles["nav--banner"]]: banner })}>
       <div className={styles.header}>
-        <Link className={styles.link} href={"/shop"}>
+        <Link
+          className={styles.link}
+          href={releaseCollectionHandle ? `/collection/${releaseCollectionHandle}` : "/shop"}
+        >
           <Image src={logo} alt={"logo"} className={styles.logo} />
         </Link>
         <div className={styles["right-items"]}>

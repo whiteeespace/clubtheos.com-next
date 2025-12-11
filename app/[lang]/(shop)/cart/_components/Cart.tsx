@@ -4,6 +4,7 @@ import { CartLineProvider, useCart } from "@shopify/hydrogen-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
+import { useShopContext } from "@/lib/context/shop-context";
 import Button from "@theos/Button";
 import { Link } from "@utils/navigation";
 
@@ -18,12 +19,15 @@ interface CartProps {
 const Cart: React.FC<CartProps> = ({ freeShipping }) => {
   const t = useTranslations("metadata");
   const { lines, totalQuantity, checkoutUrl } = useCart();
+  const { releaseCollectionHandle } = useShopContext();
+
+  const continueShoppingHref = releaseCollectionHandle ? `/collection/${releaseCollectionHandle}` : "/shop";
 
   if (!totalQuantity) {
     return (
       <div className={styles["empty-container"]}>
         <p>{t("cart.empty")}</p>
-        <Link href="/shop">
+        <Link href={continueShoppingHref}>
           <Button className={styles.button} variant="primary">
             {t("cart.continue_shopping")}
           </Button>

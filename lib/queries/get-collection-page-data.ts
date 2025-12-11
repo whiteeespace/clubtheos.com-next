@@ -1,0 +1,68 @@
+import { graphql } from "gql";
+
+export const GET_COLLECTION_PAGE_DATA = graphql(`
+  query GetCollectionPageData($handle: String!, $country: CountryCode, $language: LanguageCode)
+  @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      descriptionHtml
+      image {
+        url
+        altText
+        width
+        height
+      }
+      video: metafield(namespace: "custom", key: "video") {
+        reference {
+          ... on Video {
+            previewImage {
+              url
+            }
+            sources {
+              url
+              mimeType
+              width
+              height
+            }
+          }
+        }
+      }
+      images: metafield(namespace: "custom", key: "images") {
+        references(first: 20) {
+          nodes {
+            ... on MediaImage {
+              image {
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
+        }
+      }
+      productImages: metafield(namespace: "custom", key: "product_images") {
+        references(first: 20) {
+          nodes {
+            ... on MediaImage {
+              image {
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
+        }
+      }
+      products(first: 1) {
+        nodes {
+          handle
+        }
+      }
+    }
+  }
+`);

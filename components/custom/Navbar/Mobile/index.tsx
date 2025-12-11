@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
+import { useShopContext } from "@/lib/context/shop-context";
 import cart from "@/public/cart.png";
 import menu from "@/public/menu.png";
 import logo from "@/public/theos-new-logo.png";
@@ -128,9 +129,12 @@ interface Props {
 
 export const MobileNavBar: React.FC<Props> = ({ menuItems, banner }) => {
   const { totalQuantity } = useCart();
+  const { releaseCollectionHandle } = useShopContext();
   const t = useTranslations("language");
   const pathname = usePathname();
   const router = useRouter();
+
+  const logoHref = releaseCollectionHandle ? `/collection/${releaseCollectionHandle}` : "/shop";
 
   const onChange = (value: string) => {
     router.replace(pathname, { locale: value });
@@ -156,7 +160,7 @@ export const MobileNavBar: React.FC<Props> = ({ menuItems, banner }) => {
   return (
     <nav className={styles.nav}>
       <div className={styles.header}>
-        <Link className={styles["shop-link"]} href={"/shop"}>
+        <Link className={styles["shop-link"]} href={logoHref}>
           <Image src={logo} alt={"logo"} className={styles["menu-logo"]} />
         </Link>
         <div className={styles["button-container"]}>

@@ -12,4 +12,4 @@ export * from "./get-free-shipping";
 export * from "./get-product";
 export * from "./get-search-results";
 export * from "./get-policies";
-
+export * from "./get-collection-page-data";

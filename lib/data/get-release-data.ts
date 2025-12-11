@@ -24,6 +24,7 @@ export interface ReleaseCollection {
   handle: string;
   title: string;
   descriptionHtml: string;
+  releaseMessage: string | null;
   videoSources: VideoSource[];
   images: CollectionImage[];
 }
@@ -67,6 +68,7 @@ function parseCollection(
     handle: reference.handle,
     title: reference.title,
     descriptionHtml: reference.descriptionHtml,
+    releaseMessage: reference.releaseMessage?.value ?? null,
     videoSources,
     images,
   };

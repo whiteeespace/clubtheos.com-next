@@ -20,10 +20,11 @@ const HomePage = async () => {
 
   const releaseOn = parseMetaobject<ValueMetaobject>({ value: data.releaseOn ?? undefined });
   const password = parseMetaobject<ValueMetaobject>({ value: data.password ?? undefined });
+  const isCollection = data.collection !== null;
 
   const releaseDate = releaseOn?.value ? new Date(releaseOn.value) : null;
   if (releaseDate && !isNaN(releaseDate.getTime()) && new Date() > releaseDate) {
-    redirect({ href: "/shop", locale: language });
+    redirect({ href: isCollection ? `/collection/${data.collection?.handle}` : "/shop", locale: language });
   }
 
   // If there's a collection attached to the release, show the custom collection page
@@ -32,8 +33,12 @@ const HomePage = async () => {
       <main>
         <div className={styles.headerCollection}>
           <Image src={logo} alt={"logo"} className={styles.logo} />
+          <EarlyAccessButton
+            expectedPassword={password?.value}
+            redirectTo={`/collection/${data.collection?.handle}`}
+          />
         </div>
-        <ReleaseCollection collection={data.collection} />
+        <ReleaseCollection collection={data.collection} expectedPassword={password?.value} />
       </main>
     );
   }
