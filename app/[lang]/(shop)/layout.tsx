@@ -31,19 +31,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const closeDate = closeOn?.value ? new Date(closeOn.value) : null;
   const now = new Date();
 
-  const isReleaseActive =
-    data.collection &&
-    releaseDate &&
-    !isNaN(releaseDate.getTime()) &&
-    now >= releaseDate &&
-    (!closeDate || isNaN(closeDate.getTime()) || now <= closeDate);
-
-  const releaseCollectionHandle = isReleaseActive ? data.collection!.handle : null;
+  const releaseCollectionHandle = data.collection?.handle ?? null;
 
   const cookieStore = await cookies();
   const cookiePassword = cookieStore.get("theos_early_access")?.value;
   const hasEarlyAccess = cookiePassword && data.password && cookiePassword === data.password;
-  if (releaseDate && !isNaN(releaseDate.getTime()) && new Date() <= releaseDate && !hasEarlyAccess) {
+
+  // Redirect to home if shop is not active (before release or after close)
+  const isBeforeRelease = releaseDate && !isNaN(releaseDate.getTime()) && now <= releaseDate;
+  const isAfterClose = closeDate && !isNaN(closeDate.getTime()) && now >= closeDate;
+  if ((isBeforeRelease && !hasEarlyAccess) || isAfterClose) {
     redirect(`/${locale}`);
   }
 

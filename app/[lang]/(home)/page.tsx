@@ -19,11 +19,18 @@ const HomePage = async () => {
   if (!data) return <></>;
 
   const releaseOn = parseMetaobject<ValueMetaobject>({ value: data.releaseOn ?? undefined });
+  const closeOn = parseMetaobject<ValueMetaobject>({ value: data.closeOn ?? undefined });
   const password = parseMetaobject<ValueMetaobject>({ value: data.password ?? undefined });
   const isCollection = data.collection !== null;
 
   const releaseDate = releaseOn?.value ? new Date(releaseOn.value) : null;
-  if (releaseDate && !isNaN(releaseDate.getTime()) && new Date() > releaseDate) {
+  const closeDate = closeOn?.value ? new Date(closeOn.value) : null;
+  const now = new Date();
+
+  // Redirect to shop only if release is active (after release, before close)
+  const isAfterRelease = releaseDate && !isNaN(releaseDate.getTime()) && now > releaseDate;
+  const isBeforeClose = !closeDate || isNaN(closeDate.getTime()) || now < closeDate;
+  if (isAfterRelease && isBeforeClose) {
     redirect({ href: isCollection ? `/collection/${data.collection?.handle}` : "/shop", locale: language });
   }
 

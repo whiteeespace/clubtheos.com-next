@@ -58,30 +58,26 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
   margin-top: 36px;
+  border-radius: 12px;
+  overflow: hidden;
 
   @media only screen and (max-width: 600px) {
-    gap: 12px;
+    border-radius: 8px;
   }
 }
 
 .galleryItem {
   position: relative;
-  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: #111;
-  border-radius: 8px;
-
-  @media only screen and (max-width: 600px) {
-    border-radius: 4px;
-  }
+  break-inside: avoid;
 }
 
 .galleryImage {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
   transition: transform 0.4s ease;
 
   .galleryItem:hover & {
