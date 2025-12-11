@@ -67,7 +67,7 @@ function parseCollection(
     id: reference.id,
     handle: reference.handle,
     title: reference.title,
-    descriptionHtml: reference.descriptionHtml,
+    descriptionHtml: (reference.descriptionHtml as string) ?? "",
     releaseMessage: reference.releaseMessage?.value ?? null,
     videoSources,
     images,
