@@ -17,6 +17,9 @@ export const GET_RELEASE_DATA = graphql(`
         password: field(key: "early_access_password") {
           value
         }
+        isSpecialCollection: field(key: "is_special_collection") {
+          value
+        }
         collection: field(key: "collection") {
           reference {
             __typename
