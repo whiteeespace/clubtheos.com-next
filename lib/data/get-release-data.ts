@@ -33,6 +33,7 @@ export interface ReleaseData {
   releaseOn: string | null;
   closeOn: string | null;
   password: string | null;
+  isSpecialCollection: boolean;
   collection: ReleaseCollection | null;
 }
 
@@ -82,9 +83,10 @@ async function fetchReleaseData(language: LanguageCode): Promise<ReleaseData | n
   const releaseOn = parseMetaobject<ValueMetaobject>(node.releaseOn)?.value ?? null;
   const closeOn = parseMetaobject<ValueMetaobject>(node.closeOn)?.value ?? null;
   const password = parseMetaobject<ValueMetaobject>(node.password)?.value ?? null;
+  const isSpecialCollection = parseMetaobject<ValueMetaobject>(node.isSpecialCollection)?.value === "true";
   const collection = parseCollection(node.collection);
 
-  return { releaseOn, closeOn, password, collection };
+  return { releaseOn, closeOn, password, isSpecialCollection, collection };
 }
 
 export const getReleaseData = nextCache(fetchReleaseData, ["release-data"], {

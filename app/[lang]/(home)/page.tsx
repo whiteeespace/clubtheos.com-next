@@ -16,12 +16,26 @@ const HomePage = async () => {
   const language = await getLocale();
   const t = await getTranslations("metadata.home");
   const data = await getReleaseData(language.toUpperCase() as LanguageCode);
-  if (!data) return <></>;
+
+  // Show "CLOSED" page when there's no release data
+  if (!data) {
+    return (
+      <section className={styles.container}>
+        <div className={styles.header}>
+          <Image src={logo} alt={"logo"} className={styles.logo} />
+        </div>
+        <div className={styles.content}>
+          <div className={styles["title-container"]}>
+            <p className={styles.title}>CLOSED</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const releaseOn = parseMetaobject<ValueMetaobject>({ value: data.releaseOn ?? undefined });
   const closeOn = parseMetaobject<ValueMetaobject>({ value: data.closeOn ?? undefined });
   const password = parseMetaobject<ValueMetaobject>({ value: data.password ?? undefined });
-  const isCollection = data.collection !== null;
 
   const releaseDate = releaseOn?.value ? new Date(releaseOn.value) : null;
   const closeDate = closeOn?.value ? new Date(closeOn.value) : null;
@@ -31,11 +45,14 @@ const HomePage = async () => {
   const isAfterRelease = releaseDate && !isNaN(releaseDate.getTime()) && now > releaseDate;
   const isBeforeClose = !closeDate || isNaN(closeDate.getTime()) || now < closeDate;
   if (isAfterRelease && isBeforeClose) {
-    redirect({ href: isCollection ? `/collection/${data.collection?.handle}` : "/shop", locale: language });
+    redirect({
+      href: data.isSpecialCollection ? `/collection/${data.collection?.handle}` : "/shop",
+      locale: language,
+    });
   }
 
-  // If there's a collection attached to the release, show the custom collection page
-  if (data.collection) {
+  // If this is a special collection release, show the custom collection page
+  if (data.isSpecialCollection && data.collection) {
     return (
       <main>
         <div className={styles.headerCollection}>
