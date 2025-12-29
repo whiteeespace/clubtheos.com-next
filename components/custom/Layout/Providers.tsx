@@ -11,15 +11,16 @@ import { ShopProvider } from "./ShopContext";
 
 interface Props extends PropsWithChildren {
   languageCode: LanguageCode;
+  releaseCollectionHandle?: string | null;
 }
 
 const storefrontDomain = process.env.NEXT_PUBLIC_STOREFRONT_ID
   ? `https://${process.env.NEXT_PUBLIC_STOREFRONT_ID}.myshopify.com`
   : "";
 
-const Providers: React.FC<Props> = ({ children, languageCode }) => (
+const Providers: React.FC<Props> = ({ children, languageCode, releaseCollectionHandle }) => (
   <NuqsAdapter>
-    <ShopProvider>
+    <ShopProvider releaseCollectionHandle={releaseCollectionHandle}>
       <ShopifyProvider
         storeDomain={storefrontDomain}
         storefrontToken={process.env.NEXT_PUBLIC_STOREFRONT_API_TOKEN ?? ""}

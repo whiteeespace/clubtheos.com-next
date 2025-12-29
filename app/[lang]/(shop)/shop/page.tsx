@@ -1,17 +1,20 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 
-import { getCollectionMetadata } from "@/lib/data";
+import { LanguageCode } from "@/gql/graphql";
+import { getCollectionMetadata, getReleaseData } from "@/lib/data";
 
 import FiltersButton from "./_components/FiltersButton";
-import { Products } from "./_components/Products";
-import { ShopFilters } from "./_components/ShopFilters";
+import { ShopContent } from "./_components/ShopContent";
 import styles from "./styles.module.scss";
 
-// eslint-disable-next-line no-empty-pattern
-export async function generateMetadata({}, parent: ResolvingMetadata): Promise<Metadata> {
-  const handle = "shop-all";
+export async function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
   const locale = await getLocale();
+
+  // Use release collection for metadata if available, otherwise shop-all
+  const releaseData = await getReleaseData(locale.toUpperCase() as LanguageCode);
+  const handle = releaseData?.collection?.handle ?? "shop-all";
+
   const { title, description } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
   const parentFields = await parent;
 
@@ -24,9 +27,17 @@ export async function generateMetadata({}, parent: ResolvingMetadata): Promise<M
 }
 
 const ShopPage = async () => {
-  const handle = "shop-all";
   const locale = await getLocale();
-  const { title, description, filters } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
+
+  // Fetch release data - default to release collection if available, otherwise shop-all
+  const releaseData = await getReleaseData(locale.toUpperCase() as LanguageCode);
+  const collectionHandle = releaseData?.collection?.handle ?? "shop-all";
+
+  const { title, description, filters } = await getCollectionMetadata(
+    collectionHandle,
+    locale.toUpperCase(),
+    "CA"
+  );
 
   return (
     <section className={styles["shop-container"]}>
@@ -44,8 +55,7 @@ const ShopPage = async () => {
           />
         )}
       </div>
-      <ShopFilters filters={filters} />
-      <Products collectionHandle={handle} />
+      <ShopContent collectionHandle={collectionHandle} filters={filters} />
     </section>
   );
 };

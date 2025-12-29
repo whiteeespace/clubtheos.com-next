@@ -44,7 +44,8 @@ const HomePage = async () => {
   // Redirect to shop only if release is active (after release, before close)
   const isAfterRelease = releaseDate && !isNaN(releaseDate.getTime()) && now > releaseDate;
   const isBeforeClose = !closeDate || isNaN(closeDate.getTime()) || now < closeDate;
-  if (isAfterRelease && isBeforeClose) {
+
+  if (!data.isSpecialCollection && isAfterRelease && isBeforeClose) {
     redirect({
       href: data.isSpecialCollection ? `/collection/${data.collection?.handle}` : "/shop",
       locale: language,
