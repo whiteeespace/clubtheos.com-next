@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Redirect to home if shop is not active (before release or after close)
   const isBeforeRelease = releaseDate && !isNaN(releaseDate.getTime()) && now <= releaseDate;
   const isAfterClose = closeDate && !isNaN(closeDate.getTime()) && now >= closeDate;
-  if ((isBeforeRelease && !hasEarlyAccess) || isAfterClose || data.isSpecialCollection) {
+  if ((isBeforeRelease && !hasEarlyAccess) || isAfterClose) {
     redirect(`/${locale}`);
   }
 

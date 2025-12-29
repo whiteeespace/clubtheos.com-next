@@ -45,7 +45,7 @@ const HomePage = async () => {
   const isAfterRelease = releaseDate && !isNaN(releaseDate.getTime()) && now > releaseDate;
   const isBeforeClose = !closeDate || isNaN(closeDate.getTime()) || now < closeDate;
 
-  if (!data.isSpecialCollection && isAfterRelease && isBeforeClose) {
+  if (isAfterRelease && isBeforeClose) {
     redirect({
       href: data.isSpecialCollection ? `/collection/${data.collection?.handle}` : "/shop",
       locale: language,
