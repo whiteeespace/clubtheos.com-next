@@ -65,7 +65,9 @@ export const CollectionContent: React.FC<Props> = ({ collection }) => {
     if (!el) return;
     if (el.paused) {
       userPausedRef.current = false;
-      void el.play().catch(() => {});
+      void el.play().catch(() => {
+        console.log("autoplay blocked or missing codec — user can use Play");
+      });
     } else {
       userPausedRef.current = true;
       el.pause();

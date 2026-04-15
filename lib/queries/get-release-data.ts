@@ -24,48 +24,68 @@ export const GET_RELEASE_DATA = graphql(`
           reference {
             __typename
             ... on Collection {
-              id
-              handle
-              title
-              descriptionHtml
-              video: metafield(namespace: "custom", key: "video") {
-                reference {
-                  __typename
-                  ... on Video {
-                    previewImage {
-                      url
-                    }
-                    sources {
-                      url
-                      mimeType
-                      width
-                      height
-                    }
-                  }
-                }
-              }
-              images: metafield(namespace: "custom", key: "images") {
-                references(first: 20) {
-                  nodes {
-                    __typename
-                    ... on MediaImage {
-                      image {
-                        url
-                        altText
-                        width
-                        height
-                      }
-                    }
-                  }
-                }
-              }
-              releaseMessage: metafield(namespace: "custom", key: "release_message") {
-                value
+              ...ReleaseCollectionFields
+            }
+          }
+        }
+        multipleCollections: field(key: "multiple_collections") {
+          references(first: 20) {
+            nodes {
+              __typename
+              ... on Collection {
+                ...ReleaseCollectionFields
               }
             }
           }
         }
       }
+    }
+  }
+
+  fragment ReleaseCollectionFields on Collection {
+    id
+    handle
+    title
+    descriptionHtml
+    image {
+      url
+      altText
+      width
+      height
+    }
+    video: metafield(namespace: "custom", key: "video") {
+      reference {
+        __typename
+        ... on Video {
+          previewImage {
+            url
+          }
+          sources {
+            url
+            mimeType
+            width
+            height
+          }
+        }
+      }
+    }
+    images: metafield(namespace: "custom", key: "images") {
+      references(first: 20) {
+        nodes {
+          __typename
+          ... on MediaImage {
+            image {
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
+      }
+    }
+    releaseMessage: metafield(namespace: "custom", key: "release_message") {
+      value
     }
   }
 `);

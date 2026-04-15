@@ -2,7 +2,6 @@ import { useTranslations } from "next-intl";
 
 import { Link } from "@utils/navigation";
 
-import { Blob } from "./_components/Blob";
 import styles from "./styles.module.scss";
 
 const Footer: React.FC = () => {
@@ -26,7 +25,6 @@ const Footer: React.FC = () => {
           </Link>
         </div>
       </div>
-      <Blob />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { getLocale } from "next-intl/server";
 
 import { LanguageCode } from "@/gql/graphql";
 import { ShopProvider } from "@/lib/context/shop-context";
-import { getReleaseData } from "@/lib/data";
+import { getReleaseData, getReleasePrimaryCollectionHandle, isMultiCollectionRelease } from "@/lib/data";
 import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import Footer from "@components/Footer";
 import Navbar from "@components/Navbar";
@@ -31,7 +31,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const closeDate = closeOn?.value ? new Date(closeOn.value) : null;
   const now = new Date();
 
-  const releaseCollectionHandle = data.collection?.handle ?? null;
+  const releaseCollectionHandle = getReleasePrimaryCollectionHandle(data);
 
   const cookieStore = await cookies();
   const cookiePassword = cookieStore.get("theos_early_access")?.value;
@@ -45,7 +45,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <ShopProvider releaseCollectionHandle={releaseCollectionHandle}>
+    <ShopProvider
+      releaseCollectionHandle={releaseCollectionHandle}
+      multiCollectionReleaseActive={isMultiCollectionRelease(data)}
+    >
       <Navbar />
       <main className={styles.container}>{children}</main>
       <Footer />

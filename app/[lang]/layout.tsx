@@ -3,10 +3,15 @@ import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 
+import { locales } from "@/i18n/types";
 import { baseUrl } from "@/lib/base-url";
 import Layout from "@components/Layout";
 
 import "../global.scss";
+
+export function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
 
 export const metadata: Metadata = {
   title: "Club Theos",

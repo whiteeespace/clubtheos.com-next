@@ -1,6 +1,6 @@
 import { unstable_cache as nextCache } from "next/cache";
 
-import { GetLatestReleaseQuery, LanguageCode } from "@/gql/graphql";
+import { GetLatestReleaseQuery, LanguageCode, ReleaseCollectionFieldsFragment } from "@/gql/graphql";
 import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import { GET_RELEASE_DATA } from "@/lib/queries/get-release-data";
 import { shopifyQuery } from "@/lib/shopify";
@@ -25,6 +25,8 @@ export interface ReleaseCollection {
   title: string;
   descriptionHtml: string;
   releaseMessage: string | null;
+  /** Shopify collection image (used for multi-collection picker). */
+  collectionImage: CollectionImage | null;
   videoSources: VideoSource[];
   images: CollectionImage[];
 }
@@ -35,14 +37,25 @@ export interface ReleaseData {
   password: string | null;
   isSpecialCollection: boolean;
   collection: ReleaseCollection | null;
+  /** Populated from metaobject field `multiple_collections` (list of collection references). */
+  collections: ReleaseCollection[];
 }
 
-function parseCollection(
-  collectionField: GetLatestReleaseQuery["metaobjects"]["nodes"][0]["collection"]
-): ReleaseCollection | null {
-  const reference = collectionField?.reference;
-  if (reference?.__typename !== "Collection") return null;
+/** First entry in `multiple_collections` when set; otherwise the single `collection` handle. */
+export function getReleasePrimaryCollectionHandle(data: ReleaseData | null): string | null {
+  if (!data) return null;
+  if (data.collections.length > 0) {
+    return data.collections[0]?.handle ?? null;
+  }
+  return data.collection?.handle ?? null;
+}
 
+/** Special release with a multi-collection picker on home (navbar logo should return to `/`). */
+export function isMultiCollectionRelease(data: ReleaseData | null): boolean {
+  return !!data && data.isSpecialCollection && data.collections.length > 0;
+}
+
+function parseCollectionFields(reference: ReleaseCollectionFieldsFragment): ReleaseCollection {
   const videoRef = reference.video?.reference;
   const imagesRef = reference.images?.references?.nodes;
 
@@ -51,7 +64,6 @@ function parseCollection(
   const images: CollectionImage[] = (imagesRef ?? [])
     .filter((node) => node.__typename === "MediaImage" && node.image)
     .map((node) => {
-      // Type narrowed by filter above
       const mediaImage = node as {
         __typename: "MediaImage";
         image: { url: string; altText?: string | null; width?: number | null; height?: number | null };
@@ -64,15 +76,46 @@ function parseCollection(
       };
     });
 
+  const collectionImage = reference.image
+    ? {
+        url: String(reference.image.url),
+        altText: reference.image.altText ?? null,
+        width: reference.image.width ?? null,
+        height: reference.image.height ?? null,
+      }
+    : null;
+
   return {
     id: reference.id,
     handle: reference.handle,
     title: reference.title,
     descriptionHtml: (reference.descriptionHtml as string) ?? "",
     releaseMessage: reference.releaseMessage?.value ?? null,
+    collectionImage,
     videoSources,
     images,
   };
+}
+
+function parseCollection(
+  collectionField: GetLatestReleaseQuery["metaobjects"]["nodes"][0]["collection"]
+): ReleaseCollection | null {
+  const reference = collectionField?.reference;
+  if (reference?.__typename !== "Collection") return null;
+  return parseCollectionFields(reference as ReleaseCollectionFieldsFragment);
+}
+
+function parseCollectionsList(
+  field: GetLatestReleaseQuery["metaobjects"]["nodes"][0]["multipleCollections"]
+): ReleaseCollection[] {
+  const nodes = field?.references?.nodes ?? [];
+  const out: ReleaseCollection[] = [];
+  for (const node of nodes) {
+    if (node?.__typename === "Collection") {
+      out.push(parseCollectionFields(node as ReleaseCollectionFieldsFragment));
+    }
+  }
+  return out;
 }
 
 async function fetchReleaseData(language: LanguageCode): Promise<ReleaseData | null> {
@@ -85,8 +128,9 @@ async function fetchReleaseData(language: LanguageCode): Promise<ReleaseData | n
   const password = parseMetaobject<ValueMetaobject>(node.password)?.value ?? null;
   const isSpecialCollection = parseMetaobject<ValueMetaobject>(node.isSpecialCollection)?.value === "true";
   const collection = parseCollection(node.collection);
+  const collections = parseCollectionsList(node.multipleCollections);
 
-  return { releaseOn, closeOn, password, isSpecialCollection, collection };
+  return { releaseOn, closeOn, password, isSpecialCollection, collection, collections };
 }
 
 export const getReleaseData = nextCache(fetchReleaseData, ["release-data"], {
