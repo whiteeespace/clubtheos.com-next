@@ -9,11 +9,17 @@ export const GET_COLLECTION_PAGE_DATA = graphql(`
       title
       description
       descriptionHtml
-      image {
-        url
-        altText
-        width
-        height
+      titleImage: metafield(namespace: "custom", key: "title_image") {
+        reference {
+          ... on MediaImage {
+            image {
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
       }
       video: metafield(namespace: "custom", key: "video") {
         reference {

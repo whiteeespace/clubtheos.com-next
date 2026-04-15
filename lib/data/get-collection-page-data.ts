@@ -39,6 +39,18 @@ export interface CollectionPageData {
 type CollectionType = NonNullable<GetCollectionPageDataQuery["collection"]>;
 type ImageMetafield = CollectionType["images"];
 
+function parseTitleImage(metafield: CollectionType["titleImage"]): CollectionPageImage | null {
+  const ref = metafield?.reference;
+  if (!ref || !("image" in ref) || !ref.image) return null;
+  return {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Shopify URL scalar is typed as any
+    url: ref.image.url as string,
+    altText: ref.image.altText ?? null,
+    width: ref.image.width ?? null,
+    height: ref.image.height ?? null,
+  };
+}
+
 function parseImages(metafield: ImageMetafield): CollectionPageImage[] {
   const refs = metafield?.references?.nodes ?? [];
   return refs
@@ -77,15 +89,7 @@ async function fetchCollectionPageData(
   const videoRef = collection.video?.reference;
   const videoSources: CollectionPageVideoSource[] = videoRef && "sources" in videoRef ? videoRef.sources : [];
 
-  const collectionImage: CollectionPageImage | null = collection.image
-    ? {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Shopify URL scalar is typed as any
-        url: collection.image.url as string,
-        altText: collection.image.altText ?? null,
-        width: collection.image.width ?? null,
-        height: collection.image.height ?? null,
-      }
-    : null;
+  const collectionImage = parseTitleImage(collection.titleImage);
 
   return {
     id: collection.id,
