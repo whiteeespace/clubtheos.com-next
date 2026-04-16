@@ -5,7 +5,7 @@ import { getLocale } from "next-intl/server";
 
 import { LanguageCode } from "@/gql/graphql";
 import { ShopProvider } from "@/lib/context/shop-context";
-import { getReleaseData } from "@/lib/data";
+import { getReleaseData, getReleasePrimaryCollectionHandle, isMultiCollectionRelease } from "@/lib/data";
 import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import Footer from "@components/Footer";
 import Navbar from "@components/Navbar";
@@ -31,21 +31,32 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const closeDate = closeOn?.value ? new Date(closeOn.value) : null;
   const now = new Date();
 
-  const releaseCollectionHandle = data.collection?.handle ?? null;
+  const releaseCollectionHandle = getReleasePrimaryCollectionHandle(data);
 
   const cookieStore = await cookies();
   const cookiePassword = cookieStore.get("theos_early_access")?.value;
   const hasEarlyAccess = cookiePassword && data.password && cookiePassword === data.password;
 
-  // Redirect to home if shop is not active (before release or after close)
+  // Redirect to home if shop is not active (before release or after close).
+  // Multi-collection releases show the grid on home before open without the early-access cookie;
+  // those users must still reach /collection/* (and shop routes) — same rule as (home)/page.tsx.
   const isBeforeRelease = releaseDate && !isNaN(releaseDate.getTime()) && now <= releaseDate;
   const isAfterClose = closeDate && !isNaN(closeDate.getTime()) && now >= closeDate;
-  if ((isBeforeRelease && !hasEarlyAccess) || isAfterClose) {
+  const allowShopBeforeReleaseWithoutCookie = isMultiCollectionRelease(data);
+  const blockShopRoutes = [
+    isBeforeRelease && !hasEarlyAccess && !allowShopBeforeReleaseWithoutCookie,
+    isAfterClose,
+  ].some(Boolean);
+
+  if (blockShopRoutes) {
     redirect(`/${locale}`);
   }
 
   return (
-    <ShopProvider releaseCollectionHandle={releaseCollectionHandle}>
+    <ShopProvider
+      releaseCollectionHandle={releaseCollectionHandle}
+      multiCollectionReleaseActive={isMultiCollectionRelease(data)}
+    >
       <Navbar />
       <main className={styles.container}>{children}</main>
       <Footer />

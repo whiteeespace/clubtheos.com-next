@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { getRequestConfig } from "next-intl/server";
 
 import { Locale, locales, defaultLocale } from "./types";
@@ -8,8 +7,9 @@ interface MessageModule {
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {
-  const locale = await requestLocale;
-  if (!locales.includes(locale as Locale)) notFound();
+  const requested = await requestLocale;
+  const locale: Locale =
+    requested && locales.includes(requested as Locale) ? (requested as Locale) : defaultLocale;
 
   const [filters, metadata, navigation] = await Promise.all([
     import(`@/dictionaries/${locale}/filters.json`) as Promise<MessageModule>,
@@ -23,6 +23,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...metadata.default,
       ...navigation.default,
     },
-    locale: locale ?? defaultLocale,
+    locale,
   };
 });

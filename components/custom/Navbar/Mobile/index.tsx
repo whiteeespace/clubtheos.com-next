@@ -49,6 +49,12 @@ interface DrawerProps {
 const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
   const [open, setOpen] = useState(false);
   const [subMenu, setSubMenu] = useState<MenuItem | null>(null);
+  const { releaseCollectionHandle, multiCollectionReleaseActive } = useShopContext();
+  const drawerLogoHref = multiCollectionReleaseActive
+    ? "/"
+    : releaseCollectionHandle
+      ? `/collection/${releaseCollectionHandle}`
+      : "/shop";
 
   const onChange = useCallback((open: boolean = false) => {
     setOpen(open);
@@ -72,7 +78,7 @@ const Menu: React.FC<DrawerProps> = ({ menuItems }) => {
             </span>
             <div className={styles.drawer} id={"menu-content"}>
               <Dialog.CloseTrigger asChild>
-                <Link onClick={() => onChange()} className={styles["shop-link"]} href={"/"}>
+                <Link onClick={() => onChange()} className={styles["shop-link"]} href={drawerLogoHref}>
                   <Image src={logo} alt={"logo"} className={styles["menu-logo"]} />
                 </Link>
               </Dialog.CloseTrigger>
@@ -129,12 +135,16 @@ interface Props {
 
 export const MobileNavBar: React.FC<Props> = ({ menuItems, banner }) => {
   const { totalQuantity } = useCart();
-  const { releaseCollectionHandle } = useShopContext();
+  const { releaseCollectionHandle, multiCollectionReleaseActive } = useShopContext();
   const t = useTranslations("language");
   const pathname = usePathname();
   const router = useRouter();
 
-  const logoHref = releaseCollectionHandle ? `/collection/${releaseCollectionHandle}` : "/shop";
+  const logoHref = multiCollectionReleaseActive
+    ? "/"
+    : releaseCollectionHandle
+      ? `/collection/${releaseCollectionHandle}`
+      : "/shop";
 
   const onChange = (value: string) => {
     router.replace(pathname, { locale: value });

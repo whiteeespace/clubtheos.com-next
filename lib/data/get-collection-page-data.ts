@@ -2,12 +2,22 @@ import { unstable_cache as nextCache } from "next/cache";
 
 import {
   CountryCode,
+  GetCollectionPageByNodeIdQuery,
+  GetCollectionPageByNodeIdQueryVariables,
   GetCollectionPageDataQuery,
   GetCollectionPageDataQueryVariables,
   LanguageCode,
 } from "@/gql/graphql";
-import { GET_COLLECTION_PAGE_DATA } from "@/lib/queries/get-collection-page-data";
+import { getReleaseData } from "@/lib/data/get-release-data";
+import {
+  GET_COLLECTION_PAGE_BY_NODE_ID,
+  GET_COLLECTION_PAGE_DATA,
+} from "@/lib/queries/get-collection-page-data";
 import { shopifyQuery } from "@/lib/shopify";
+
+export type CollectionPageProduct = NonNullable<
+  GetCollectionPageDataQuery["collection"]
+>["products"]["nodes"][number];
 
 export interface CollectionPageVideoSource {
   url: string;
@@ -32,14 +42,13 @@ export interface CollectionPageData {
   collectionImage: CollectionPageImage | null;
   videoSources: CollectionPageVideoSource[];
   images: CollectionPageImage[];
-  productImages: CollectionPageImage[];
-  firstProductHandle: string | null;
+  products: CollectionPageProduct[];
 }
 
-type CollectionType = NonNullable<GetCollectionPageDataQuery["collection"]>;
-type ImageMetafield = CollectionType["images"];
+type CollectionFromHandleQuery = NonNullable<GetCollectionPageDataQuery["collection"]>;
+type ImageMetafield = CollectionFromHandleQuery["images"];
 
-function parseTitleImage(metafield: CollectionType["titleImage"]): CollectionPageImage | null {
+function parseTitleImage(metafield: CollectionFromHandleQuery["titleImage"]): CollectionPageImage | null {
   const ref = metafield?.reference;
   if (!ref || !("image" in ref) || !ref.image) return null;
   return {
@@ -69,23 +78,7 @@ function parseImages(metafield: ImageMetafield): CollectionPageImage[] {
     }));
 }
 
-async function fetchCollectionPageData(
-  handle: string,
-  language: string,
-  country: string
-): Promise<CollectionPageData | null> {
-  const result = await shopifyQuery<GetCollectionPageDataQuery, GetCollectionPageDataQueryVariables>(
-    GET_COLLECTION_PAGE_DATA,
-    {
-      handle,
-      language: language as LanguageCode,
-      country: country as CountryCode,
-    }
-  );
-
-  const collection = result.collection;
-  if (!collection) return null;
-
+function mapCollectionToPageData(collection: CollectionFromHandleQuery): CollectionPageData {
   const videoRef = collection.video?.reference;
   const videoSources: CollectionPageVideoSource[] = videoRef && "sources" in videoRef ? videoRef.sources : [];
 
@@ -101,9 +94,53 @@ async function fetchCollectionPageData(
     collectionImage,
     videoSources,
     images: parseImages(collection.images),
-    productImages: parseImages(collection.productImages),
-    firstProductHandle: collection.products.nodes[0]?.handle ?? null,
+    products: collection.products.nodes,
   };
+}
+
+function collectionFromNodeQuery(
+  data: GetCollectionPageByNodeIdQuery
+): CollectionPageData | null {
+  const node = data.node;
+  if (node?.__typename !== "Collection") return null;
+  return mapCollectionToPageData(node);
+}
+
+async function fetchCollectionPageData(
+  handle: string,
+  language: string,
+  country: string
+): Promise<CollectionPageData | null> {
+  const result = await shopifyQuery<GetCollectionPageDataQuery, GetCollectionPageDataQueryVariables>(
+    GET_COLLECTION_PAGE_DATA,
+    {
+      handle,
+      language: language as LanguageCode,
+      country: country as CountryCode,
+    }
+  );
+
+  if (result.collection) {
+    return mapCollectionToPageData(result.collection);
+  }
+
+  /** Handle lookup can fail while `node(id:)` still works (e.g. visibility/channel quirks vs metaobject refs). */
+  const release = await getReleaseData(language.toUpperCase() as LanguageCode);
+  const fromRelease =
+    release?.collections.find((c) => c.handle === handle) ??
+    (release?.collection?.handle === handle ? release.collection : undefined);
+  if (!fromRelease) return null;
+
+  const byId = await shopifyQuery<
+    GetCollectionPageByNodeIdQuery,
+    GetCollectionPageByNodeIdQueryVariables
+  >(GET_COLLECTION_PAGE_BY_NODE_ID, {
+    id: fromRelease.id,
+    language: language as LanguageCode,
+    country: country as CountryCode,
+  });
+
+  return collectionFromNodeQuery(byId);
 }
 
 export const getCollectionPageData: typeof fetchCollectionPageData = nextCache(

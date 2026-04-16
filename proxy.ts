@@ -1,18 +1,11 @@
-// middleware.ts
+// Next.js 16+: `proxy.ts` (formerly `middleware.ts`). Must use the same routing config as `lib/navigation.ts`.
 
 import createMiddleware from "next-intl/middleware";
 
-import { defaultLocale, locales } from "@/i18n/types";
+import { routing } from "@/i18n/routing";
 
-const middleware = createMiddleware({
-  // A list of all locales that are supported
-  locales,
-  // Used when no locale matches
-  defaultLocale,
-});
-
-export default middleware;
+export default createMiddleware(routing);
 
 export const config = {
-  matcher: "/((?!api|static|.*\\..*|_next).*)",
+  matcher: ["/((?!api|static|trpc|_next|_vercel|.*\\..*).*)"],
 };

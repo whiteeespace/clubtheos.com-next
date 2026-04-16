@@ -13,10 +13,11 @@ import styles from "../styles.module.scss";
 
 interface Props {
   expectedPassword?: string | null;
-  redirectTo?: string;
+  /** After unlock: navigate to this path. `null` = stay on this page and refresh (e.g. multi-collection home grid). */
+  redirectTo?: string | null;
 }
 
-export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword, redirectTo = "/shop" }) => {
+export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword, redirectTo }) => {
   const t = useTranslations("metadata.home");
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -39,8 +40,12 @@ export const EarlyAccessButton: React.FC<Props> = ({ expectedPassword, redirectT
     // Using effect-like pattern to satisfy React Compiler
     queueMicrotask(() => {
       document.cookie = `theos_early_access=${password}; path=/`;
+      if (redirectTo === null) {
+        router.refresh();
+      } else {
+        router.push(redirectTo ?? "/shop");
+      }
     });
-    router.push(redirectTo);
   }
 
   const onSubmit = ({ password }: FormValues) => {

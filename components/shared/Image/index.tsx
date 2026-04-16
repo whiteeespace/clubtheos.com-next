@@ -13,6 +13,11 @@ export interface ImageProps extends ShopifyImageProps {
   blurSize?: number;
   /** Aspect ratio for the placeholder (e.g., "3/4", "1/1", "16/9"). Defaults to "3/4" for product images */
   aspectRatio?: string;
+  /**
+   * When true, the wrapper is absolutely positioned to fill the parent (parent must be `position: relative`).
+   * Use instead of `aspectRatio` for layouts that previously used `next/image` `fill`.
+   */
+  fill?: boolean;
 }
 
 /**
@@ -31,6 +36,7 @@ const Image: React.FC<ImageProps> = ({
   data,
   blurSize = 30,
   aspectRatio = "3/4",
+  fill = false,
   className,
   onLoad,
   ...restOfProps
@@ -51,7 +57,10 @@ const Image: React.FC<ImageProps> = ({
   };
 
   return (
-    <div className={classNames(styles.wrapper, className)} style={{ aspectRatio }}>
+    <div
+      className={classNames(styles.wrapper, fill && styles.wrapperFill, className)}
+      style={fill ? undefined : { aspectRatio }}
+    >
       {/* Low quality placeholder - loads instantly */}
       {placeholderSrc && (
         // eslint-disable-next-line @next/next/no-img-element -- Intentional: tiny blur placeholder doesn't benefit from next/image optimization

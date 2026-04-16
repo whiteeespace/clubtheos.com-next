@@ -2,7 +2,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { getLocale } from "next-intl/server";
 
 import { LanguageCode } from "@/gql/graphql";
-import { getCollectionMetadata, getReleaseData } from "@/lib/data";
+import { getCollectionMetadata, getReleaseData, getReleasePrimaryCollectionHandle } from "@/lib/data";
 
 import FiltersButton from "./_components/FiltersButton";
 import { ShopContent } from "./_components/ShopContent";
@@ -13,7 +13,7 @@ export async function generateMetadata(_props: unknown, parent: ResolvingMetadat
 
   // Use release collection for metadata if available, otherwise shop-all
   const releaseData = await getReleaseData(locale.toUpperCase() as LanguageCode);
-  const handle = releaseData?.collection?.handle ?? "shop-all";
+  const handle = getReleasePrimaryCollectionHandle(releaseData) ?? "shop-all";
 
   const { title, description } = await getCollectionMetadata(handle, locale.toUpperCase(), "CA");
   const parentFields = await parent;
@@ -31,7 +31,7 @@ const ShopPage = async () => {
 
   // Fetch release data - default to release collection if available, otherwise shop-all
   const releaseData = await getReleaseData(locale.toUpperCase() as LanguageCode);
-  const collectionHandle = releaseData?.collection?.handle ?? "shop-all";
+  const collectionHandle = getReleasePrimaryCollectionHandle(releaseData) ?? "shop-all";
 
   const { title, description, filters } = await getCollectionMetadata(
     collectionHandle,

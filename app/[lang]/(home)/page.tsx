@@ -1,15 +1,22 @@
+import classNames from "classnames";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { LanguageCode } from "@/gql/graphql";
-import { getReleaseData } from "@/lib/data";
+import { ShopProvider } from "@/lib/context/shop-context";
+import { getReleaseData, getReleasePrimaryCollectionHandle, isMultiCollectionRelease } from "@/lib/data";
 import { parseMetaobject, ValueMetaobject } from "@/lib/metaobjects";
 import logo from "@/public/theos-new-logo.png";
+import Footer from "@components/Footer";
+import Navbar from "@components/Navbar";
 import { redirect } from "@utils/navigation";
+
+import shopStyles from "../(shop)/styles.module.scss";
 
 import Countdown from "./_components/Countdown";
 import { EarlyAccessButton } from "./_components/EarlyAccessButton";
-import { ReleaseCollection } from "./_components/ReleaseCollection";
+import { ReleaseCollectionsGrid } from "./_components/ReleaseCollectionsGrid";
 import styles from "./styles.module.scss";
 
 const HomePage = async () => {
@@ -41,34 +48,63 @@ const HomePage = async () => {
   const closeDate = closeOn?.value ? new Date(closeOn.value) : null;
   const now = new Date();
 
-  // Redirect to shop only if release is active (after release, before close)
   const isAfterRelease = releaseDate && !isNaN(releaseDate.getTime()) && now > releaseDate;
   const isBeforeClose = !closeDate || isNaN(closeDate.getTime()) || now < closeDate;
 
-  if (isAfterRelease && isBeforeClose) {
+  const primaryCollectionHandle = getReleasePrimaryCollectionHandle(data);
+
+  const showMultiSpecialCollectionPicker = data.isSpecialCollection && data.collections.length > 0;
+
+  const cookieStore = await cookies();
+  const cookiePassword = cookieStore.get("theos_early_access")?.value;
+  const hasEarlyAccess = Boolean(cookiePassword && data.password && cookiePassword === data.password);
+
+  const showMultiCollectionGridLive = showMultiSpecialCollectionPicker && isAfterRelease && isBeforeClose;
+  const showMultiCollectionGridEarlyAccess =
+    showMultiSpecialCollectionPicker && hasEarlyAccess && isBeforeClose && !isAfterRelease;
+
+  // During the live window, send everyone to shop or a single special collection — except
+  // multi-collection releases, which must stay on home so the grid can render.
+  if (isAfterRelease && isBeforeClose && !showMultiSpecialCollectionPicker) {
     redirect({
-      href: data.isSpecialCollection ? `/collection/${data.collection?.handle}` : "/shop",
+      href:
+        data.isSpecialCollection && primaryCollectionHandle
+          ? `/collection/${primaryCollectionHandle}`
+          : "/shop",
       locale: language,
     });
   }
 
-  // If this is a special collection release, show the custom collection page
-  if (data.isSpecialCollection && data.collection) {
+  // Multi-collection grid: live window, or before release with valid early-access cookie.
+  if (showMultiCollectionGridLive || showMultiCollectionGridEarlyAccess) {
     return (
-      <main>
-        <div className={styles.headerCollection}>
-          <Image src={logo} alt={"logo"} className={styles.logo} />
-          <EarlyAccessButton
-            expectedPassword={password?.value}
-            redirectTo={`/collection/${data.collection?.handle}`}
-          />
+      <ShopProvider
+        releaseCollectionHandle={primaryCollectionHandle}
+        multiCollectionReleaseActive={isMultiCollectionRelease(data)}
+      >
+        <div className={styles["collections-viewport"]}>
+          <div className={styles["collections-nav"]}>
+            <Navbar />
+          </div>
+          <div className={styles["collections-page-shell"]}>
+            <main className={classNames(shopStyles.container, styles["collections-main"])}>
+              <div className={styles["collections-grid-shop-wrap"]}>
+                <ReleaseCollectionsGrid
+                  collections={data.collections}
+                  className={styles["collections-grid--in-shop"]}
+                />
+              </div>
+            </main>
+            <div className={styles["collections-footer-wrap"]}>
+              <Footer />
+            </div>
+          </div>
         </div>
-        <ReleaseCollection collection={data.collection} expectedPassword={password?.value} />
-      </main>
+      </ShopProvider>
     );
   }
 
-  // Default countdown page
+  // Default countdown page (before release, after close, or non-special releases)
   return (
     <section className={styles.container}>
       <div className={styles.header}>
@@ -82,7 +118,10 @@ const HomePage = async () => {
           <Countdown targetDateString={releaseOn?.value} />
         </div>
         <div className={styles["button-container"]}>
-          <EarlyAccessButton expectedPassword={password?.value} />
+          <EarlyAccessButton
+            expectedPassword={password?.value}
+            redirectTo={showMultiSpecialCollectionPicker ? null : undefined}
+          />
         </div>
       </div>
     </section>
