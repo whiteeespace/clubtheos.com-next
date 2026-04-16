@@ -50,23 +50,33 @@ export const GET_COLLECTION_PAGE_DATA = graphql(`
           }
         }
       }
-      productImages: metafield(namespace: "custom", key: "product_images") {
-        references(first: 20) {
-          nodes {
-            ... on MediaImage {
-              image {
-                url
-                altText
-                width
-                height
-              }
-            }
-          }
-        }
-      }
-      products(first: 1) {
+      products(first: 20) {
         nodes {
           handle
+          title
+          availableForSale
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          compareAtPriceRange {
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
         }
       }
     }
@@ -126,23 +136,33 @@ export const GET_COLLECTION_PAGE_BY_NODE_ID = graphql(`
             }
           }
         }
-        productImages: metafield(namespace: "custom", key: "product_images") {
-          references(first: 20) {
-            nodes {
-              ... on MediaImage {
-                image {
-                  url
-                  altText
-                  width
-                  height
-                }
-              }
-            }
-          }
-        }
-        products(first: 1) {
+        products(first: 20) {
           nodes {
             handle
+            title
+            availableForSale
+            featuredImage {
+              url
+              altText
+              width
+              height
+            }
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            compareAtPriceRange {
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
+            }
           }
         }
       }

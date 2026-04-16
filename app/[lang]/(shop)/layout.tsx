@@ -37,10 +37,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const cookiePassword = cookieStore.get("theos_early_access")?.value;
   const hasEarlyAccess = cookiePassword && data.password && cookiePassword === data.password;
 
-  // Redirect to home if shop is not active (before release or after close)
+  // Redirect to home if shop is not active (before release or after close).
+  // Multi-collection releases show the grid on home before open without the early-access cookie;
+  // those users must still reach /collection/* (and shop routes) — same rule as (home)/page.tsx.
   const isBeforeRelease = releaseDate && !isNaN(releaseDate.getTime()) && now <= releaseDate;
   const isAfterClose = closeDate && !isNaN(closeDate.getTime()) && now >= closeDate;
-  if ((isBeforeRelease && !hasEarlyAccess) || isAfterClose) {
+  const allowShopBeforeReleaseWithoutCookie = isMultiCollectionRelease(data);
+  const blockShopRoutes = [
+    isBeforeRelease && !hasEarlyAccess && !allowShopBeforeReleaseWithoutCookie,
+    isAfterClose,
+  ].some(Boolean);
+
+  if (blockShopRoutes) {
     redirect(`/${locale}`);
   }
 

@@ -15,6 +15,10 @@ import {
 } from "@/lib/queries/get-collection-page-data";
 import { shopifyQuery } from "@/lib/shopify";
 
+export type CollectionPageProduct = NonNullable<
+  GetCollectionPageDataQuery["collection"]
+>["products"]["nodes"][number];
+
 export interface CollectionPageVideoSource {
   url: string;
   mimeType: string;
@@ -38,8 +42,7 @@ export interface CollectionPageData {
   collectionImage: CollectionPageImage | null;
   videoSources: CollectionPageVideoSource[];
   images: CollectionPageImage[];
-  productImages: CollectionPageImage[];
-  firstProductHandle: string | null;
+  products: CollectionPageProduct[];
 }
 
 type CollectionFromHandleQuery = NonNullable<GetCollectionPageDataQuery["collection"]>;
@@ -91,8 +94,7 @@ function mapCollectionToPageData(collection: CollectionFromHandleQuery): Collect
     collectionImage,
     videoSources,
     images: parseImages(collection.images),
-    productImages: parseImages(collection.productImages),
-    firstProductHandle: collection.products.nodes[0]?.handle ?? null,
+    products: collection.products.nodes,
   };
 }
 
