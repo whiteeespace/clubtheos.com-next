@@ -28,14 +28,17 @@ export const SizeGuideImage: React.FC<SizeGuideImageProps> = ({ sizeGuide }) => 
   if (!image) return null;
 
   return (
-    <Image
-      src={image}
-      alt={`Size guide for ${sizeGuide}`}
-      placeholder={"empty"}
-      className={styles.image}
-      width={600}
-      height={600}
-      priority
-    />
+    <div className={styles.imageWrap}>
+      <Image
+        src={image}
+        alt={`Size guide for ${sizeGuide}`}
+        placeholder={"empty"}
+        className={styles.image}
+        width={600}
+        height={600}
+        sizes="(max-width: 768px) 85vw, 600px"
+        priority
+      />
+    </div>
   );
 };

@@ -24,7 +24,7 @@ export const Dialog: React.FC<DialogProps> = ({ children, title, description, tr
             </ArkDialog.CloseTrigger>
           </div>
           <ArkDialog.Description className={styles.description}>{description}</ArkDialog.Description>
-          {children}
+          <div className={styles.body}>{children}</div>
         </ArkDialog.Content>
       </ArkDialog.Positioner>
     </Portal>

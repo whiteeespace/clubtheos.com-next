@@ -122,11 +122,13 @@ export const Products: React.FC<ProductsProps> = ({ collectionHandle }) => {
   const filtersKey = useMemo(() => JSON.stringify(filtersInput), [filtersInput]);
 
   // Reset shop variables when filters change
+  /* eslint-disable react-hooks/set-state-in-effect -- syncing shop list state to URL filters */
   useEffect(() => {
     setShowLoader(true);
     setShopVariables([{ after: undefined }]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtersKey]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const countText = productCount === 1 ? t("shop.product") : t("shop.products");
   const loadedProductsCount = Math.min(shopVariables.length * 32, productCount ?? 0);

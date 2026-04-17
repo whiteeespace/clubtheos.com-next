@@ -43,11 +43,11 @@ const Image: React.FC<ImageProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Get image source from either src prop or data.url
-  const imageSrc = src ?? data?.url;
-  const placeholderSrc = getPlaceholderUrl(imageSrc, blurSize);
+  // String URL for Shopify CDN ops (React 19 types `src` as string | Blob)
+  const stringUrl = typeof src === "string" ? src : data?.url;
+  const placeholderSrc = getPlaceholderUrl(stringUrl, blurSize);
 
-  if (!imageSrc) {
+  if (!src && !data?.url) {
     return null;
   }
 

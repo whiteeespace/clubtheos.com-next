@@ -52,7 +52,7 @@ function parseTitleImage(metafield: CollectionFromHandleQuery["titleImage"]): Co
   const ref = metafield?.reference;
   if (!ref || !("image" in ref) || !ref.image) return null;
   return {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Shopify URL scalar is typed as any
+     
     url: ref.image.url as string,
     altText: ref.image.altText ?? null,
     width: ref.image.width ?? null,
@@ -89,7 +89,7 @@ function mapCollectionToPageData(collection: CollectionFromHandleQuery): Collect
     handle: collection.handle,
     title: collection.title,
     description: collection.description ?? null,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Shopify HTML scalar is typed as any
+     
     descriptionHtml: (collection.descriptionHtml as string) ?? null,
     collectionImage,
     videoSources,

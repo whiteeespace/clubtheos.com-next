@@ -98,6 +98,7 @@ export function useShopifyQuery<TData, TVariables extends Record<string, unknown
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, variablesKey, options?.pause]);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- fetch-on-mount; setState runs inside async fetchData */
   useEffect(() => {
     isMountedRef.current = true;
     void fetchData();
@@ -106,6 +107,7 @@ export function useShopifyQuery<TData, TVariables extends Record<string, unknown
       isMountedRef.current = false;
     };
   }, [fetchData]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const refetch = useCallback(() => {
     void fetchData();

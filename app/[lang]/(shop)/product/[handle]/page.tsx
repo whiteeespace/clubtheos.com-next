@@ -73,7 +73,7 @@ const ProductPage = async ({ params }: { params: Promise<{ handle: string }> }) 
   };
 
   const sizeGuide = product.sizeGuide?.value;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+   
   const condition = product.condition?.value;
   return (
     <>

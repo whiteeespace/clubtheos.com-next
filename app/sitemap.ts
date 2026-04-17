@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const productRoutes: MetadataRoute.Sitemap = [];
 
   while (hasNextPage) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- shopifyQuery returns typed data but TS can't infer it through the function
+     
     const data: GetCollectionQuery = await shopifyQuery<GetCollectionQuery, GetCollectionQueryVariables>(
       GET_COLLECTION,
       {

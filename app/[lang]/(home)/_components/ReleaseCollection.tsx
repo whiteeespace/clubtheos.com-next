@@ -66,7 +66,7 @@ export const ReleaseCollection: React.FC<Props> = ({ collection }) => {
         {collection.descriptionHtml && (
           <div
             className={styles.description}
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+             
             dangerouslySetInnerHTML={{ __html: collection.descriptionHtml }}
           />
         )}

@@ -13,19 +13,17 @@ function padTwoDigits(value: number): string {
 }
 
 const Countdown: React.FC<CountdownProps> = ({ targetDateString, className }) => {
+  const targetDate = React.useMemo(() => {
+    if (!targetDateString) return undefined;
+    const d = new Date(targetDateString);
+    return isValid(d) ? d : undefined;
+  }, [targetDateString]);
+
   const [display, setDisplay] = React.useState<string>("");
 
   React.useEffect(() => {
-    if (!targetDateString) {
-      setDisplay("");
-      return;
-    }
-
-    const target = new Date(targetDateString);
-    if (!isValid(target)) {
-      setDisplay("");
-      return;
-    }
+    if (!targetDate) return;
+    const target = targetDate;
 
     function updateDisplay() {
       const totalMs = Math.max(0, differenceInMilliseconds(target, new Date()));
@@ -45,14 +43,14 @@ const Countdown: React.FC<CountdownProps> = ({ targetDateString, className }) =>
       setDisplay(`${weekdayMonthDay} — ${countdown}`);
     }
 
-    // Initial paint
-    updateDisplay();
-    // Update roughly every 50ms to keep centiseconds responsive without being too heavy
+    // Defer first update out of the effect body (react-hooks/set-state-in-effect)
+    queueMicrotask(updateDisplay);
     const intervalId = window.setInterval(updateDisplay, 50);
 
     return () => window.clearInterval(intervalId);
-  }, [targetDateString]);
+  }, [targetDate]);
 
+  if (!targetDate) return null;
   if (!display) return null;
   return <p className={className}>{display}</p>;
 };
