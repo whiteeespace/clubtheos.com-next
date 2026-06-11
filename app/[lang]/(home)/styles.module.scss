@@ -180,12 +180,6 @@
   width: 100%;
   min-height: 100dvh;
   box-sizing: border-box;
-
-  @media only screen and (min-width: 769px) {
-    height: 100dvh;
-    max-height: 100dvh;
-    overflow: hidden;
-  }
 }
 
 .collections-nav {
@@ -195,17 +189,11 @@
 .collections-page-shell {
   display: flex;
   flex-direction: column;
-  flex: 1 1 0;
+  flex: 1 1 auto;
   width: 100%;
   min-height: 0;
   box-sizing: border-box;
-  overflow: hidden;
-
-  @media only screen and (max-width: 768px) {
-    flex: 1 1 auto;
-    min-height: auto;
-    overflow: visible;
-  }
+  overflow: visible;
 }
 
 .collections-footer-wrap {
@@ -220,9 +208,8 @@
   box-sizing: border-box;
 
   @media only screen and (min-width: 769px) {
-    flex: 1 1 0;
+    flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
   }
@@ -235,11 +222,10 @@
   box-sizing: border-box;
 
   @media only screen and (min-width: 769px) {
-    flex: 1 1 0;
+    flex: 0 0 auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 }
 
@@ -263,12 +249,11 @@
   min-height: unset;
 
   @media only screen and (min-width: 769px) {
-    flex: 1 1 0;
-    min-height: 0;
-    height: 100%;
-    grid-auto-rows: minmax(0, 1fr);
-    align-content: stretch;
-    overflow: hidden;
+    // Rows are sized by each tile's aspect ratio and the grid grows with its
+    // content, so the page scrolls naturally and the footer sits at the end
+    // of the collections rather than floating at the bottom of the viewport.
+    grid-auto-rows: auto;
+    align-content: start;
   }
 
   @media only screen and (max-width: 768px) {
@@ -285,7 +270,8 @@
 
   @media only screen and (min-width: 769px) {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
     min-height: 0;
     max-height: none;
   }
@@ -294,6 +280,16 @@
     width: 100%;
     aspect-ratio: 3 / 4;
     height: auto;
+  }
+}
+
+// Hero tile: on desktop it spans both columns as a 2:1 row (used for the first
+// tile when the release count is odd). On mobile the grid stays 2 columns and
+// the hero is a normal tile, so every tile matches in size.
+.collections-grid-tile--span-full {
+  @media only screen and (min-width: 769px) {
+    grid-column: 1 / -1;
+    aspect-ratio: 2 / 1;
   }
 }
 
