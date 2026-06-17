@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -17,6 +17,12 @@ export const metadata: Metadata = {
   title: "Club Theos",
   description: "A Montreal curated vintage/streetwear store located at the Plateau Mont-Royal.",
   metadataBase: new URL(baseUrl),
+};
+
+// Force a light color scheme so the site stays white-background even when the
+// user's OS/browser is set to dark mode.
+export const viewport: Viewport = {
+  colorScheme: "light",
 };
 
 export default async function RootLayout({

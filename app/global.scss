@@ -1,5 +1,11 @@
 @import url("https://use.typekit.net/utz4tfk.css");
 
+:root {
+  // Opt the whole site into a light scheme so OS/browser dark mode (and
+  // Chrome's "Auto Dark Theme") can't invert the page or darken the canvas.
+  color-scheme: light;
+}
+
 body,
 html {
   font-family: "neue-haas-unica", sans-serif;
@@ -7,6 +13,9 @@ html {
   font-weight: normal;
   width: 100vw;
   margin: 0;
+  // Force a white background + black text regardless of dark mode.
+  background-color: #fff;
+  color: #000;
 }
 
 ::-moz-selection {

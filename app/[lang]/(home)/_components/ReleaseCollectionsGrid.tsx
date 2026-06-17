@@ -20,6 +20,16 @@ export const ReleaseCollectionsGrid: React.FC<Props> = ({ collections, className
     <div className={classNames(styles["collections-grid"], className)}>
       {collections.map((c, index) => {
         const isHero = isOdd && index === 0;
+        // The hero tile spans both columns on desktop only. There it uses the
+        // wide `full_row_image` (falling back to the normal image); on mobile —
+        // where it's a normal tile — it always uses the normal collection image.
+        const desktopImage = isHero ? c.fullRowImage ?? c.collectionImage : c.collectionImage;
+        const showResponsivePair =
+          isHero &&
+          !!c.fullRowImage &&
+          !!c.collectionImage &&
+          c.fullRowImage.url !== c.collectionImage.url;
+
         return (
           <Link
             key={c.id}
@@ -29,11 +39,38 @@ export const ReleaseCollectionsGrid: React.FC<Props> = ({ collections, className
             })}
             aria-label={c.title}
           >
-            {c.collectionImage ? (
+            {showResponsivePair ? (
+              <>
+                <Image
+                  key={c.fullRowImage!.url}
+                  src={c.fullRowImage!.url}
+                  alt={c.fullRowImage!.altText ?? c.title}
+                  fill
+                  blurSize={30}
+                  sizes="100vw"
+                  className={classNames(
+                    styles["collections-grid-image"],
+                    styles["collections-grid-image--desktop"]
+                  )}
+                />
+                <Image
+                  key={c.collectionImage!.url}
+                  src={c.collectionImage!.url}
+                  alt={c.collectionImage!.altText ?? c.title}
+                  fill
+                  blurSize={30}
+                  sizes="100vw"
+                  className={classNames(
+                    styles["collections-grid-image"],
+                    styles["collections-grid-image--mobile"]
+                  )}
+                />
+              </>
+            ) : desktopImage ? (
               <Image
-                key={c.collectionImage.url}
-                src={c.collectionImage.url}
-                alt={c.collectionImage.altText ?? c.title}
+                key={desktopImage.url}
+                src={desktopImage.url}
+                alt={desktopImage.altText ?? c.title}
                 fill
                 blurSize={30}
                 sizes={isHero ? "100vw" : "(max-width: 768px) 100vw, 50vw"}

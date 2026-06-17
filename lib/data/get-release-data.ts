@@ -27,6 +27,11 @@ export interface ReleaseCollection {
   releaseMessage: string | null;
   /** Shopify collection image (used for multi-collection picker). */
   collectionImage: CollectionImage | null;
+  /**
+   * `custom.full_row_image` metafield — wide image for the hero tile that spans
+   * both columns on desktop when the collection count is odd.
+   */
+  fullRowImage: CollectionImage | null;
   videoSources: VideoSource[];
   images: CollectionImage[];
 }
@@ -85,6 +90,17 @@ function parseCollectionFields(reference: ReleaseCollectionFieldsFragment): Rele
       }
     : null;
 
+  const fullRowRef = reference.fullRowImage?.reference;
+  const fullRowImage: CollectionImage | null =
+    fullRowRef?.__typename === "MediaImage" && fullRowRef.image
+      ? {
+          url: String(fullRowRef.image.url),
+          altText: fullRowRef.image.altText ?? null,
+          width: fullRowRef.image.width ?? null,
+          height: fullRowRef.image.height ?? null,
+        }
+      : null;
+
   return {
     id: reference.id,
     handle: reference.handle,
@@ -92,6 +108,7 @@ function parseCollectionFields(reference: ReleaseCollectionFieldsFragment): Rele
     descriptionHtml: (reference.descriptionHtml as string) ?? "",
     releaseMessage: reference.releaseMessage?.value ?? null,
     collectionImage,
+    fullRowImage,
     videoSources,
     images,
   };

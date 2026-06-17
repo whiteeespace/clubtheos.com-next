@@ -53,6 +53,19 @@ export const GET_RELEASE_DATA = graphql(`
       width
       height
     }
+    fullRowImage: metafield(namespace: "custom", key: "full_row_image") {
+      reference {
+        __typename
+        ... on MediaImage {
+          image {
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+    }
     video: metafield(namespace: "custom", key: "video") {
       reference {
         __typename

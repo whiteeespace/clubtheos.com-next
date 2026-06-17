@@ -297,6 +297,22 @@
   min-height: 0;
 }
 
+// Hero tile only: show the wide full-row image where it spans both columns
+// (desktop) and the normal collection image where it's a single tile (mobile).
+.collections-grid-image--desktop {
+  display: none;
+
+  @media only screen and (min-width: 769px) {
+    display: block;
+  }
+}
+
+.collections-grid-image--mobile {
+  @media only screen and (min-width: 769px) {
+    display: none;
+  }
+}
+
 .collections-grid-fallback {
   display: flex;
   align-items: center;
