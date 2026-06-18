@@ -50,7 +50,7 @@ export const GET_COLLECTION_PAGE_DATA = graphql(`
           }
         }
       }
-      products(first: 20) {
+      products(first: 50) {
         nodes {
           handle
           title
@@ -136,7 +136,7 @@ export const GET_COLLECTION_PAGE_BY_NODE_ID = graphql(`
             }
           }
         }
-        products(first: 20) {
+        products(first: 50) {
           nodes {
             handle
             title
