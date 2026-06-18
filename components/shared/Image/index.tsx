@@ -2,7 +2,7 @@
 
 import { Image as ShopifyImage } from "@shopify/hydrogen-react";
 import classNames from "classnames";
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useCallback, useState } from "react";
 
 import styles from "./styles.module.scss";
 
@@ -56,6 +56,16 @@ const Image: React.FC<ImageProps> = ({
     onLoad?.(e);
   };
 
+  // The SSR'd <img> can finish loading (or be served from cache) before React
+  // hydrates and attaches `onLoad`, so that event is missed and the blur would
+  // stay forever — common on mobile and in-app (Instagram) WebViews where
+  // hydration is throttled. Catch that by checking `complete` once the node mounts.
+  const imageRef = useCallback((node: HTMLImageElement | null) => {
+    if (node?.complete && node.naturalWidth > 0) {
+      setIsLoaded(true);
+    }
+  }, []);
+
   return (
     <div
       className={classNames(styles.wrapper, fill && styles.wrapperFill, className)}
@@ -74,6 +84,7 @@ const Image: React.FC<ImageProps> = ({
 
       {/* Full quality Shopify Image with automatic srcset */}
       <ShopifyImage
+        ref={imageRef}
         src={src}
         data={data}
         className={classNames(styles.image, { [styles.loaded]: isLoaded })}
