@@ -1,6 +1,6 @@
 "use client";
 
-import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
+import classNames from "classnames";
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -13,9 +13,10 @@ import styles from "../styles.module.scss";
 
 /** Match `Item` / shop grid — same blur + srcset behavior as product tiles */
 const BLUR_SIZE = 30;
-const SIZES_SHOP_ITEM = "(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw";
 const SIZES_COLLECTION_HERO = "(max-width: 600px) 100vw, 600px";
 const SIZES_GALLERY_CELL = "(max-width: 600px) 50vw, 300px";
+/** Single-product collections render one larger, centered tile. */
+const SIZES_SINGLE_CELL = "(max-width: 600px) 100vw, 360px";
 
 interface Props {
   collection: CollectionPageData;
@@ -25,26 +26,20 @@ export const CollectionContent: React.FC<Props> = ({ collection }) => {
   const [playSound, setPlaySound] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const carouselRef = useRef<HTMLDivElement | null>(null);
   const userPausedRef = useRef(false);
 
   const hasVideo = collection.videoSources.length > 0;
   const hasImages = collection.images.length > 0;
   const collectionImage = collection.collectionImage;
 
-  const carouselProducts = useMemo(
+  const gridProducts = useMemo(
     () => collection.products.filter((p) => p.featuredImage?.url),
     [collection.products]
   );
-  const hasProductCarousel = carouselProducts.length > 0;
+  const hasProductGrid = gridProducts.length > 0;
+  const isSingleProduct = gridProducts.length === 1;
 
   const videoSourcesKey = collection.videoSources.map((s) => s.url).join("|");
-
-  const scrollCarousel = useCallback((direction: 1 | -1) => {
-    const el = carouselRef.current;
-    if (!el) return;
-    el.scrollBy({ left: direction * el.clientWidth, behavior: "smooth" });
-  }, []);
 
   const tryPlay = useCallback(() => {
     const el = videoRef.current;
@@ -125,72 +120,50 @@ export const CollectionContent: React.FC<Props> = ({ collection }) => {
         />
       )}
 
-      {/* Product carousel */}
-      {hasProductCarousel && (
+      {/* Product grid */}
+      {hasProductGrid && (
         <div
-          className={styles.productCarousel}
+          className={classNames(styles.productGrid, {
+            [styles["productGrid--single"]]: isSingleProduct,
+          })}
           role="region"
-          aria-roledescription="carousel"
           aria-label="Products in this collection"
         >
-          <div ref={carouselRef} className={styles.productCarouselTrack}>
-            {carouselProducts.map((product) => {
-              const img = product.featuredImage!;
-              return (
-                <Link
-                  key={product.handle}
-                  href={`/product/${product.handle}`}
-                  className={styles.productCarouselSlide}
-                  style={{ touchAction: "manipulation" }}
-                >
-                  <div className={styles.productCarouselImageWrap}>
-                    <Image
-                      key={img.url as string}
-                      src={img.url as string}
-                      alt={img.altText ?? product.title}
-                      aspectRatio="3/4"
-                      blurSize={BLUR_SIZE}
-                      sizes={SIZES_SHOP_ITEM}
-                      className={styles.productCarouselImage}
-                    />
-                  </div>
-                  <div className={styles.productCarouselCaption}>
-                    <span className={styles.productCarouselTitle}>{product.title}</span>
-                    <span className={styles.productCarouselPrice}>
-                      {product.availableForSale && product.priceRange?.maxVariantPrice ? (
-                        <Price
-                          price={product.priceRange.maxVariantPrice}
-                          comparedAtPrice={product.compareAtPriceRange?.maxVariantPrice}
-                        />
-                      ) : (
-                        "SOLD OUT"
-                      )}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-          {carouselProducts.length > 1 && (
-            <>
-              <button
-                type="button"
-                className={styles.productCarouselNav}
-                aria-label="Previous product"
-                onClick={() => scrollCarousel(-1)}
+          {gridProducts.map((product) => {
+            const img = product.featuredImage!;
+            return (
+              <Link
+                key={product.handle}
+                href={`/product/${product.handle}`}
+                className={styles.productGridItem}
               >
-                <CaretLeft size={20} weight="bold" aria-hidden />
-              </button>
-              <button
-                type="button"
-                className={`${styles.productCarouselNav} ${styles.productCarouselNavNext}`}
-                aria-label="Next product"
-                onClick={() => scrollCarousel(1)}
-              >
-                <CaretRight size={20} weight="bold" aria-hidden />
-              </button>
-            </>
-          )}
+                <div className={styles.productGridImageWrap}>
+                  <Image
+                    key={img.url as string}
+                    src={img.url as string}
+                    alt={img.altText ?? product.title}
+                    aspectRatio="3/4"
+                    blurSize={BLUR_SIZE}
+                    sizes={isSingleProduct ? SIZES_SINGLE_CELL : SIZES_GALLERY_CELL}
+                    className={styles.productGridImage}
+                  />
+                </div>
+                <div className={styles.productGridCaption}>
+                  <span className={styles.productGridTitle}>{product.title}</span>
+                  <span className={styles.productGridPrice}>
+                    {product.availableForSale && product.priceRange?.maxVariantPrice ? (
+                      <Price
+                        price={product.priceRange.maxVariantPrice}
+                        comparedAtPrice={product.compareAtPriceRange?.maxVariantPrice}
+                      />
+                    ) : (
+                      "SOLD OUT"
+                    )}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
 

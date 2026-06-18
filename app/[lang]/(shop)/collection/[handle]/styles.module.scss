@@ -75,64 +75,64 @@
   }
 }
 
-.productCarousel {
-  position: relative;
+.productGrid {
   width: 100%;
-}
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 16px;
+  row-gap: 32px;
 
-.productCarouselTrack {
-  display: flex;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  gap: 0;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
+  @media only screen and (max-width: 480px) {
+    column-gap: 12px;
+    row-gap: 24px;
   }
 }
 
-.productCarouselSlide {
-  position: relative;
-  z-index: 0;
-  flex: 0 0 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+/* A lone product gets a single, larger, centered tile instead of a half-width cell.
+   Capped at a max-width on desktop so it stays prominent without dominating;
+   fills the column on mobile. */
+.productGrid--single {
+  grid-template-columns: minmax(0, 360px);
+  justify-content: center;
+
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.productGridItem {
   display: flex;
   flex-direction: column;
   min-width: 0;
   text-decoration: none;
   color: #000;
-  border-radius: 0;
-  overflow: hidden;
-  background: transparent;
   cursor: pointer;
 }
 
-.productCarouselImageWrap {
+.productGridImageWrap {
   position: relative;
   aspect-ratio: 3 / 4;
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
+
+  @media only screen and (max-width: 768px) {
+    border-radius: 6px;
+  }
 }
 
-.productCarouselImage {
+.productGridImage {
   width: 100%;
   height: 100%;
   min-height: 0;
   transition: transform 0.4s ease;
 
-  .productCarouselSlide:hover & {
+  .productGridItem:hover & {
     transform: scale(1.02);
   }
 }
 
-.productCarouselCaption {
+.productGridCaption {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -147,7 +147,7 @@
   line-height: 1.35;
 }
 
-.productCarouselTitle {
+.productGridTitle {
   flex: 1;
   min-width: 0;
   margin: 0;
@@ -157,53 +157,13 @@
   white-space: nowrap;
 }
 
-.productCarouselPrice {
+.productGridPrice {
   flex-shrink: 0;
   text-align: right;
 
   & > :global(div) {
     font-size: 12px;
     font-weight: 400;
-  }
-}
-
-.productCarouselNav {
-  position: absolute;
-  top: 0;
-  bottom: 44px;
-  left: 8px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  margin: auto 0;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  color: #111;
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-}
-
-.productCarouselNavNext {
-  left: auto;
-  right: 8px;
-}
-
-@media only screen and (max-width: 480px) {
-  .productCarouselNav {
-    width: 32px;
-    height: 32px;
-    left: 4px;
-    bottom: 42px;
-  }
-
-  .productCarouselNavNext {
-    left: auto;
-    right: 4px;
   }
 }
 
